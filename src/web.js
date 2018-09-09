@@ -4,7 +4,8 @@ import compression from "compression";
 import { ApolloServer } from "apollo-server-express";
 import { RedisCache } from "apollo-server-cache-redis";
 import omdbAPI from "./grapql/dataSources/omdbApi";
-import schema from "./grapql/movies";
+import untappdAPI from "./grapql/dataSources/untappdAPI";
+import schema from "./grapql/schema";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -19,7 +20,8 @@ async function run() {
     cache: redisCache,
     persistedQueries: redisCache,
     dataSources: () => ({
-      OmdbAPI: new omdbAPI()
+      OmdbAPI: new omdbAPI(),
+      UntappdAPI: new untappdAPI()
     }),
     formatError: error => {
       return {

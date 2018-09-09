@@ -6,10 +6,15 @@ module.exports = {
   googleApiKey: process.env.GOOGLE_API_KEY,
   googleCseId: process.env.GOOGLE_CSE_ID,
 
+  untappedBaseUrl:
+    process.env.UNTAPPED_BASE_URL || "https://api.untappd.com/v4",
   untappedClientID: process.env.UNTAPPED_CLIENT_ID,
   untappedClientSecret: process.env.UNTAPPED_CLIENT_SECRET,
 
   systembolagetUrl:
     process.env.SYSTEMBOLAGET_URL ||
-    "http://www.systembolaget.se/api/assortment/products/xml"
+    "http://www.systembolaget.se/api/assortment/products/xml",
+
+  omdbBaseUrl: process.env.UNTAPPED_BASE_URL || "http://www.omdbapi.com",
+  omdbApiKey: process.env.OMDB_API_KEY || "http://www.omdbapi.com"
 };

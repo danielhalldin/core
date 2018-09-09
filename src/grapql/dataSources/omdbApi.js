@@ -1,10 +1,11 @@
 import { RESTDataSource } from "apollo-datasource-rest";
+import config from "../../config";
 
 class OmdbAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "http://www.omdbapi.com";
-    this.apiKey = process.env.OMDB_API_KEY;
+    this.baseURL = config.omdbBaseUrl;
+    this.apiKey = config.omdbApiKey;
   }
 
   // https://www.apollographql.com/docs/apollo-server/v2/features/data-sources.html#Intercepting-fetches
