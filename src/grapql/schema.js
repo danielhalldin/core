@@ -1,6 +1,6 @@
 import { makeExecutableSchema } from "apollo-server-express";
 import Untappd from "./beer/resolvers";
-import Omdb from "./movies/resolvers";
+import Omdb from "./movie/resolvers";
 import typeDefs from "./typeDefs";
 
 const resolvers = {

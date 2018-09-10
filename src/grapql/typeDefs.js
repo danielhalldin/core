@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 import untappdTypeDefs from "./beer/typeDefs";
-import omdbTypeDefs from "./movies/typeDefs";
+import omdbTypeDefs from "./movie/typeDefs";
 
 export default gql`
   ${untappdTypeDefs}

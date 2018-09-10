@@ -1,4 +1,4 @@
-export default async (obj, { id }, { dataSources }) => {
+const getMovie = async (obj, { id }, { dataSources }) => {
   const data = await dataSources.OmdbAPI.getMovie(id);
   const metacritic = data.Ratings.find(rating => rating.Source === "Metacritic")
     .Value;
@@ -16,3 +16,5 @@ export default async (obj, { id }, { dataSources }) => {
     imdb
   };
 };
+
+export default getMovie;

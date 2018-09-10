@@ -1,4 +1,4 @@
-export default async (obj, { query }, { dataSources }) => {
+const searchBeer = async (obj, { query }, { dataSources }) => {
   const data = await dataSources.UntappdAPI.search(query);
   const beers = data.map(item => {
     return {
@@ -11,3 +11,5 @@ export default async (obj, { query }, { dataSources }) => {
 
   return beers;
 };
+
+export default searchBeer;
