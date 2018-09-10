@@ -1,23 +1,32 @@
-## core
+# core
 
-# Run web
+## Run web
 
-$ dotenv yarn dev
+`$ dotenv yarn dev`
 
-# Run worker
+## Run worker
 
-$ dotenv yarn dev-worker
+`$ dotenv yarn dev-worker`
 
-# ENV
+---
 
-# web
+## Environment variables
 
+### web
+
+```
 REDISCLOUD_URL=
 OMDB_API_KEY=
+```
 
-#worker
+### worker
+
+```
 BONSAI_URL=
 GOOGLE_API_KEY=
 GOOGLE_CSE_ID=
 UNTAPPED_CLIENT_ID=
 UNTAPPED_CLIENT_SECRET=
+```
+
+---

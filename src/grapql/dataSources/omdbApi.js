@@ -11,7 +11,7 @@ class OmdbAPI extends RESTDataSource {
   // https://www.apollographql.com/docs/apollo-server/v2/features/data-sources.html#Intercepting-fetches
   willSendRequest(request) {}
 
-  async getMovie(imdbId) {
+  async getMovieById(imdbId) {
     // RESTDataSource do cache responses as defined in the API response cache headers.
     // It does not cache private cache headers.
     // But we can override the TTL (in SEC) with cacheOptions!
@@ -19,6 +19,14 @@ class OmdbAPI extends RESTDataSource {
     return this.get(
       "/",
       { apikey: this.apiKey, i: imdbId },
+      { cacheOptions: { ttl: 3600 } }
+    );
+  }
+
+  async getMovieBySearch(searchString) {
+    return this.get(
+      "/",
+      { apikey: this.apiKey, s: searchString },
       { cacheOptions: { ttl: 3600 } }
     );
   }

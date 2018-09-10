@@ -7,7 +7,9 @@ export default gql`
   ${omdbTypeDefs}
 
   type Query {
-    Omdb(id: ID!): movieData
+    getMovieById(imdbId: ID!): movieData
+    getMovieBySearch(searchString: String!): [movieData]
+    getLatestBeers(test: ID): [beer]
     Untappd(query: String!): [beer]
   }
 `;

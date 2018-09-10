@@ -5,6 +5,7 @@ import { ApolloServer } from "apollo-server-express";
 import { RedisCache } from "apollo-server-cache-redis";
 import omdbAPI from "./grapql/dataSources/omdbApi";
 import untappdAPI from "./grapql/dataSources/untappdAPI";
+import elasticsearchAPI from "./grapql/dataSources/elasticsearchAPI";
 import schema from "./grapql/schema";
 
 async function run() {
@@ -21,7 +22,8 @@ async function run() {
     persistedQueries: redisCache,
     dataSources: () => ({
       OmdbAPI: new omdbAPI(),
-      UntappdAPI: new untappdAPI()
+      UntappdAPI: new untappdAPI(),
+      ElasticsearchApi: new elasticsearchAPI()
     }),
     formatError: error => {
       return {

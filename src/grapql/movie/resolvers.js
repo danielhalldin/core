@@ -1,20 +1,42 @@
-const getMovie = async (obj, { id }, { dataSources }) => {
-  const data = await dataSources.OmdbAPI.getMovie(id);
-  const metacritic = data.Ratings.find(rating => rating.Source === "Metacritic")
-    .Value;
-  const rottenTomatoes = data.Ratings.find(
-    rating => rating.Source === "Rotten Tomatoes"
-  ).Value;
-  const imdb = data.Ratings.find(
-    rating => rating.Source === "Internet Movie Database"
-  ).Value;
+const transformMovieData = data => {
+  const metacritic =
+    data.Ratings &&
+    data.Ratings.find(
+      rating => rating.Source && rating.Source === "Metacritic"
+    );
+  const rottenTomatoes =
+    data.Ratings &&
+    data.Ratings.find(
+      rating => rating.Source && rating.Source === "Rotten Tomatoes"
+    );
+  const imdb =
+    data.Ratings &&
+    data.Ratings.find(
+      rating => rating.Source && rating.Source === "Internet Movie Database"
+    );
 
   return {
     title: data.Title,
-    metacritic,
-    rottenTomatoes,
-    imdb
+    metacritic: metacritic && metacritic.Value,
+    rottenTomatoes: rottenTomatoes && rottenTomatoes.Value,
+    imdb: imdb && imdb.Value
   };
 };
 
-export default getMovie;
+const getMovieById = async (obj, { imdbId }, { dataSources }) => {
+  const data = await dataSources.OmdbAPI.getMovieById(imdbId);
+  return transformMovieData(data);
+};
+
+const getMovieBySearch = async (obj, { searchString }, { dataSources }) => {
+  const data = await dataSources.OmdbAPI.getMovieBySearch(searchString);
+
+  const test = await data.Search.map(async item => {
+    const data = await dataSources.OmdbAPI.getMovieById(item.imdbID);
+    return transformMovieData(data);
+  });
+
+  return test;
+};
+
+export { getMovieById, getMovieBySearch };
