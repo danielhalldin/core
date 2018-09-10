@@ -9,9 +9,7 @@ class OmdbAPI extends RESTDataSource {
   }
 
   // https://www.apollographql.com/docs/apollo-server/v2/features/data-sources.html#Intercepting-fetches
-  willSendRequest(request) {
-    const { method, path, params } = request;
-  }
+  willSendRequest(request) {}
 
   async getMovie(imdbId) {
     // RESTDataSource do cache responses as defined in the API response cache headers.

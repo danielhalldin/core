@@ -9,9 +9,7 @@ class UntappdAPI extends RESTDataSource {
     this.clientId = config.untappedClientID;
   }
 
-  willSendRequest(request) {
-    const { method, path, params } = request;
-  }
+  willSendRequest(request) {}
 
   async search(query) {
     const response = await this.get(
