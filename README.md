@@ -1,5 +1,9 @@
 # core
 
+## Installing
+
+`$ dotenv yarn`
+
 ## Run web
 
 `$ dotenv yarn dev`
@@ -12,16 +16,9 @@
 
 ## Environment variables
 
-### web
-
 ```
 REDISCLOUD_URL=
 OMDB_API_KEY=
-```
-
-### worker
-
-```
 BONSAI_URL=
 GOOGLE_API_KEY=
 GOOGLE_CSE_ID=
