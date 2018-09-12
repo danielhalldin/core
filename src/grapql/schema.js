@@ -1,7 +1,7 @@
 import { makeExecutableSchema } from "apollo-server-express";
-import Untappd from "./beer/resolvers";
-import { getMovieById, getMovieBySearch } from "./movie/resolvers";
-import getLatestBeers from "./systembolaget/resolvers";
+import Untappd from "./Untappd/resolvers";
+import { getMovieById, getMovieBySearch } from "./Omdb/resolvers";
+import latestBeers from "./systembolaget/resolvers";
 import typeDefs from "./typeDefs";
 
 const resolvers = {
@@ -9,7 +9,7 @@ const resolvers = {
     Untappd,
     getMovieById,
     getMovieBySearch,
-    getLatestBeers
+    latestBeers
   }
 };
 

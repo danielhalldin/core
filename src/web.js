@@ -7,6 +7,8 @@ import omdbAPI from "./grapql/dataSources/omdbApi";
 import untappdAPI from "./grapql/dataSources/untappdAPI";
 import elasticsearchAPI from "./grapql/dataSources/elasticsearchAPI";
 import schema from "./grapql/schema";
+import config from "./config";
+import fetch from "node-fetch";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -40,7 +42,31 @@ async function run() {
 
   const app = express();
   app.use(compression());
-  server.applyMiddleware({ app });
+
+  // Untappd token
+  app.get("/login", function(req, res) {
+    res.redirect(
+      `https://untappd.com/oauth/authenticate/?client_id=${
+        config.untappedClientID
+      }&response_type=code&redirect_url=http%3A%2F%2Flocalhost%3A4444%2Fauth`
+    );
+  });
+
+  app.get("/auth", async function(req, res) {
+    const code = req.param("code");
+    const url = `https://untappd.com/oauth/authorize/?client_id=${
+      config.untappedClientID
+    }&client_secret=${
+      config.untappedClientSecret
+    }&response_type=code&redirect_url=http%3A%2F%2Flocalhost%3A4444%2Fauth&code=${code}`;
+
+    const authorizeResponse = await fetch(url);
+    const token = (await authorizeResponse.json()).response.access_token;
+
+    res.send(`token, ${token}`);
+  });
+
+  https: server.applyMiddleware({ app });
 
   const port = process.env.PORT || 4444;
   app.listen({ port }, () => console.log(`Server is running on ${port}`));

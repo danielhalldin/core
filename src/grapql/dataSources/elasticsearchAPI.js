@@ -1,4 +1,5 @@
 import { RESTDataSource } from "apollo-datasource-rest";
+import moment from "moment";
 import config from "../../config";
 
 class elasticsearchAPI extends RESTDataSource {
@@ -9,10 +10,30 @@ class elasticsearchAPI extends RESTDataSource {
 
   willSendRequest(request) {}
 
-  async getLatestBeer() {
-    return this.get(
-      "/systembolaget/_search",
-      {},
+  async latestBeer(size = 10) {
+    var fromDate = moment().subtract(14, "day");
+    return this.post(
+      `/systembolaget/_search?size=${size}`,
+      {
+        query: {
+          bool: {
+            filter: {
+              bool: {
+                must: [
+                  { match: { Varugrupp: "öl" } },
+                  {
+                    range: {
+                      Saljstart: {
+                        gte: fromDate
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
       {
         cacheOptions: { ttl: 3600 }
       }
