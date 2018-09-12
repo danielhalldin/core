@@ -11,16 +11,20 @@ class UntappdAPI extends RESTDataSource {
 
   willSendRequest(request) {}
 
-  async search(query) {
-    const response = await this.get(
-      "/search/beer",
-      {
-        client_id: this.clientId,
-        client_secret: this.clientSecret,
-        q: query.replace(/\s/g, "+")
-      },
-      { cacheOptions: { ttl: 3 } }
-    );
+  async search(query, untappd_access_token) {
+    let options = {
+      q: query.replace(/\s/g, "+")
+    };
+    if (!untappd_access_token) {
+      options.client_id = this.clientId;
+      options.client_secret = this.clientSecret;
+    } else {
+      options.access_token = untappd_access_token;
+    }
+
+    const response = await this.get("/search/beer", options, {
+      cacheOptions: { ttl: 3 }
+    });
 
     const beers = response.response.beers.items;
 

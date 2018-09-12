@@ -1,5 +1,9 @@
-const searchBeer = async (obj, { query }, { dataSources }) => {
-  const data = await dataSources.UntappdAPI.search(query);
+const searchBeer = async (
+  obj,
+  { query },
+  { dataSources, untappd_access_token }
+) => {
+  const data = await dataSources.UntappdAPI.search(query, untappd_access_token);
   const beers = data.map(item => {
     const {
       beer_name: name,

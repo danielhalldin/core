@@ -9,6 +9,7 @@ import elasticsearchAPI from "./grapql/dataSources/elasticsearchAPI";
 import schema from "./grapql/schema";
 import config from "./config";
 import fetch from "node-fetch";
+import Cookies from "cookies";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -35,8 +36,12 @@ async function run() {
         path: error.path
       };
     },
-    context: ({ req }) => {
-      return {};
+    context: ({ req, res }) => {
+      const untappd_access_token = req.headers.untappd_access_token;
+      console.log("headers", req.headers);
+      return {
+        untappd_access_token
+      };
     }
   });
 
@@ -53,17 +58,25 @@ async function run() {
   });
 
   app.get("/auth", async function(req, res) {
-    const code = req.param("code");
+    const code = req.query.code;
     const url = `https://untappd.com/oauth/authorize/?client_id=${
       config.untappedClientID
     }&client_secret=${
       config.untappedClientSecret
     }&response_type=code&redirect_url=http%3A%2F%2Flocalhost%3A4444%2Fauth&code=${code}`;
-
     const authorizeResponse = await fetch(url);
     const token = (await authorizeResponse.json()).response.access_token;
-
+    var cookies = new Cookies(req, res);
+    cookies.set("untappd_access_token", token);
     res.send(`token, ${token}`);
+  });
+
+  app.get("/cookie", function(req, res) {
+    const cookies = new Cookies(req, res);
+    const untappd_access_token = cookies.get("untappd_access_token");
+    console.log("untappd_access_token", untappd_access_token);
+    console.log("Cookie req.headesrs", req.headers);
+    res.send(untappd_access_token);
   });
 
   https: server.applyMiddleware({ app });

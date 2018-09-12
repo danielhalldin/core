@@ -19,7 +19,7 @@ const getLatestBeers = async (obj, { size }, { dataSources }) => {
       category,
       style,
       type,
-      abv,
+      abv: abv.replace(/(\d+\.)(\d)\d*%/, "$1$2"),
       supplier,
       volume
     };
