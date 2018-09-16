@@ -19,5 +19,7 @@ export default `
     salesStartDate: String
     stockTypeId: String
     stockType: String
+    systembolagetId: String
+    systembolagetUrl: String
   }
 `;
