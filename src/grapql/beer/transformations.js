@@ -43,11 +43,7 @@ const untappdTransformBeer = data => {
 };
 
 const untappdTransformBrewery = data => {
-  const {
-    brewery_name: brewery,
-    brewery_label: breweryLabel,
-    country_name: country
-  } = data;
+  const { brewery_name: brewery, brewery_label: breweryLabel } = data;
 
   return {
     brewery,
