@@ -1,15 +1,17 @@
 import { gql } from "apollo-server-express";
-import untappdTypeDefs from "./Untappd/typeDefs";
-import omdbTypeDefs from "./Omdb/typeDefs";
+import beerTypeDefs from "./beer/typeDefs";
+import movieTypeDefs from "./movie/typeDefs";
 
 export default gql`
-  ${untappdTypeDefs}
-  ${omdbTypeDefs}
+  ${beerTypeDefs}
+  ${movieTypeDefs}
 
   type Query {
-    getMovieById(imdbId: ID!): movieData
-    getMovieBySearch(searchString: String!): [movieData]
-    latestBeers(size: Int): [beer]
-    Untappd(query: String!): [beer]
+    omdbById(imdbId: ID!): movieData
+    omdbBySearch(searchString: String!): [movieData]
+    systembolagetLatest(size: Int): [beer]
+    untappdSearch(query: String!): [beer]
+    untappdById(id: ID!): beer
+    decoratedLatest(size: Int): [beer]
   }
 `;

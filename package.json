@@ -4,7 +4,7 @@
   "description": "",
   "main": "/build/web.js",
   "scripts": {
-    "dev": "nodemon --watch src/web.js --exec babel-node src/web.js -e js,graphql,json --node-path './src/web.js'",
+    "dev": "nodemon --exec babel-node src/web.js -e js,graphql,json --node-path './src/web.js'",
     "dev-worker": "nodemon --watch src/worker.js --exec babel-node src/worker.js -e js,graphql,json --node-path './src/worker.js'",
     "prepush": "yarn lint",
     "build": "babel src --copy-files --source-maps --out-dir build",

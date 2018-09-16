@@ -1,6 +1,7 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import moment from "moment";
 import config from "../../config";
+import _ from "lodash";
 
 class elasticsearchAPI extends RESTDataSource {
   constructor() {
@@ -12,15 +13,25 @@ class elasticsearchAPI extends RESTDataSource {
 
   async latestBeer(size = 10) {
     var fromDate = moment().subtract(14, "day");
+    var sort = ["+Saljstart"].map(function(item) {
+      var order = _.startsWith(item, "-") ? "desc" : "asc";
+      var object = {};
+      object[_.trim(item, "+-")] = {
+        order: order
+      };
+      return object;
+    });
     return this.post(
       `/systembolaget/_search?size=${size}`,
       {
+        sort: sort,
         query: {
           bool: {
             filter: {
               bool: {
                 must: [
                   { match: { Varugrupp: "öl" } },
+                  { match: { SortimentText: "Små partier" } },
                   {
                     range: {
                       Saljstart: {

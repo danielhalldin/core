@@ -38,7 +38,6 @@ async function run() {
     },
     context: ({ req, res }) => {
       const untappd_access_token = req.headers.untappd_access_token;
-      console.log("headers", req.headers);
       return {
         untappd_access_token
       };
@@ -69,14 +68,6 @@ async function run() {
     var cookies = new Cookies(req, res);
     cookies.set("untappd_access_token", token);
     res.send(`token, ${token}`);
-  });
-
-  app.get("/cookie", function(req, res) {
-    const cookies = new Cookies(req, res);
-    const untappd_access_token = cookies.get("untappd_access_token");
-    console.log("untappd_access_token", untappd_access_token);
-    console.log("Cookie req.headesrs", req.headers);
-    res.send(untappd_access_token);
   });
 
   https: server.applyMiddleware({ app });

@@ -6,8 +6,7 @@ module.exports = {
   googleApiKey: process.env.GOOGLE_API_KEY,
   googleCseId: process.env.GOOGLE_CSE_ID,
 
-  untappedBaseUrl:
-    process.env.UNTAPPED_BASE_URL || "https://api.untappd.com/v4",
+  untappedBaseUrl: process.env.UNTAPPED_BASE_URL || "https://api.untappd.com",
   untappedClientID: process.env.UNTAPPED_CLIENT_ID,
   untappedClientSecret: process.env.UNTAPPED_CLIENT_SECRET,
 

@@ -23,12 +23,12 @@ const transformMovieData = data => {
   };
 };
 
-const getMovieById = async (obj, { imdbId }, { dataSources }) => {
+const omdbById = async (obj, { imdbId }, { dataSources }) => {
   const data = await dataSources.OmdbAPI.getMovieById(imdbId);
   return transformMovieData(data);
 };
 
-const getMovieBySearch = async (obj, { searchString }, { dataSources }) => {
+const omdbBySearch = async (obj, { searchString }, { dataSources }) => {
   const data = await dataSources.OmdbAPI.getMovieBySearch(searchString);
 
   const test = await data.Search.map(async item => {
@@ -39,4 +39,4 @@ const getMovieBySearch = async (obj, { searchString }, { dataSources }) => {
   return test;
 };
 
-export { getMovieById, getMovieBySearch };
+export { omdbById, omdbBySearch };

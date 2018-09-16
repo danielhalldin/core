@@ -2,7 +2,7 @@
 
 ## Installing
 
-`$ dotenv yarn`
+`$ yarn`
 
 ## Run web
 

@@ -4,15 +4,17 @@ export default `
     brewery: String
     beerLabel: String
     breweryLabel: String
-    price: String,
+    price: Float,
     category: String,
     style: String,
     type: String,
-    abv: String,
+    abv: Float,
     supplier: String,
-    volume: String,
+    volume: Float,
     description: String,
     country: String
-    untappdId: String
+    untappdId: Int
+    userRating: String,
+    salesStartDate: String
   }
 `;
