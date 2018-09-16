@@ -17,6 +17,7 @@ const untappdTransform = data => {
 const untappdTransformBeer = data => {
   const {
     auth_rating: userRating,
+    rating_score: rating,
     beer_name: name,
     beer_label: beerLabel,
     beer_ibu: ibu,
@@ -28,6 +29,7 @@ const untappdTransformBeer = data => {
 
   return {
     userRating,
+    rating,
     name,
     beerLabel,
     ibu,
@@ -42,13 +44,12 @@ const untappdTransformBrewery = data => {
   const {
     brewery_name: brewery,
     brewery_label: breweryLabel,
-    brewery_country: country
+    country_name: country
   } = data;
 
   return {
     brewery,
-    breweryLabel,
-    country
+    breweryLabel
   };
 };
 
@@ -64,7 +65,9 @@ const systembolagetTransform = data => {
     Alkoholhalt: abv,
     Leverantor: supplier,
     Volymiml: volume,
-    Saljstart: salesStartDate
+    Saljstart: salesStartDate,
+    Ursprunglandnamn: countryName,
+    Ursprung: countryRegion
   } = data._source;
   return {
     name: `${name}${name2 ? " " + name2 : ""}`,
@@ -76,7 +79,8 @@ const systembolagetTransform = data => {
     abv: abv.replace(/(\d+\.)(\d)\d*%/, "$1$2"),
     supplier,
     volume,
-    salesStartDate
+    salesStartDate,
+    country: `${countryName}${countryRegion ? " - " + countryRegion : ""}`
   };
 };
 
