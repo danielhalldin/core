@@ -29,7 +29,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/search/beer`,
       this.decorateOptionsWithTokens(options, untappd_access_token),
-      { cacheOptions: { ttl: 3600 } }
+      { cacheOptions: { ttl: 3600 * 24 } }
     );
 
     return response.response.beers.items;
@@ -39,7 +39,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/beer/info/${id}`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
-      { cacheOptions: { ttl: 3600 } }
+      { cacheOptions: { ttl: 3600 * 24 } }
     );
 
     return response;
