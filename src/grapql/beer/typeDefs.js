@@ -20,6 +20,6 @@ export default `
     stockTypeId: String
     stockType: String
     systembolagetId: String
-    systembolagetUrl: String
+    systembolagetUrl: String  
   }
 `;
