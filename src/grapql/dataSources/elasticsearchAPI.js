@@ -22,7 +22,6 @@ class elasticsearchAPI extends RESTDataSource {
       return object;
     });
 
-    console.log("sort", sort);
     return this.post(
       `/systembolaget/_search?size=${size}`,
       {
