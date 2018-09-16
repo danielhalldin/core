@@ -67,7 +67,9 @@ const systembolagetTransform = data => {
     Volymiml: volume,
     Saljstart: salesStartDate,
     Ursprunglandnamn: countryName,
-    Ursprung: countryRegion
+    Ursprung: countryRegion,
+    Sortiment: stockTypeId,
+    SortimentText: stockType
   } = data._source;
   return {
     name: `${name}${name2 ? " " + name2 : ""}`,
@@ -80,7 +82,9 @@ const systembolagetTransform = data => {
     supplier,
     volume,
     salesStartDate,
-    country: `${countryName}${countryRegion ? " - " + countryRegion : ""}`
+    country: `${countryName}${countryRegion ? " - " + countryRegion : ""}`,
+    stockTypeId,
+    stockType
   };
 };
 

@@ -13,7 +13,7 @@ class elasticsearchAPI extends RESTDataSource {
 
   async latestBeer(size = 10) {
     var fromDate = moment().subtract(14, "day");
-    var sort = ["+Saljstart"].map(function(item) {
+    var sort = ["-Saljstart"].map(function(item) {
       var order = _.startsWith(item, "-") ? "desc" : "asc";
       var object = {};
       object[_.trim(item, "+-")] = {
@@ -21,6 +21,8 @@ class elasticsearchAPI extends RESTDataSource {
       };
       return object;
     });
+
+    console.log("sort", sort);
     return this.post(
       `/systembolaget/_search?size=${size}`,
       {
@@ -31,7 +33,7 @@ class elasticsearchAPI extends RESTDataSource {
               bool: {
                 must: [
                   { match: { Varugrupp: "öl" } },
-                  { match: { SortimentText: "Små partier" } },
+                  // { match: { SortimentText: "Små partier" } },
                   {
                     range: {
                       Saljstart: {

@@ -17,5 +17,7 @@ export default `
     userRating: Float
     rating: Float
     salesStartDate: String
+    stockTypeId: String
+    stockType: String
   }
 `;
