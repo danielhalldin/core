@@ -24,7 +24,8 @@ const untappdTransformBeer = data => {
     beer_abv: abv,
     beer_style: style,
     beer_description: description,
-    bid: untappdId
+    bid: untappdId,
+    beer_slug
   } = data;
 
   return {
@@ -36,7 +37,8 @@ const untappdTransformBeer = data => {
     abv,
     style,
     description,
-    untappdId
+    untappdId,
+    untappdUrl: `https://untappd.com/b/${beer_slug}/${untappdId}`
   };
 };
 
