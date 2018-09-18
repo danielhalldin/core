@@ -1,5 +1,6 @@
 export default `
   type beer {
+    id: Int
     name: String
     brewery: String
     beerLabel: String
@@ -9,6 +10,7 @@ export default `
     style: String
     type: String
     abv: Float
+    ibu: Int
     supplier: String
     volume: Float
     description: String

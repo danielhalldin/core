@@ -29,6 +29,7 @@ const untappdTransformBeer = data => {
   } = data;
 
   return {
+    id: untappdId,
     userRating,
     rating,
     name,
@@ -71,6 +72,7 @@ const systembolagetTransform = data => {
     nr: systembolagetId
   } = data._source;
   return {
+    id: systembolagetId,
     name: `${name}${name2 ? " " + name2 : ""}`,
     brewery,
     price,
