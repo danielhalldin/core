@@ -9,7 +9,6 @@ import elasticsearchAPI from "./grapql/dataSources/elasticsearchAPI";
 import schema from "./grapql/schema";
 import config from "./config";
 import fetch from "node-fetch";
-import Cookies from "cookies";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -38,6 +37,7 @@ async function run() {
     },
     context: ({ req, res }) => {
       const untappd_access_token = req.headers.untappd_access_token;
+      console.log("untappd_access_token", untappd_access_token);
       return {
         untappd_access_token
       };
@@ -65,9 +65,7 @@ async function run() {
     }&response_type=code&redirect_url=http%3A%2F%2Flocalhost%3A4444%2Fauth&code=${code}`;
     const authorizeResponse = await fetch(url);
     const token = (await authorizeResponse.json()).response.access_token;
-    var cookies = new Cookies(req, res);
-    cookies.set("untappd_access_token", token);
-    res.send(`token, ${token}`);
+    res.redirect(`http://localhost:3001/?token=${token}`);
   });
 
   https: server.applyMiddleware({ app });
