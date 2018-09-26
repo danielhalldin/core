@@ -12,6 +12,6 @@ export default gql`
     systembolagetLatest(size: Int): [beer]
     untappdSearch(query: String!): [beer]
     untappdById(id: ID!): beer
-    decoratedLatest(size: Int): [beer]
+    decoratedLatest(size: Int, stockType: String): [beer]
   }
 `;

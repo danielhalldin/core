@@ -3,53 +3,35 @@ import moment from "moment";
 import config from "../../config";
 import _ from "lodash";
 
+import beerQuery from "./queries/beer";
+
 class elasticsearchAPI extends RESTDataSource {
   constructor() {
     super();
     this.baseURL = config.elasticsearchUrl;
   }
 
-  willSendRequest(request) {}
+  willSendRequest(request) {
+    console.log("request", request.body);
+    return request;
+  }
 
-  async latestBeer(size = 10) {
+  async didReceiveResponse(response) {
+    const body = await response.json();
+    return body;
+  }
+
+  async latestBeer(size = 10, stockType = "Små partier") {
     var fromDate = moment().subtract(14, "day");
-    var sort = ["-Saljstart"].map(function(item) {
-      var order = _.startsWith(item, "-") ? "desc" : "asc";
-      var object = {};
-      object[_.trim(item, "+-")] = {
-        order: order
-      };
-      return object;
-    });
+    var toDate = moment().add(2, "month");
 
-    return this.post(
-      `/systembolaget/_search?size=${size}`,
-      {
-        sort: sort,
-        query: {
-          bool: {
-            filter: {
-              bool: {
-                must: [
-                  { match: { Varugrupp: "öl" } },
-                  // { match: { SortimentText: "Små partier" } },
-                  {
-                    range: {
-                      Saljstart: {
-                        gte: fromDate
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        cacheOptions: { ttl: 3600 }
-      }
+    const response = await this.post(
+      `/systembolaget/_search?size=${size}#stockType=${stockType}`,
+      beerQuery(fromDate, toDate, stockType),
+      { cacheOptions: { ttl: 3600 } }
     );
+
+    return response;
   }
 }
 

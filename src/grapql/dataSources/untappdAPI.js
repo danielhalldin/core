@@ -9,7 +9,18 @@ class UntappdAPI extends RESTDataSource {
     this.clientId = config.untappedClientID;
   }
 
-  willSendRequest(request) {}
+  willSendRequest(request) {
+    console.log("request", request);
+    return request;
+  }
+
+  async didReceiveResponse(response) {
+    const currentRemainingRequest = response.headers.get(
+      "x-ratelimit-remaining"
+    );
+    console.log("currentRemainingRequest", currentRemainingRequest);
+    return response.json();
+  }
 
   decorateOptionsWithTokens(options, untappd_access_token) {
     if (!untappd_access_token) {
@@ -21,15 +32,15 @@ class UntappdAPI extends RESTDataSource {
     return options;
   }
 
-  async search(query, untappd_access_token) {
+  async search(query) {
     let options = {
       q: query.replace(/\s/g, "+")
     };
 
     const response = await this.get(
       `/v4/search/beer`,
-      this.decorateOptionsWithTokens(options, untappd_access_token),
-      { cacheOptions: { ttl: 3600 * 24 } }
+      this.decorateOptionsWithTokens(options),
+      { cacheOptions: { ttl: 3600 * 2 } }
     );
 
     return response.response.beers.items;
@@ -39,7 +50,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/beer/info/${id}`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
-      { cacheOptions: { ttl: 3600 * 24 } }
+      { cacheOptions: { ttl: 3600 * 2 } }
     );
 
     return response;

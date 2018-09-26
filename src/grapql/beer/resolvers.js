@@ -34,10 +34,10 @@ const systembolagetLatest = async (obj, { size }, { dataSources }) => {
 
 const decoratedLatest = async (
   obj,
-  { size },
+  { size, stockType },
   { dataSources, untappd_access_token }
 ) => {
-  const data = await dataSources.ElasticsearchApi.latestBeer(size);
+  const data = await dataSources.ElasticsearchApi.latestBeer(size, stockType);
   const beers = data.hits.hits.map(async beer => {
     const systembolagetBeer = systembolagetTransform(beer);
     const query = `${systembolagetBeer.brewery} ${systembolagetBeer.name}`
@@ -55,6 +55,7 @@ const decoratedLatest = async (
       query,
       untappd_access_token
     );
+    console.log("untappdSearchResult", untappdSearchResult);
     if (untappdSearchResult.length > 0) {
       untappdId = untappdTransform(untappdSearchResult[0]).untappdId;
     } else {
