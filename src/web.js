@@ -37,7 +37,6 @@ async function run() {
     },
     context: ({ req, res }) => {
       const untappd_access_token = req.headers.untappd_access_token;
-      console.log("untappd_access_token", untappd_access_token);
       return {
         untappd_access_token
       };

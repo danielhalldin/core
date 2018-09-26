@@ -12,7 +12,6 @@ class elasticsearchAPI extends RESTDataSource {
   }
 
   willSendRequest(request) {
-    console.log("request", request.body);
     return request;
   }
 

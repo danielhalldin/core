@@ -55,7 +55,7 @@ const decoratedLatest = async (
       query,
       untappd_access_token
     );
-    console.log("untappdSearchResult", untappdSearchResult);
+
     if (untappdSearchResult.length > 0) {
       untappdId = untappdTransform(untappdSearchResult[0]).untappdId;
     } else {
