@@ -10,7 +10,6 @@ class UntappdAPI extends RESTDataSource {
   }
 
   willSendRequest(request) {
-    console.log("request", request);
     return request;
   }
 
