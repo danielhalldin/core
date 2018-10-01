@@ -102,7 +102,7 @@ class IndexClient {
   };
 
   updateDocument = ({ index, type, id, documentBody }) => {
-    this._client.update({
+    return this._client.update({
       index: index,
       type: type,
       id: id,

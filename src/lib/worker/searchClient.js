@@ -21,7 +21,7 @@ class SearchClient {
     size = 1,
     stockType = "Små partier"
   }) => {
-    var fromDate = moment().subtract(14, "day");
+    var fromDate = moment().subtract(1, "month");
     var toDate = moment().add(1, "month");
     const queryBody = beersToDecorate(fromDate, toDate, stockType);
     const query = {

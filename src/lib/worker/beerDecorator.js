@@ -24,10 +24,15 @@ class beerDecorator {
   };
 
   decorateWithUntappd = async () => {
-    logger.info("Running decorateWithUntappd");
     const beersToDecorate = await this.searchClient.latatestBeersToBeDecorated({
       size: 1
     });
+
+    if (beersToDecorate.length === 0) {
+      return;
+    }
+
+    logger.info("Running decorateWithUntappd");
 
     beersToDecorate.map(async beer => {
       const name = `${beer._source.Namn}${

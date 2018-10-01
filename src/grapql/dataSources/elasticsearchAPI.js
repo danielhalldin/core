@@ -1,7 +1,6 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import moment from "moment";
 import config from "../../config";
-import _ from "lodash";
 
 import { beers } from "../../lib/queries/beer";
 
@@ -21,7 +20,7 @@ class elasticsearchAPI extends RESTDataSource {
   }
 
   async latestBeer(size = 10, stockType = "Små partier") {
-    var fromDate = moment().subtract(14, "day");
+    var fromDate = moment().subtract(1, "month");
     var toDate = moment().add(1, "month");
 
     const response = await this.post(
