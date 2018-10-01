@@ -58,28 +58,30 @@ async function run() {
     };
 
     const url =
-      config.untappd.authBaseUrl + "?" + querystring.stringify(params);
+      config.untappd.authBaseUrl +
+      "/authenticate/?" +
+      querystring.stringify(params);
 
-    logger.info("url" + url);
+    logger.info("url " + url);
     res.redirect(url);
   });
 
   app.get("/auth", async function(req, res) {
     const code = req.query.code;
-
     const params = {
       client_id: config.untappd.clientID,
       client_secret: config.untappd.clientSecret,
       response_type: "code",
-      redirect_url: encodeURI(config.newBeers.authUrl + "&code=" + code)
+      redirect_url: encodeURI(config.newBeers.authUrl),
+      code: code
     };
 
     const url =
-      config.untappd.authBaseUrl + "?" + querystring.stringify(params);
-
+      config.untappd.authBaseUrl +
+      "/authorize/?" +
+      querystring.stringify(params);
     const authorizeResponse = await fetch(url);
     const token = (await authorizeResponse.json()).response.access_token;
-
     res.redirect(`${config.newBeers.url}/?token=${token}`);
   });
 

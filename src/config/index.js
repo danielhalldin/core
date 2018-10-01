@@ -17,8 +17,7 @@ module.exports = {
   untappd: {
     baseUrl: process.env.UNTAPPED_BASE_URL || "https://api.untappd.com",
     authBaseUrl:
-      process.env.UNTAPPED_AUTH_BASE_URL ||
-      "https://api.untappd.com/oauth/authenticate/",
+      process.env.UNTAPPED_AUTH_BASE_URL || "https://api.untappd.com/oauth",
     clientID: process.env.UNTAPPED_CLIENT_ID,
     clientSecret: process.env.UNTAPPED_CLIENT_SECRET
   },
