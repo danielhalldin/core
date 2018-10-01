@@ -1,6 +1,7 @@
 module.exports = {
   port: process.env.PORT || 5000,
   logLevel: process.env.LOG_LEVEL || "info",
+  decoratorInterval: process.env.DECORATOR_INTERVAL | 10000,
 
   elasticsearchUrl: process.env.BONSAI_URL || "http://localhost:9200",
 

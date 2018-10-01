@@ -50,7 +50,7 @@ const indexBeers = async () => {
   await indexClient.bulkIndex("systembolaget", "artikel", beers);
 
   // Decorating
-  setInterval(beerDecorator.decorateWithUntappd, 10000);
+  setInterval(beerDecorator.decorateWithUntappd, config.decoratorInterval);
 };
 
 indexBeers();
