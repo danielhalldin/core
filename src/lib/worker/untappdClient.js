@@ -4,9 +4,9 @@ import logger from "../logger";
 
 class UntappdClient {
   constructor() {
-    this.baseUrl = config.untappedBaseUrl;
-    this.untappedClientID = config.untappedClientID;
-    this.untappedClientSecret = config.untappedClientSecret;
+    this.baseUrl = config.untappd.baseUrl;
+    this.untappedClientID = config.untappd.clientID;
+    this.untappedClientSecret = config.untappd.clientSecret;
   }
 
   searchBeer = async q => {

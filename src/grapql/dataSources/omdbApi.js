@@ -4,8 +4,8 @@ import config from "../../config";
 class OmdbAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = config.omdbBaseUrl;
-    this.apiKey = config.omdbApiKey;
+    this.baseURL = config.omdb.baseUrl;
+    this.apiKey = config.omdb.apiKey;
   }
 
   // https://www.apollographql.com/docs/apollo-server/v2/features/data-sources.html#Intercepting-fetches

@@ -5,9 +5,9 @@ import logger from "../../lib/logger";
 class UntappdAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = config.untappedBaseUrl;
-    this.clientSecret = config.untappedClientSecret;
-    this.clientId = config.untappedClientID;
+    this.baseURL = config.untappd.baseUrl;
+    this.clientSecret = config.untappd.clientSecret;
+    this.clientId = config.untappd.clientID;
   }
 
   willSendRequest(request) {

@@ -1,16 +1,17 @@
-import throng from "throng";
-import express from "express";
-import compression from "compression";
 import { ApolloServer } from "apollo-server-express";
 import { RedisCache } from "apollo-server-cache-redis";
-import omdbAPI from "./grapql/dataSources/omdbApi";
-import untappdAPI from "./grapql/dataSources/untappdAPI";
-import elasticsearchAPI from "./grapql/dataSources/elasticsearchAPI";
-import IndexClient from "./lib/worker/indexClient";
-import schema from "./grapql/schema";
+import compression from "compression";
 import config from "./config";
+import elasticsearchAPI from "./grapql/dataSources/elasticsearchAPI";
+import express from "express";
 import fetch from "node-fetch";
+import IndexClient from "./lib/worker/indexClient";
 import logger from "./lib/logger";
+import omdbAPI from "./grapql/dataSources/omdbApi";
+import querystring from "querystring";
+import schema from "./grapql/schema";
+import throng from "throng";
+import untappdAPI from "./grapql/dataSources/untappdAPI";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -50,23 +51,36 @@ async function run() {
 
   // Untappd token
   app.get("/login", function(req, res) {
-    res.redirect(
-      `https://untappd.com/oauth/authenticate/?client_id=${
-        config.untappedClientID
-      }&response_type=code&redirect_url=http%3A%2F%2Fdata-source.ddns.net%2Fauth`
-    );
+    const params = {
+      client_id: config.untappd.clientID,
+      response_type: "code",
+      redirect_url: encodeURI(config.newBeers.authUrl)
+    };
+
+    const url =
+      config.untappd.authBaseUrl + "?" + querystring.stringify(params);
+
+    logger.info("url" + url);
+    res.redirect(url);
   });
 
   app.get("/auth", async function(req, res) {
     const code = req.query.code;
-    const url = `https://untappd.com/oauth/authorize/?client_id=${
-      config.untappedClientID
-    }&client_secret=${
-      config.untappedClientSecret
-    }&response_type=code&redirect_url=http%3A%2F%2Fdata-source.ddns.net%2Fauth&code=${code}`;
+
+    const params = {
+      client_id: config.untappd.clientID,
+      client_secret: config.untappd.clientSecret,
+      response_type: "code",
+      redirect_url: encodeURI(config.newBeers.authUrl + "&code=" + code)
+    };
+
+    const url =
+      config.untappd.authBaseUrl + "?" + querystring.stringify(params);
+
     const authorizeResponse = await fetch(url);
     const token = (await authorizeResponse.json()).response.access_token;
-    res.redirect(`http://new-beers.herokuapp.com/?token=${token}`);
+
+    res.redirect(`${config.newBeers.url}/?token=${token}`);
   });
 
   app.get("/manual-update", async function(req, res) {
@@ -91,11 +105,11 @@ async function run() {
 
   https: server.applyMiddleware({ app });
 
-  const port = process.env.PORT || 4444;
+  const port = config.port;
   app.listen({ port }, () => logger.info(`Server is running on ${port}`));
 }
 
-const WORKERS = process.env.WEB_CONCURRENCY || 1;
+const WORKERS = config.webConcurrenct || 1;
 throng(
   {
     workers: WORKERS,

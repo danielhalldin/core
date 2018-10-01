@@ -1,21 +1,36 @@
 module.exports = {
-  port: process.env.PORT || 5000,
+  port: process.env.PORT || 4444,
   logLevel: process.env.LOG_LEVEL || "info",
-  decoratorInterval: process.env.DECORATOR_INTERVAL | 10000,
+  decoratorInterval: process.env.DECORATOR_INTERVAL || 10000,
+  webConcurrenct: process.env.WEB_CONCURRENCY || 1,
 
-  elasticsearchUrl: process.env.BONSAI_URL || "http://localhost:9200",
+  newBeers: {
+    url: process.env.NEW_BEERS_URL || "http://new-beers.herokuapp.com",
+    authUrl:
+      process.env.NEW_BEERS_AUTH_URL || "http://data-source.ddns.net/auth"
+  },
 
-  googleApiKey: process.env.GOOGLE_API_KEY,
-  googleCseId: process.env.GOOGLE_CSE_ID,
+  elasticsearch: {
+    url: process.env.BONSAI_URL || "http://localhost:9200"
+  },
 
-  untappedBaseUrl: process.env.UNTAPPED_BASE_URL || "https://api.untappd.com",
-  untappedClientID: process.env.UNTAPPED_CLIENT_ID,
-  untappedClientSecret: process.env.UNTAPPED_CLIENT_SECRET,
+  untappd: {
+    baseUrl: process.env.UNTAPPED_BASE_URL || "https://api.untappd.com",
+    authBaseUrl:
+      process.env.UNTAPPED_AUTH_BASE_URL ||
+      "https://api.untappd.com/oauth/authenticate/",
+    clientID: process.env.UNTAPPED_CLIENT_ID,
+    clientSecret: process.env.UNTAPPED_CLIENT_SECRET
+  },
 
-  systembolagetUrl:
-    process.env.SYSTEMBOLAGET_URL ||
-    "http://www.systembolaget.se/api/assortment/products/xml",
+  systembolaget: {
+    url:
+      process.env.SYSTEMBOLAGET_URL ||
+      "http://www.systembolaget.se/api/assortment/products/xml"
+  },
 
-  omdbBaseUrl: process.env.UNTAPPED_BASE_URL || "http://www.omdbapi.com",
-  omdbApiKey: process.env.OMDB_API_KEY || "http://www.omdbapi.com"
+  omdb: {
+    baseUrl: process.env.UNTAPPED_BASE_URL || "http://www.omdbapi.com",
+    apiKey: process.env.OMDB_API_KEY || "http://www.omdbapi.com"
+  }
 };

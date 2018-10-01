@@ -38,6 +38,7 @@
     "graphql": "^14.0.2",
     "moment": "^2.22.2",
     "node-fetch": "^2.2.0",
+    "querystring": "^0.2.0",
     "redis": "^2.8.0",
     "throng": "^4.0.0",
     "urijs": "^1.19.1",

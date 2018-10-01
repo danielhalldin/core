@@ -6,7 +6,7 @@ import { beersToDecorate } from "../queries/beer";
 
 class SearchClient {
   constructor() {
-    const uri = new URI(config.elasticsearchUrl);
+    const uri = new URI(config.elasticsearch.url);
     this._client = new Elasticsearch.Client({
       host: uri.toString(),
       apiVersion: "5.0"

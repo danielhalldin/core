@@ -7,7 +7,7 @@ import { beers } from "../../lib/queries/beer";
 class elasticsearchAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = config.elasticsearchUrl;
+    this.baseURL = config.elasticsearch.url;
   }
 
   willSendRequest(request) {

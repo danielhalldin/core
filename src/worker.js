@@ -28,7 +28,7 @@ const indexBeers = async () => {
 
   // Fetching
   logger.info("Fetching Systembolaget data");
-  const res = await fetch(config.systembolagetUrl);
+  const res = await fetch(config.systembolaget.url);
 
   // Parsing
   logger.info("Parsing Systembolaget data");
