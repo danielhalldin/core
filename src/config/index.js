@@ -5,7 +5,7 @@ module.exports = {
   webConcurrenct: process.env.WEB_CONCURRENCY || 1,
 
   newBeers: {
-    url: process.env.NEW_BEERS_URL || "http://new-beers.herokuapp.com",
+    url: process.env.NEW_BEERS_URL || "http://new-beers.ddns.net",
     authUrl:
       process.env.NEW_BEERS_AUTH_URL || "http://data-source.ddns.net/auth"
   },
