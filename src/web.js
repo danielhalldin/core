@@ -66,7 +66,7 @@ async function run() {
     }&response_type=code&redirect_url=http%3A%2F%2Fdata-source.ddns.net%2Fauth&code=${code}`;
     const authorizeResponse = await fetch(url);
     const token = (await authorizeResponse.json()).response.access_token;
-    res.redirect(`https://new-beers.herokuapp.com/?token=${token}`);
+    res.redirect(`http://new-beers.herokuapp.com/?token=${token}`);
   });
 
   app.get("/manual-update", async function(req, res) {
