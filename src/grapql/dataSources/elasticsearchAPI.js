@@ -22,7 +22,7 @@ class elasticsearchAPI extends RESTDataSource {
 
   async latestBeer(size = 10, stockType = "Små partier") {
     var fromDate = moment().subtract(14, "day");
-    var toDate = moment().add(1, "mpnth");
+    var toDate = moment().add(1, "month");
 
     const response = await this.post(
       `/systembolaget/_search?size=${size}#stockType=${stockType}`,
