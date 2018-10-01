@@ -1,18 +1,35 @@
 import xml2js from "xml2js";
 import fetch from "node-fetch";
-import IndexClient from "./lib/worker/index_client";
+import IndexClient from "./lib/worker/indexClient";
+import BeerDecorator from "./lib/worker/beerDecorator";
+import logger from "./lib/logger";
 import config from "./config";
 
 var parser = new xml2js.Parser({ explicitArray: false });
 var indexClient = new IndexClient();
+var beerDecorator = new BeerDecorator();
 
 indexClient.healthCheck(60000);
 
 const indexBeers = async () => {
-  // fetching
+  // // REMOVE AND CREATE INDEX
+  // try {
+  //   await indexClient.deleteIndex("systembolaget");
+  //   logger.info("Removed index 'systembolget'");
+  // } catch (e) {
+  //   logger.info("Faild to remove index 'systembolget'");
+  // }
+  // try {
+  //   await indexClient.createIndex("systembolaget");
+  //   logger.info("Created index 'systembolget'");
+  // } catch (e) {
+  //   logger.info("Faild to create index 'systembolget'");
+  // }
+
+  // Fetching
   const res = await fetch(config.systembolagetUrl);
 
-  // parsing
+  // Parsing
   const xml = await res.text();
   const json = await new Promise((resolve, reject) =>
     parser.parseString(xml, (err, result) => {
@@ -29,12 +46,11 @@ const indexBeers = async () => {
       return article;
     });
 
-  // index
-  await indexClient.deleteIndex("systembolaget");
-  await indexClient.createIndex("systembolaget");
+  // Indexing
   await indexClient.bulkIndex("systembolaget", "artikel", beers);
 
-  console.log("All indexed");
+  // Decorating
+  setInterval(beerDecorator.decorateWithUntappd, 10000);
 };
 
 indexBeers();

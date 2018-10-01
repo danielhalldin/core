@@ -3,7 +3,7 @@ import moment from "moment";
 import config from "../../config";
 import _ from "lodash";
 
-import beerQuery from "./queries/beer";
+import { beers } from "../../lib/queries/beer";
 
 class elasticsearchAPI extends RESTDataSource {
   constructor() {
@@ -22,12 +22,12 @@ class elasticsearchAPI extends RESTDataSource {
 
   async latestBeer(size = 10, stockType = "Små partier") {
     var fromDate = moment().subtract(14, "day");
-    var toDate = moment().add(2, "month");
+    var toDate = moment().add(1, "mpnth");
 
     const response = await this.post(
       `/systembolaget/_search?size=${size}#stockType=${stockType}`,
-      beerQuery(fromDate, toDate, stockType),
-      { cacheOptions: { ttl: 3600 } }
+      beers(fromDate, toDate, stockType),
+      { cacheOptions: { ttl: 10 } }
     );
 
     return response;

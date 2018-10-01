@@ -9,6 +9,7 @@ import elasticsearchAPI from "./grapql/dataSources/elasticsearchAPI";
 import schema from "./grapql/schema";
 import config from "./config";
 import fetch from "node-fetch";
+import logger from "./lib/logger";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -70,7 +71,7 @@ async function run() {
   https: server.applyMiddleware({ app });
 
   const port = process.env.PORT || 4444;
-  app.listen({ port }, () => console.log(`Server is running on ${port}`));
+  app.listen({ port }, () => logger.info(`Server is running on ${port}`));
 }
 
 const WORKERS = process.env.WEB_CONCURRENCY || 1;

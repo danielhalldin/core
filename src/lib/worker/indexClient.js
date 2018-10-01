@@ -1,5 +1,6 @@
 import Elasticsearch from "elasticsearch";
 import URI from "urijs";
+import logger from "../logger";
 import config from "../../config";
 
 class IndexClient {
@@ -28,9 +29,9 @@ class IndexClient {
       },
       function(error) {
         if (error) {
-          console.log("Elasticsearch ping: DOWN");
+          logger.info("Elasticsearch ping: DOWN");
         } else {
-          console.log("Elasticsearch ping: OK");
+          logger.info("Elasticsearch ping: OK");
         }
       }
     );
@@ -53,13 +54,15 @@ class IndexClient {
   bulkIndex = (index, type, documents) => {
     const body = [];
     documents.slice(0, 5000).forEach(beer => {
-      body.push({ index: { _index: index, _type: type } });
-      body.push(beer);
+      body.push({ update: { _index: index, _type: type, _id: beer.id } });
+      body.push({ doc: beer, upsert: beer });
     });
 
-    return this._client.bulk({
+    this._client.bulk({
       body: body
     });
+
+    logger.info("All indexed");
   };
 
   addToIndex = (index, type, document) => {
@@ -80,9 +83,9 @@ class IndexClient {
       },
       function(error, response) {
         if (error) {
-          console.error("Failed to delete document from index: " + error);
+          logger.info("Failed to delete document from index: " + error);
         } else {
-          console.info(
+          logger.info(
             "Deleted document from indexed." +
               " Index: " +
               response._index +
@@ -96,6 +99,18 @@ class IndexClient {
         }
       }
     );
+  };
+
+  updateDocument = ({ index, type, id, documentBody }) => {
+    this._client.update({
+      index: index,
+      type: type,
+      id: id,
+      body: {
+        doc: documentBody
+      },
+      refresh: true
+    });
   };
 }
 

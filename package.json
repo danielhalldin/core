@@ -41,6 +41,7 @@
     "redis": "^2.8.0",
     "throng": "^4.0.0",
     "urijs": "^1.19.1",
+    "winston": "^3.1.0",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {

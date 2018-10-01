@@ -1,5 +1,6 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import config from "../../config";
+import logger from "../../lib/logger";
 
 class UntappdAPI extends RESTDataSource {
   constructor() {
@@ -18,7 +19,7 @@ class UntappdAPI extends RESTDataSource {
       "x-ratelimit-remaining"
     );
     const authType = response.headers.get("x-auth-type");
-    console.log("Remaining request", currentRemainingRequest, authType);
+    logger.info("Remaining request", currentRemainingRequest, authType);
     return response.json();
   }
 
