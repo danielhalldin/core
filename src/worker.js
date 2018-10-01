@@ -27,9 +27,11 @@ const indexBeers = async () => {
   // }
 
   // Fetching
+  logger.info("Fetching Systembolaget data");
   const res = await fetch(config.systembolagetUrl);
 
   // Parsing
+  logger.info("Parsing Systembolaget data");
   const xml = await res.text();
   const json = await new Promise((resolve, reject) =>
     parser.parseString(xml, (err, result) => {
@@ -47,6 +49,7 @@ const indexBeers = async () => {
     });
 
   // Indexing
+  logger.info("Indexing Systembolaget data");
   await indexClient.bulkIndex("systembolaget", "artikel", beers);
 
   // Decorating
