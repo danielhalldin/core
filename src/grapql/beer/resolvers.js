@@ -1,3 +1,5 @@
+import logger from "../../lib/logger";
+
 import { untappdTransform, systembolagetTransform } from "./transformations";
 
 const untappdById = async (
@@ -8,6 +10,12 @@ const untappdById = async (
   const data = await dataSources.UntappdAPI.byId(id, untappd_access_token);
 
   return untappdTransform(data.response.beer);
+};
+
+const untappdUser = async (obj, {}, { dataSources, untappd_access_token }) => {
+  const data = await dataSources.UntappdAPI.user(untappd_access_token);
+  console.log(data);
+  return data;
 };
 
 const untappdSearch = async (
@@ -61,4 +69,10 @@ const decoratedLatest = async (
   return beers;
 };
 
-export { untappdSearch, systembolagetLatest, untappdById, decoratedLatest };
+export {
+  untappdSearch,
+  systembolagetLatest,
+  untappdById,
+  decoratedLatest,
+  untappdUser
+};

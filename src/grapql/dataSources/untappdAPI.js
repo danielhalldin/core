@@ -56,6 +56,21 @@ class UntappdAPI extends RESTDataSource {
 
     return response;
   }
+
+  async user(untappd_access_token) {
+    const response = await this.get(
+      `/v4/user/info#${untappd_access_token}`,
+      this.decorateOptionsWithTokens({}, untappd_access_token),
+      { cacheOptions: { ttl: 3600 * 2 } }
+    );
+
+    console.log(response.response);
+    return {
+      name: response.response.user.user_name,
+      avatar: response.response.user.user_avatar,
+      checkins: response.response.user.stats.total_checkins
+    };
+  }
 }
 
 export default UntappdAPI;

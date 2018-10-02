@@ -3,6 +3,7 @@ import {
   systembolagetLatest,
   untappdSearch,
   untappdById,
+  untappdUser,
   decoratedLatest
 } from "./beer/resolvers";
 import { omdbById, omdbBySearch } from "./movie/resolvers";
@@ -12,6 +13,7 @@ const resolvers = {
   Query: {
     untappdSearch,
     untappdById,
+    untappdUser,
     omdbById,
     omdbBySearch,
     systembolagetLatest,

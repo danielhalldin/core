@@ -25,4 +25,10 @@ export default `
     systembolagetId: String
     systembolagetUrl: String  
   }
+
+  type user {
+    name: String 
+    avatar: String
+    checkins: Int
+  }
 `;
