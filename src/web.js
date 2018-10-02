@@ -86,7 +86,7 @@ async function run() {
     const authorizeResponse = await fetch(url);
     const token = (await authorizeResponse.json()).response.access_token;
     var cookies = new Cookies(req, res);
-    cookies.set("t", token, { dmoain: ".ddns.net" });
+    cookies.set("t", token, { domain: ".ddns.net" });
     res.redirect(`${config.newBeers.url}`);
   });
 
