@@ -19,7 +19,7 @@ class UntappdAPI extends RESTDataSource {
       "x-ratelimit-remaining"
     );
     const authType = response.headers.get("x-auth-type");
-    logger.info("Remaining request", currentRemainingRequest, authType);
+    logger.debug(`Remaining request, ${currentRemainingRequest}, ${authType}`);
     return response.json();
   }
 

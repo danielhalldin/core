@@ -12,6 +12,7 @@ import querystring from "querystring";
 import schema from "./grapql/schema";
 import throng from "throng";
 import untappdAPI from "./grapql/dataSources/untappdAPI";
+import morgan from "morgan";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -48,6 +49,7 @@ async function run() {
 
   const app = express();
   app.use(compression());
+  app.use(morgan("dev"));
 
   // Untappd token
   app.get("/login", function(req, res) {
