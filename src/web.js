@@ -15,7 +15,7 @@ import untappdAPI from "./grapql/dataSources/untappdAPI";
 
 async function run() {
   const redisCache = new RedisCache({
-    url: process.env.REDISCLOUD_URL,
+    url: config.rediscloudUrl,
     options: { no_ready_check: true }
   });
 

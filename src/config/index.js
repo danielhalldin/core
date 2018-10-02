@@ -4,6 +4,8 @@ module.exports = {
   decoratorInterval: process.env.DECORATOR_INTERVAL || 10000,
   webConcurrenct: process.env.WEB_CONCURRENCY || 1,
 
+  rediscloudUrl: process.env.REDISCLOUD_URL,
+
   newBeers: {
     url: process.env.NEW_BEERS_URL || "http://new-beers.ddns.net",
     authUrl:
@@ -30,6 +32,6 @@ module.exports = {
 
   omdb: {
     baseUrl: process.env.UNTAPPED_BASE_URL || "http://www.omdbapi.com",
-    apiKey: process.env.OMDB_API_KEY || "http://www.omdbapi.com"
+    apiKey: process.env.OMDB_API_KEY
   }
 };
