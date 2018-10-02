@@ -13,6 +13,7 @@ import schema from "./grapql/schema";
 import throng from "throng";
 import untappdAPI from "./grapql/dataSources/untappdAPI";
 import morgan from "morgan";
+import Cookies from "cookies";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -84,7 +85,9 @@ async function run() {
       querystring.stringify(params);
     const authorizeResponse = await fetch(url);
     const token = (await authorizeResponse.json()).response.access_token;
-    res.redirect(`${config.newBeers.url}/?token=${token}`);
+    var cookies = new Cookies(req, res);
+    cookies.set("t", token);
+    res.redirect(`${config.newBeers.url}`);
   });
 
   app.get("/manual-update", async function(req, res) {
