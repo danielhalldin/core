@@ -64,7 +64,6 @@ async function run() {
       "/authenticate/?" +
       querystring.stringify(params);
 
-    logger.info("url " + url);
     res.redirect(url);
   });
 

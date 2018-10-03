@@ -29,9 +29,9 @@ class IndexClient {
       },
       function(error) {
         if (error) {
-          logger.info("Elasticsearch ping: DOWN");
+          logger.debug("Elasticsearch ping: DOWN");
         } else {
-          logger.info("Elasticsearch ping: OK");
+          logger.error("Elasticsearch ping: OK");
         }
       }
     );
