@@ -3,6 +3,16 @@ module.exports = {
   logLevel: process.env.LOG_LEVEL || "info",
   decoratorInterval: process.env.DECORATOR_INTERVAL || 10000,
   webConcurrenct: process.env.WEB_CONCURRENCY || 1,
+  graphql: {
+    introspectionEnabled:
+      (process.env.INTRSPECTION_ENABLED &&
+        process.env.INTRSPECTION_ENABLED === "true") ||
+      false,
+    playgroundEnabled:
+      (process.env.PLAYGROUND_ENABLED &&
+        process.env.PLAYGROUND_ENABLED === "true") ||
+      false
+  },
 
   rediscloudUrl: process.env.REDISCLOUD_URL,
 

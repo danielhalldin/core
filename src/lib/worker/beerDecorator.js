@@ -16,7 +16,6 @@ class beerDecorator {
       .toLowerCase()
       .replace("ab", "")
       .replace("aktiebryggeri", "")
-      .replace("ipa", "")
       .replace("ale", "")
       .replace("&", "");
 

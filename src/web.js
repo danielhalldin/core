@@ -26,6 +26,8 @@ async function run() {
     cacheControl: true,
     cache: redisCache,
     persistedQueries: redisCache,
+    introspection: config.graphql.introspectionEnabled,
+    playground: config.graphql.playgroundEnabled,
     dataSources: () => ({
       OmdbAPI: new omdbAPI(),
       UntappdAPI: new untappdAPI(),
