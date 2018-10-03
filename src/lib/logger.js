@@ -1,6 +1,6 @@
 import config from "../config";
 import { createLogger, format, transports } from "winston";
-const { combine, timestamp, printf } = format;
+const { combine, printf } = format;
 
 const myFormat = printf(info => {
   return `${info.timestamp} ${info.level}: ${info.message}`;
