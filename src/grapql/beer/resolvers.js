@@ -1,5 +1,3 @@
-import logger from "../../lib/logger";
-
 import { untappdTransform, systembolagetTransform } from "./transformations";
 
 const untappdById = async (
@@ -14,7 +12,6 @@ const untappdById = async (
 
 const untappdUser = async (obj, {}, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.user(untappd_access_token);
-  console.log(data);
   return data;
 };
 

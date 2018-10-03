@@ -64,11 +64,16 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: 3600 * 2 } }
     );
 
-    console.log(response.response);
+    logger.info(
+      `User:,
+      ${response.response.user.user_name},
+      ${response.response.user.first_name},
+      ${response.response.user.last_name}`
+    );
     return {
       name: response.response.user.user_name,
       avatar: response.response.user.user_avatar,
-      checkins: response.response.user.stats.total_checkins
+      checkins: response.response.user.stats.total_beers
     };
   }
 }
