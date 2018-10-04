@@ -3,6 +3,8 @@ module.exports = {
   logLevel: process.env.LOG_LEVEL || "info",
   decoratorInterval: process.env.DECORATOR_INTERVAL || 10000,
   webConcurrenct: process.env.WEB_CONCURRENCY || 1,
+  jwtSecret: process.env.JWT_SECRET,
+
   graphql: {
     introspectionEnabled:
       (process.env.INTRSPECTION_ENABLED &&
