@@ -1,7 +1,8 @@
 import querystring from "querystring";
+import fetch from "node-fetch";
+
 import config from "../../../config";
 import { encrypt } from "../../jwtHandler";
-import fetch from "node-fetch";
 
 const login = app => {
   app.get("/login", function(req, res) {
