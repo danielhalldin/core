@@ -52,6 +52,7 @@ async function run() {
   const app = express();
   app.use(compression());
   app.use(morgan("dev"));
+  app.use(express.static("public"));
 
   // Untappd token
   app.get("/login", function(req, res) {
