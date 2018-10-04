@@ -1,6 +1,6 @@
 import xml2js from "xml2js";
 import fetch from "node-fetch";
-import IndexClient from "./lib/worker/indexClient";
+import IndexClient from "./lib/worker/clients/indexClient";
 import BeerDecorator from "./lib/worker/beerDecorator";
 import logger from "./lib/logger";
 import config from "./config";

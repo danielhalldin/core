@@ -1,5 +1,5 @@
 import { RESTDataSource } from "apollo-datasource-rest";
-import config from "../../config";
+import config from "../../../config";
 
 class OmdbAPI extends RESTDataSource {
   constructor() {

@@ -1,6 +1,6 @@
 import { RESTDataSource } from "apollo-datasource-rest";
-import config from "../../config";
-import logger from "../../lib/logger";
+import config from "../../../config";
+import logger from "../../logger";
 
 class UntappdAPI extends RESTDataSource {
   constructor() {

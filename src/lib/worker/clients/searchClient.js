@@ -1,8 +1,8 @@
 import Elasticsearch from "elasticsearch";
 import URI from "urijs";
 import moment from "moment";
-import config from "../../config";
-import { beersToDecorate } from "../queries/beer";
+import config from "../../../config";
+import { beersToDecorate } from "../../queries/beer";
 
 class SearchClient {
   constructor() {

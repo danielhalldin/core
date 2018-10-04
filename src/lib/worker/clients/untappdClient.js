@@ -1,6 +1,6 @@
-import config from "../../config";
+import config from "../../../config";
 import fetch from "node-fetch";
-import logger from "../logger";
+import logger from "../../logger";
 
 class UntappdClient {
   constructor() {

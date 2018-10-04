@@ -2,16 +2,16 @@ import { ApolloServer } from "apollo-server-express";
 import { RedisCache } from "apollo-server-cache-redis";
 import compression from "compression";
 import config from "./config";
-import elasticsearchAPI from "./grapql/dataSources/elasticsearchAPI";
+import elasticsearchAPI from "./lib/web/dataSources/elasticsearchAPI";
 import express from "express";
 import fetch from "node-fetch";
-import IndexClient from "./lib/worker/indexClient";
+import IndexClient from "./lib/worker/clients/indexClient";
 import logger from "./lib/logger";
-import omdbAPI from "./grapql/dataSources/omdbApi";
+import omdbAPI from "./lib/web/dataSources/omdbApi";
 import querystring from "querystring";
 import schema from "./grapql/schema";
 import throng from "throng";
-import untappdAPI from "./grapql/dataSources/untappdAPI";
+import untappdAPI from "./lib/web/dataSources/untappdAPI";
 import morgan from "morgan";
 
 async function run() {

@@ -1,7 +1,7 @@
 import _ from "lodash";
-import SearchClient from "./searchClient";
-import IndexClient from "./indexClient";
-import UntappdClient from "./untappdClient";
+import SearchClient from "./clients/searchClient";
+import IndexClient from "./clients/indexClient";
+import UntappdClient from "./clients/untappdClient";
 import logger from "../logger";
 
 class beerDecorator {

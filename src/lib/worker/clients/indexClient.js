@@ -1,7 +1,7 @@
 import Elasticsearch from "elasticsearch";
 import URI from "urijs";
-import logger from "../logger";
-import config from "../../config";
+import logger from "../../logger";
+import config from "../../../config";
 
 class IndexClient {
   constructor() {
