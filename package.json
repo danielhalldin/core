@@ -36,6 +36,7 @@
     "eslint-plugin-react": "^7.11.1",
     "express": "^4.16.3",
     "graphql": "^14.0.2",
+    "jwt-simple": "^0.5.5",
     "moment": "^2.22.2",
     "morgan": "^1.9.1",
     "node-fetch": "^2.2.0",

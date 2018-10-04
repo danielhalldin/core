@@ -13,6 +13,7 @@ import schema from "./grapql/schema";
 import throng from "throng";
 import untappdAPI from "./lib/web/dataSources/untappdAPI";
 import morgan from "morgan";
+import { encrypt, decrypt } from "./lib/jwtHandler";
 
 async function run() {
   const redisCache = new RedisCache({
@@ -42,7 +43,7 @@ async function run() {
       };
     },
     context: ({ req, res }) => {
-      const untappd_access_token = req.headers.untappd_access_token;
+      const untappd_access_token = decrypt(req.headers.untappd_access_token);
       return {
         untappd_access_token
       };
@@ -86,7 +87,8 @@ async function run() {
       querystring.stringify(params);
     const authorizeResponse = await fetch(url);
     const token = (await authorizeResponse.json()).response.access_token;
-    res.redirect(`${config.newBeers.url}/?token=${token}`);
+    const jwt = encrypt(token);
+    res.redirect(`${config.newBeers.url}/?token=${jwt}`);
   });
 
   app.get("/manual-update", async function(req, res) {
