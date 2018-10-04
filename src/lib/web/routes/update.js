@@ -1,4 +1,4 @@
-import IndexClient from "../..//worker/clients/indexClient";
+import IndexClient from "../../worker/clients/indexClient";
 
 const update = app => {
   app.get("/manual-update", async function(req, res) {
