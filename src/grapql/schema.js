@@ -4,6 +4,8 @@ import {
   untappdSearch,
   untappdById,
   untappdUser,
+  untappdFriends,
+  untappdIsFriend,
   decoratedLatest
 } from "./beer/resolvers";
 import { omdbById, omdbBySearch } from "./movie/resolvers";
@@ -13,6 +15,8 @@ const resolvers = {
   Query: {
     untappdSearch,
     untappdById,
+    untappdFriends,
+    untappdIsFriend,
     untappdUser,
     omdbById,
     omdbBySearch,

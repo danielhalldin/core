@@ -15,6 +15,22 @@ const untappdUser = async (obj, {}, { dataSources, untappd_access_token }) => {
   return data;
 };
 
+const untappdFriends = async (obj, {}, { dataSources }) => {
+  const data = await dataSources.UntappdAPI.friends();
+  return data;
+};
+
+const untappdIsFriend = async (
+  obj,
+  {},
+  { dataSources, untappd_access_token }
+) => {
+  const friends = await dataSources.UntappdAPI.friends();
+  const user = await dataSources.UntappdAPI.user(untappd_access_token);
+
+  return !!friends.find(friend => friend.name === user.name);
+};
+
 const untappdSearch = async (
   obj,
   { query },
@@ -71,5 +87,7 @@ export {
   systembolagetLatest,
   untappdById,
   decoratedLatest,
-  untappdUser
+  untappdUser,
+  untappdFriends,
+  untappdIsFriend
 };

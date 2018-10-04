@@ -13,6 +13,8 @@ export default gql`
     untappdSearch(query: String!): [beer]
     untappdById(id: ID!): beer
     untappdUser: user
+    untappdFriends: [user]
+    untappdIsFriend: Boolean
     decoratedLatest(size: Int, stockType: String): [beer]
   }
 `;

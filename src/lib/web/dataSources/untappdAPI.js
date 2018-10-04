@@ -57,6 +57,23 @@ class UntappdAPI extends RESTDataSource {
     return response;
   }
 
+  async friends() {
+    const response = await this.get(
+      `/v4/user/friends/Nexus5`,
+      this.decorateOptionsWithTokens({}),
+      { cacheOptions: { ttl: 3600 * 2 } }
+    );
+
+    const friends = response.response.items.map(item => {
+      return {
+        name: item.user.user_name,
+        avatar: item.user.user_avatar
+      };
+    });
+
+    return friends;
+  }
+
   async user(untappd_access_token) {
     const response = await this.get(
       `/v4/user/info#${untappd_access_token}`,
@@ -64,12 +81,6 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: 3600 * 2 } }
     );
 
-    logger.info(
-      `User:,
-      ${response.response.user.user_name},
-      ${response.response.user.first_name},
-      ${response.response.user.last_name}`
-    );
     return {
       name: response.response.user.user_name,
       avatar: response.response.user.user_avatar,
