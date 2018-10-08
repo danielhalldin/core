@@ -6,7 +6,6 @@ const untappdById = async (
   { dataSources, untappd_access_token }
 ) => {
   const data = await dataSources.UntappdAPI.byId(id, untappd_access_token);
-
   return untappdTransform(data.response.beer);
 };
 
@@ -69,7 +68,7 @@ const decoratedLatest = async (
         untappd_access_token
       );
 
-      if (personalBeerData) {
+      if (personalBeerData.response.length > 0) {
         untappdBeer = untappdTransform(personalBeerData.response.beer);
       } else {
         untappdBeer = untappdTransform(beer._source.untappdData);
