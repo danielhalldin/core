@@ -29,7 +29,6 @@ const beers = (fromDate, toDate, stockType) => {
       }
     }
   };
-  console.log("Q", JSON.stringify(q));
   return q;
 };
 
