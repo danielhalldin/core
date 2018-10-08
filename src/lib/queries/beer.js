@@ -10,13 +10,13 @@ var sort = ["-Saljstart", "+Namn.keyword"].map(function(item) {
 });
 
 const beers = (fromDate, toDate, stockType) => {
-  return {
+  const q = {
     sort: sort,
     query: {
       bool: {
         must: [
-          { match: { Varugrupp: "öl" } },
-          { match: { SortimentText: stockType } },
+          { match: { Varugrupp: { query: "öl", operator: "and" } } },
+          { match: { SortimentText: { query: stockType, operator: "and" } } },
           {
             range: {
               Saljstart: {
@@ -29,6 +29,8 @@ const beers = (fromDate, toDate, stockType) => {
       }
     }
   };
+  console.log("Q", JSON.stringify(q));
+  return q;
 };
 
 const beersToDecorate = (fromDate, toDate, stockType) => {
