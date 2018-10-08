@@ -13,9 +13,24 @@ const tidyQuery = query => {
 };
 
 const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
-  const beersToDecorate = await searchClient.latatestBeersToBeDecorated({
-    size: 1
-  });
+  const stockTypes = [
+    "Små partier",
+    "Lokalt och småskaligt",
+    "Övrigt sortiment",
+    "Ordinarie sortiment"
+  ];
+
+  let beersToDecorate;
+
+  for (const [, el] of stockTypes.entries()) {
+    beersToDecorate = await searchClient.latatestBeersToBeDecorated({
+      size: 1,
+      stockType: el
+    });
+    if (beersToDecorate.length !== 0) {
+      break;
+    }
+  }
 
   if (beersToDecorate.length === 0) {
     return;
