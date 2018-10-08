@@ -67,8 +67,7 @@ const decoratedLatest = async (
         untappdId,
         untappd_access_token
       );
-
-      if (personalBeerData.response.length > 0) {
+      if (personalBeerData.response.beer) {
         untappdBeer = untappdTransform(personalBeerData.response.beer);
       } else {
         untappdBeer = untappdTransform(beer._source.untappdData);
