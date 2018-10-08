@@ -19,7 +19,7 @@ class elasticsearchAPI extends RESTDataSource {
     return body;
   }
 
-  async latestBeer(size = 10, stockType = "Små partier") {
+  async latestBeer(size, stockType) {
     var fromDate = moment().subtract(1, "month");
     var toDate = moment().add(1, "month");
 

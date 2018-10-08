@@ -55,7 +55,7 @@ const systembolagetLatest = async (obj, { size }, { dataSources }) => {
 
 const decoratedLatest = async (
   obj,
-  { size, stockType },
+  { size, stockType = "Små partier" },
   { dataSources, untappd_access_token }
 ) => {
   const data = await dataSources.ElasticsearchApi.latestBeer(size, stockType);
@@ -75,11 +75,13 @@ const decoratedLatest = async (
         untappdBeer = untappdTransform(beer._source.untappdData);
       }
     }
-
     return Object.assign({}, systembolagetBeer, untappdBeer);
   });
 
-  return beers;
+  return {
+    name: stockType,
+    beers: beers
+  };
 };
 
 export {

@@ -15,6 +15,6 @@ export default gql`
     untappdUser: user
     untappdFriends: [user]
     untappdIsFriend: Boolean
-    decoratedLatest(size: Int, stockType: String): [beer]
+    decoratedLatest(size: Int, stockType: String): list
   }
 `;

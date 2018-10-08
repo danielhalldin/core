@@ -31,4 +31,9 @@ export default `
     avatar: String
     checkins: Int
   }
+
+  type list {
+    name: String
+    beers: [beer]
+  }
 `;
