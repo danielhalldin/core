@@ -29,7 +29,13 @@ export default `
   type user {
     name: String 
     avatar: String
-    checkins: Int
+    totalBeers: Int
+    checkins: [checkin]
+  }
+
+  type checkin {
+    timestamp: String
+    bid: Int
   }
 
   type list {

@@ -86,7 +86,13 @@ class UntappdAPI extends RESTDataSource {
     return {
       name: response.response.user.user_name,
       avatar: response.response.user.user_avatar,
-      checkins: response.response.user.stats.total_beers
+      totalBeers: response.response.user.stats.total_beers,
+      checkins: response.response.user.checkins.items.map(checkin => {
+        return {
+          timestamp: checkin.created_at,
+          bid: checkin.beer.bid
+        };
+      })
     };
   }
 }
