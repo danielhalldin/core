@@ -51,7 +51,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/beer/info/${id}`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
-      { cacheOptions: { ttl: 3600 * 2 } }
+      { cacheOptions: { ttl: 3600 * 24 } }
     );
 
     return response;
@@ -61,7 +61,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/user/friends/Nexus5`,
       this.decorateOptionsWithTokens({}),
-      { cacheOptions: { ttl: 3600 * 2 } }
+      { cacheOptions: { ttl: 3600 * 24 } }
     );
 
     const friends =
@@ -80,7 +80,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/user/info#${untappd_access_token}`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
-      { cacheOptions: { ttl: 3600 * 2 } }
+      { cacheOptions: { ttl: 3600 * 24 } }
     );
 
     return {
