@@ -9,7 +9,15 @@ var sort = ["-Saljstart", "+Namn.keyword"].map(function(item) {
   return object;
 });
 
-const beers = (fromDate, toDate, stockType) => {
+const beers = ({ fromDate, toDate, stockType }) => {
+  let salesStart = {};
+  if (fromDate) {
+    salesStart.gte = fromDate;
+  }
+  if (toDate) {
+    salesStart.lte = toDate;
+  }
+
   const q = {
     sort: sort,
     query: {
@@ -19,10 +27,7 @@ const beers = (fromDate, toDate, stockType) => {
           { match: { SortimentText: { query: stockType, operator: "and" } } },
           {
             range: {
-              Saljstart: {
-                gte: fromDate,
-                lte: toDate
-              }
+              Saljstart: salesStart
             }
           }
         ]
@@ -32,12 +37,12 @@ const beers = (fromDate, toDate, stockType) => {
   return q;
 };
 
-const beersToDecorate = (fromDate, toDate, stockType) => {
-  const q = Object.assign({}, beers(fromDate, toDate, stockType));
-  q.query.bool.must_not = {
-    exists: { field: "untappdId" }
-  };
-  return q;
-};
+// const beersToDecorate = (fromDate, toDate, stockType) => {
+//   const q = Object.assign({}, beers(fromDate, toDate, stockType));
+//   q.query.bool.must_not = {
+//     exists: { field: "untappdId" }
+//   };
+//   return q;
+// };
 
-export { beers, beersToDecorate };
+export { beers };

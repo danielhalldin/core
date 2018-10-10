@@ -2,7 +2,7 @@ import Elasticsearch from "elasticsearch";
 import URI from "urijs";
 import moment from "moment";
 import config from "../../../config";
-import { beersToDecorate } from "../../queries/beer";
+import { beers } from "../../queries/beer";
 
 class SearchClient {
   constructor() {
@@ -18,12 +18,11 @@ class SearchClient {
   };
 
   latatestBeersToBeDecorated = async ({
-    size = 1,
+    size = 50,
     stockType = "Små partier"
   }) => {
-    var fromDate = moment().subtract(1, "month");
     var toDate = moment().add(1, "month");
-    const queryBody = beersToDecorate(fromDate, toDate, stockType);
+    const queryBody = beers({ toDate, stockType });
     const query = {
       index: ["systembolaget"],
       size: size,
