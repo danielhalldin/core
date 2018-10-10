@@ -21,8 +21,9 @@ class SearchClient {
     size = 50,
     stockType = "Små partier"
   }) => {
+    var fromDate = moment().subtract(10, "year");
     var toDate = moment().add(1, "month");
-    const queryBody = beers({ toDate, stockType });
+    const queryBody = beers({ fromDate, toDate, stockType });
     const query = {
       index: ["systembolaget"],
       size: size,

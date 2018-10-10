@@ -64,12 +64,14 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: 3600 * 2 } }
     );
 
-    const friends = response.response.items.map(item => {
-      return {
-        name: item.user.user_name,
-        avatar: item.user.user_avatar
-      };
-    });
+    const friends =
+      response.response.items &&
+      response.response.items.map(item => {
+        return {
+          name: item.user.user_name,
+          avatar: item.user.user_avatar
+        };
+      });
 
     return friends;
   }

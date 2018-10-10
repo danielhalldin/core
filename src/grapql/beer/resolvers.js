@@ -57,7 +57,10 @@ const decoratedLatest = async (
   { size, stockType = "Små partier" },
   { dataSources, untappd_access_token }
 ) => {
-  const data = await dataSources.ElasticsearchApi.latestBeer(size, stockType);
+  const data = await dataSources.ElasticsearchApi.latestBeer({
+    size,
+    stockType
+  });
   const beers = data.hits.hits.map(async beer => {
     const systembolagetBeer = systembolagetTransform(beer);
     const untappdId = beer._source.untappdId;

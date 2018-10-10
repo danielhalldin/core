@@ -10,14 +10,6 @@ var sort = ["-Saljstart", "+Namn.keyword"].map(function(item) {
 });
 
 const beers = ({ fromDate, toDate, stockType }) => {
-  let salesStart = {};
-  if (fromDate) {
-    salesStart.gte = fromDate;
-  }
-  if (toDate) {
-    salesStart.lte = toDate;
-  }
-
   const q = {
     sort: sort,
     query: {
@@ -27,7 +19,10 @@ const beers = ({ fromDate, toDate, stockType }) => {
           { match: { SortimentText: { query: stockType, operator: "and" } } },
           {
             range: {
-              Saljstart: salesStart
+              Saljstart: {
+                gte: fromDate,
+                lte: toDate
+              }
             }
           }
         ]
