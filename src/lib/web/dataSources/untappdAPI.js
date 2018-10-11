@@ -1,6 +1,8 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import config from "../../../config";
 import logger from "../../logger";
+import redis from "redis";
+import moment from "moment";
 
 class UntappdAPI extends RESTDataSource {
   constructor() {
@@ -8,6 +10,7 @@ class UntappdAPI extends RESTDataSource {
     this.baseURL = config.untappd.baseUrl;
     this.clientSecret = config.untappd.clientSecret;
     this.clientId = config.untappd.clientID;
+    this.redisClient = redis.createClient(config.rediscloudUrl);
   }
 
   willSendRequest(request) {
@@ -41,7 +44,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/search/beer`,
       this.decorateOptionsWithTokens(options),
-      { cacheOptions: { ttl: 3600 * 2 } }
+      { cacheOptions: { ttl: 3600 * 2 } } // Cache beers for 2 hours
     );
 
     return response.response.beers.items;
@@ -51,7 +54,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/beer/info/${id}`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
-      { cacheOptions: { ttl: 3600 * 24 } }
+      { cacheOptions: { ttl: 3600 * 24 * 5 } } // Cache beers for 5 days
     );
 
     return response;
@@ -61,7 +64,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/user/friends/Nexus5`,
       this.decorateOptionsWithTokens({}),
-      { cacheOptions: { ttl: 3600 * 24 } }
+      { cacheOptions: { ttl: 3600 * 24 } } // Cache beers for 1 days
     );
 
     const friends =
@@ -80,19 +83,51 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/user/info#${untappd_access_token}`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
-      { cacheOptions: { ttl: 3600 * 24 } }
+      { cacheOptions: { ttl: 1800 } } // Cache user for 30 minutes
     );
 
+    const user = response.response.user;
+    const checkins = user.checkins.items.map(checkin => {
+      return {
+        timestamp: checkin.created_at,
+        bid: checkin.beer.bid,
+        name: checkin.beer.beer_name
+      };
+    });
+
+    const keysToFlush = checkins.map(async checkin => {
+      const key = `httpcache:https://api.untappd.com/v4/beer/info/${
+        checkin.bid
+      }?access_token=${untappd_access_token}`;
+      this.redisClient.ttl(
+        key,
+        function(err, secondsToExpire) {
+          const timeWhenCached = moment()
+            .add(secondsToExpire, "second")
+            .subtract(3600 * 24 * 5, "second");
+          const checkinTime = moment(checkin.timestamp);
+
+          if (timeWhenCached.isBefore(checkinTime)) {
+            console.log({
+              key,
+              name: checkin.name,
+              shouldFlush: timeWhenCached.isBefore(checkinTime),
+              timeWhenCached: timeWhenCached.format("YY-MM-DD HH:mm"),
+              checkinTime: checkinTime.format("YY-MM-DD HH:mm"),
+              originalCheckinTime: checkin.timestamp
+            });
+            this.redisClient.expireat(key, -2);
+          }
+        }.bind(this)
+      );
+      return key;
+    });
+
     return {
-      name: response.response.user.user_name,
-      avatar: response.response.user.user_avatar,
-      totalBeers: response.response.user.stats.total_beers,
-      checkins: response.response.user.checkins.items.map(checkin => {
-        return {
-          timestamp: checkin.created_at,
-          bid: checkin.beer.bid
-        };
-      })
+      name: user.user_name,
+      avatar: user.user_avatar,
+      totalBeers: user.stats.total_beers,
+      checkins: checkins
     };
   }
 }
