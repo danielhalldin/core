@@ -1,8 +1,9 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import config from "../../../config";
 import logger from "../../logger";
-import redis from "redis";
 import moment from "moment";
+import _get from "lodash/get";
+import { getTtl, setExpireat, getExists } from "../../redisClient";
 
 class UntappdAPI extends RESTDataSource {
   constructor() {
@@ -10,7 +11,6 @@ class UntappdAPI extends RESTDataSource {
     this.baseURL = config.untappd.baseUrl;
     this.clientSecret = config.untappd.clientSecret;
     this.clientId = config.untappd.clientID;
-    this.redisClient = redis.createClient(config.rediscloudUrl);
   }
 
   willSendRequest(request) {
@@ -86,8 +86,9 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: 1800 } } // Cache user for 30 minutes
     );
 
-    const user = response.response.user;
-    const checkins = user.checkins.items.map(checkin => {
+    const user = await response.response.user;
+
+    const checkins = _get(user, ["checkins", "items"], []).map(checkin => {
       return {
         timestamp: checkin.created_at,
         bid: checkin.beer.bid,
@@ -95,31 +96,18 @@ class UntappdAPI extends RESTDataSource {
       };
     });
 
-    const keysToFlush = checkins.map(async checkin => {
+    checkins.map(async checkin => {
       const key = `httpcache:https://api.untappd.com/v4/beer/info/${
         checkin.bid
       }?access_token=${untappd_access_token}`;
-      this.redisClient.ttl(
-        key,
-        function(err, secondsToExpire) {
-          const timeWhenCached = moment()
-            .add(secondsToExpire, "second")
-            .subtract(3600 * 24 * 5, "second");
-          const checkinTime = moment(checkin.timestamp);
-
-          if (timeWhenCached.isBefore(checkinTime)) {
-            console.log({
-              key,
-              name: checkin.name,
-              shouldFlush: timeWhenCached.isBefore(checkinTime),
-              timeWhenCached: timeWhenCached.format("YY-MM-DD HH:mm"),
-              checkinTime: checkinTime.format("YY-MM-DD HH:mm"),
-              originalCheckinTime: checkin.timestamp
-            });
-            this.redisClient.expireat(key, -2);
-          }
-        }.bind(this)
-      );
+      const ttl = await getTtl(key);
+      const timeWhenCached = moment()
+        .add(ttl, "second")
+        .subtract(3600 * 24 * 5, "second");
+      const checkinTime = moment(checkin.timestamp);
+      if (timeWhenCached.isBefore(checkinTime) && ttl !== -2) {
+        await setExpireat(key, -2);
+      }
       return key;
     });
 
