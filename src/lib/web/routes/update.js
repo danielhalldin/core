@@ -17,8 +17,10 @@ const update = app => {
       id: id,
       documentBody: documentBody
     });
-
-    res.send(responseData);
+    if (responseData) {
+      res.send(responseData);
+    }
+    res.send("no match found");
   });
 
   return app;
