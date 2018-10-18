@@ -27,6 +27,27 @@ class UntappdClient {
     const json = await JSON.parse(data);
     return json.response.beers.items;
   };
+
+  fetchBeerById = async id => {
+    const url = `${this.baseUrl}/v4/beer/info/${id}?client_id=${
+      this.untappedClientID
+    }&client_secret=${this.untappedClientSecret}`;
+
+    const response = await fetch(url);
+    logger.info(
+      "Remaining Untappd requests: " +
+        response.headers.get("x-ratelimit-remaining")
+    );
+    if (response.headers.get("x-ratelimit-remaining") === "0") {
+      throw new Error(
+        "Exceeded untappd rate limit fetcing beer with id: " + id
+      );
+    }
+
+    const data = await response.text();
+    const json = await JSON.parse(data);
+    return json.response.beer;
+  };
 }
 
 module.exports = UntappdClient;

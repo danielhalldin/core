@@ -28,7 +28,10 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       size: 50
     });
     beerToDecorate = beersToDecorate.find(
-      beerToDecorate => beerToDecorate._source.untappdId === undefined
+      beerToDecorate =>
+        (beerToDecorate._source.untappdData === undefined ||
+          beerToDecorate._source.untappdData === null) &&
+        beerToDecorate._source.untappdId !== 0
     );
     if (beerToDecorate) {
       console.log("Stocktype", el);
@@ -47,30 +50,41 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
   }`;
 
   try {
-    const query1 = tidyQuery(`${beerToDecorate._source.Producent} ${name}`);
-    logger.info("query1: " + query1);
-    const untappdSearchResult = await untappdClient.searchBeer(query1);
-
     let untappdData;
-    if (untappdSearchResult.length > 0) {
-      untappdData = untappdSearchResult[0];
-    } else {
-      const query2 = tidyQuery(
-        name.replace(beerToDecorate._source.Producent, "")
-      );
-      logger.info("query2: " + query2);
-      const untappdSearchResult = await untappdClient.searchBeer(query2);
-      if (untappdSearchResult.length > 0) {
-        untappdData = untappdSearchResult[0];
-      }
-    }
-
+    let untappdId;
     let documentBody = {
       untappdId: 0
     };
+
+    // Check if the beer has bid
+    if (beerToDecorate._source.untappdId) {
+      untappdData = await untappdClient.fetchBeerById(
+        beerToDecorate._source.untappdId
+      );
+      untappdId = beerToDecorate._source.untappdId;
+    } else {
+      const query1 = tidyQuery(`${beerToDecorate._source.Producent} ${name}`);
+      logger.info("query1: " + query1);
+      const untappdSearchResult = await untappdClient.searchBeer(query1);
+      if (untappdSearchResult.length > 0) {
+        untappdData = untappdSearchResult[0];
+        untappdId = untappdData.beer.bid;
+      } else {
+        const query2 = tidyQuery(
+          name.replace(beerToDecorate._source.Producent, "")
+        );
+        logger.info("query2: " + query2);
+        const untappdSearchResult = await untappdClient.searchBeer(query2);
+        if (untappdSearchResult.length > 0) {
+          untappdData = untappdSearchResult[0];
+          untappdId = untappdData.beer.bid;
+        }
+      }
+    }
+
     if (untappdData) {
       documentBody = {
-        untappdId: untappdData.beer.bid,
+        untappdId: untappdId,
         untappdData: untappdData
       };
     }
