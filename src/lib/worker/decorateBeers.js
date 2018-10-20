@@ -7,7 +7,8 @@ const tidyQuery = query => {
     .replace("ab", "")
     .replace("aktiebryggeri", "")
     .replace("ale", "")
-    .replace("&", "");
+    .replace("&", "")
+    .replace("[ ]+", " ");
 
   return _.uniq(query.split(" ")).join(" ");
 };
@@ -22,9 +23,9 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
 
   let beerToDecorate;
 
-  for (const [, el] of stockTypes.entries()) {
+  for (const stockType of stockTypes) {
     const beersToDecorate = await searchClient.latatestBeersToBeDecorated({
-      stockType: el,
+      stockType: stockType,
       size: 50
     });
     beerToDecorate = beersToDecorate.find(
@@ -34,7 +35,7 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
         beerToDecorate._source.untappdId !== 0
     );
     if (beerToDecorate) {
-      console.log("Stocktype", el);
+      logger.info(`Stocktype: ${stockType}`);
       break;
     }
   }
@@ -43,57 +44,38 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
     return;
   }
 
-  logger.info("Running decorateWithUntappd");
-
-  const name = `${beerToDecorate._source.Namn}${
-    beerToDecorate._source.Namn2 ? " " + beerToDecorate._source.Namn2 : ""
-  }`;
-
   try {
+    logger.info(`Running decorateWithUntappd`);
+    let { Namn, Namn2, untappdId, Producent } = beerToDecorate._source;
     let untappdData;
-    let untappdId;
-    let documentBody = {
-      untappdId: 0
-    };
 
-    // Check if the beer has bid
-    if (beerToDecorate._source.untappdId) {
-      untappdData = await untappdClient.fetchBeerById(
-        beerToDecorate._source.untappdId
-      );
-      untappdId = beerToDecorate._source.untappdId;
+    if (untappdId) {
+      logger.info(`untappdId: ${untappdId}`);
+      untappdData = await untappdClient.fetchBeerById(untappdId);
     } else {
-      const query1 = tidyQuery(`${beerToDecorate._source.Producent} ${name}`);
-      logger.info("query1: " + query1);
-      const untappdSearchResult = await untappdClient.searchBeer(query1);
-      if (untappdSearchResult.length > 0) {
-        untappdData = untappdSearchResult[0];
-        untappdId = untappdData.beer.bid;
-      } else {
-        const query2 = tidyQuery(
-          name.replace(beerToDecorate._source.Producent, "")
-        );
-        logger.info("query2: " + query2);
-        const untappdSearchResult = await untappdClient.searchBeer(query2);
+      const queries = [];
+      queries.push(tidyQuery(`${Producent} ${Namn} ${Namn2}`));
+      queries.push(tidyQuery(`${Namn} ${Namn2}`.replace(Producent, "")));
+
+      for (const [i, q] of queries.entries()) {
+        logger.info(`q${i}: ${q}`);
+        const untappdSearchResult = await untappdClient.searchBeer(q);
         if (untappdSearchResult.length > 0) {
           untappdData = untappdSearchResult[0];
           untappdId = untappdData.beer.bid;
+          break;
         }
       }
-    }
-
-    if (untappdData) {
-      documentBody = {
-        untappdId: untappdId,
-        untappdData: untappdData
-      };
     }
 
     return indexClient.updateDocument({
       index: "systembolaget",
       type: "artikel",
       id: beerToDecorate._id,
-      documentBody: documentBody
+      documentBody: {
+        untappdId: untappdId || 0,
+        untappdData: untappdData || null
+      }
     });
   } catch (e) {
     logger.error("Failed to decorate beer: " + e.message);
