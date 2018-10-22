@@ -1,3 +1,4 @@
+import moment from "moment";
 import { untappdTransform, systembolagetTransform } from "./transformations";
 
 const untappdById = async (
@@ -11,7 +12,23 @@ const untappdById = async (
 
 const untappdUser = async (obj, {}, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.user(untappd_access_token);
-  return data;
+  const checkins = data.checkins.map(async checkin => {
+    const data = await dataSources.UntappdAPI.byId(
+      checkin.bid,
+      untappd_access_token
+    );
+    const beer = Object.assign({}, data.response.beer, {
+      checkinDate: moment(checkin.timestamp).format("YYYY-MM-DD")
+    });
+    return untappdTransform(beer);
+  });
+
+  return {
+    name: data.name,
+    avatar: data.avatar,
+    totalBeers: data.totalBeers,
+    checkins: checkins
+  };
 };
 
 const untappdFriends = async (obj, {}, { dataSources }) => {

@@ -23,19 +23,15 @@ export default `
     stockTypeId: String
     stockType: String
     systembolagetId: String
-    systembolagetUrl: String  
+    systembolagetUrl: String 
+    checkinDate: String
   }
 
   type user {
     name: String 
     avatar: String
     totalBeers: Int
-    checkins: [checkin]
-  }
-
-  type checkin {
-    timestamp: String
-    bid: Int
+    checkins: [beer]
   }
 
   type list {

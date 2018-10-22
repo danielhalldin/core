@@ -91,8 +91,7 @@ class UntappdAPI extends RESTDataSource {
     const checkins = _get(user, ["checkins", "items"], []).map(checkin => {
       return {
         timestamp: checkin.created_at,
-        bid: checkin.beer.bid,
-        name: checkin.beer.beer_name
+        bid: checkin.beer.bid
       };
     });
 
