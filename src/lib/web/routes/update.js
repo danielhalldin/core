@@ -13,7 +13,7 @@ const update = app => {
         type: "artikel",
         id: id,
         documentBody: {
-          untappdId: uid,
+          untappdId: Number(uid),
           untappdData: null
         }
       });
