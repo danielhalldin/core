@@ -28,12 +28,14 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       stockType: stockType,
       size: 50
     });
-    beerToDecorate = beersToDecorate.find(
-      beerToDecorate =>
-        (beerToDecorate._source.untappdData === undefined ||
-          beerToDecorate._source.untappdData === null) &&
-        beerToDecorate._source.untappdId !== 0
-    );
+    beerToDecorate = beersToDecorate.find(beerToDecorate => {
+      const untappdData = beerToDecorate._source.untappdData;
+      const untappdId = beerToDecorate._source.untappdId;
+      return (
+        (untappdData === undefined || untappdData === null) &&
+        !(untappdId === 0 || untappdId === "0")
+      );
+    });
     if (beerToDecorate) {
       logger.info(`Stocktype: ${stockType}`);
       break;
