@@ -6,7 +6,7 @@ const update = app => {
     const uid = req.query.uid;
     let responseData;
 
-    if (id && uid) {
+    if (id) {
       const indexClient = new IndexClient();
       responseData = await indexClient.updateDocument({
         index: "systembolaget",
