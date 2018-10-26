@@ -2,6 +2,7 @@ module.exports = {
   port: process.env.PORT || 4444,
   logLevel: process.env.LOG_LEVEL || "info",
   decoratorInterval: process.env.DECORATOR_INTERVAL || 10000,
+  indexInterval: process.env.INDEX_INTERVAL || 3600000,
   webConcurrenct: process.env.WEB_CONCURRENCY || 1,
   jwtSecret: process.env.JWT_SECRET,
 
