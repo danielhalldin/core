@@ -17,7 +17,6 @@ indexClient.healthCheck(60000);
 setInterval(() => indexBeers(indexClient), config.indexInterval);
 
 // Decorating
-decorateBeers({ indexClient, searchClient, untappdClient });
 setInterval(
   () => decorateBeers({ indexClient, searchClient, untappdClient }),
   config.decoratorInterval
