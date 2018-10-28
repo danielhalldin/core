@@ -3,7 +3,8 @@ import config from "../../../config";
 import logger from "../../logger";
 import moment from "moment";
 import _get from "lodash/get";
-import { getTtl, setExpireat, getExists } from "../../redisClient";
+import _isEmpty from "lodash/isEmpty";
+import { set, get, getTtl, setExpireat } from "../../redisClient";
 
 class UntappdAPI extends RESTDataSource {
   constructor() {
@@ -80,13 +81,20 @@ class UntappdAPI extends RESTDataSource {
   }
 
   async user(untappd_access_token) {
-    const response = await this.get(
+    let response = await this.get(
       `/v4/user/info#${untappd_access_token}`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
       { cacheOptions: { ttl: 1800 } } // Cache user for 30 minutes
     );
 
     const user = await response.response.user;
+
+    const fallbackUserKey = `fallbackForUser_${untappd_access_token}`;
+    if (_isEmpty(response, true)) {
+      response = JSON.parse(await get(fallbackUserKey));
+    } else {
+      set(fallbackUserKey, JSON.stringify(response), "EX", 3600);
+    }
 
     const checkins = _get(user, ["checkins", "items"], []).map(checkin => {
       return {
