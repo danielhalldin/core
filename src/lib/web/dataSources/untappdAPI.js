@@ -84,7 +84,7 @@ class UntappdAPI extends RESTDataSource {
     let response = await this.get(
       `/v4/user/info#${untappd_access_token}`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
-      { cacheOptions: { ttl: 1800 } } // Cache user for 30 minutes
+      { cacheOptions: { ttl: 600 } } // Cache user for 10 minutes
     );
 
     const user = await response.response.user;
