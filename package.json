@@ -23,7 +23,7 @@
     "apollo-cache-control": "^0.2.3",
     "apollo-datasource-rest": "^0.1.5",
     "apollo-link-http": "^1.5.4",
-    "apollo-server": "^2.0.7",
+    "apollo-server": "^2.1.0",
     "apollo-server-cache-redis": "^0.1.3",
     "apollo-server-express": "^2.0.6",
     "babel-eslint": "^9.0.0",

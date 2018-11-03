@@ -31,7 +31,6 @@ export default `
     name: String 
     avatar: String
     totalBeers: Int
-    checkins: [beer]
   }
 
   type list {

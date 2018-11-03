@@ -11,6 +11,7 @@ export default gql`
     omdbBySearch(searchString: String!): [movieData]
     systembolagetLatest(size: Int): [beer]
     untappdSearch(query: String!): [beer]
+    untappdUserBeers: [beer]
     untappdById(id: ID!): beer
     untappdUser: user
     untappdFriends: [user]

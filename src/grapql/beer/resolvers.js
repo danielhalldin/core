@@ -12,22 +12,11 @@ const untappdById = async (
 
 const untappdUser = async (obj, {}, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.user(untappd_access_token);
-  const checkins = data.checkins.map(async checkin => {
-    const data = await dataSources.UntappdAPI.byId(
-      checkin.bid,
-      untappd_access_token
-    );
-    const beer = Object.assign({}, data.response.beer, {
-      checkinDate: moment(checkin.timestamp).format("YYYY-MM-DD")
-    });
-    return untappdTransform(beer);
-  });
 
   return {
     name: data.name,
     avatar: data.avatar,
-    totalBeers: data.totalBeers,
-    checkins: checkins
+    totalBeers: data.totalBeers
   };
 };
 
@@ -56,6 +45,27 @@ const untappdSearch = async (
   const beers = data.map(item => {
     return untappdTransform(item);
   });
+
+  return beers;
+};
+
+const untappdUserBeers = async (
+  obj,
+  { query },
+  { dataSources, untappd_access_token }
+) => {
+  const data = await dataSources.UntappdAPI.userBeers(untappd_access_token);
+  const beers = data
+    .map(item => {
+      return Object.assign({}, item, {
+        beer: {
+          ...item.beer,
+          auth_rating: item.rating_score,
+          checkinDate: item.recent_created_at
+        }
+      });
+    })
+    .map(item => untappdTransform(item));
 
   return beers;
 };
@@ -108,6 +118,7 @@ export {
   untappdById,
   decoratedLatest,
   untappdUser,
+  untappdUserBeers,
   untappdFriends,
   untappdIsFriend
 };

@@ -3,7 +3,6 @@ import config from "../../../config";
 import logger from "../../logger";
 import moment from "moment";
 import _get from "lodash/get";
-import _isEmpty from "lodash/isEmpty";
 import { set, get, getTtl, setExpireat } from "../../redisClient";
 
 class UntappdAPI extends RESTDataSource {
@@ -59,6 +58,16 @@ class UntappdAPI extends RESTDataSource {
     );
 
     return response;
+  }
+
+  async userBeers(untappd_access_token) {
+    const response = await this.get(
+      `/v4/user/beers`,
+      this.decorateOptionsWithTokens({}, untappd_access_token),
+      { cacheOptions: { ttl: 3600 } } // Cache beers 1 hour
+    );
+
+    return response.response.beers.items;
   }
 
   async friends() {

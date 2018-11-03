@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const untappdTransform = data => {
   if (data.beer && data.brewery) {
     return Object.assign(
@@ -41,7 +43,7 @@ const untappdTransformBeer = data => {
     description,
     untappdId,
     untappdUrl: `https://untappd.com/b/${beer_slug}/${untappdId}`,
-    checkinDate
+    checkinDate: moment(checkinDate).format("YYYY-MM-DD")
   };
 };
 
