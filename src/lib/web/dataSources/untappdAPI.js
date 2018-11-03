@@ -62,7 +62,7 @@ class UntappdAPI extends RESTDataSource {
 
   async userBeers(untappd_access_token) {
     const response = await this.get(
-      `/v4/user/beers`,
+      `/v4/user/beers?limit=50`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
       { cacheOptions: { ttl: 3600 } } // Cache beers 1 hour
     );
