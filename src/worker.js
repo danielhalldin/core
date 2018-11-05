@@ -14,6 +14,7 @@ const untappdClient = new UntappdClient();
 indexClient.healthCheck(60000);
 
 // Indexing
+indexBeers(indexClient);
 setInterval(() => indexBeers(indexClient), config.indexInterval);
 
 // Decorating
