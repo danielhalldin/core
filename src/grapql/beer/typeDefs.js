@@ -22,7 +22,8 @@ export default `
     salesStartDate: String
     stockTypeId: String
     stockType: String
-    systembolagetId: String
+    systembolagetId: Int
+    systembolagetArticleId: Int
     systembolagetUrl: String 
     checkinDate: String
   }

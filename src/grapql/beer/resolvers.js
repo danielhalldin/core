@@ -1,8 +1,8 @@
-import moment from "moment";
 import { untappdTransform, systembolagetTransform } from "./transformations";
+import IndexClient from "../../lib/worker/clients/indexClient";
 
 const untappdById = async (
-  obj,
+  _,
   { id },
   { dataSources, untappd_access_token }
 ) => {
@@ -10,7 +10,11 @@ const untappdById = async (
   return untappdTransform(data.response.beer);
 };
 
-const untappdUser = async (obj, {}, { dataSources, untappd_access_token }) => {
+const untappdUser = async (
+  _,
+  params,
+  { dataSources, untappd_access_token }
+) => {
   const data = await dataSources.UntappdAPI.user(untappd_access_token);
 
   return {
@@ -20,14 +24,14 @@ const untappdUser = async (obj, {}, { dataSources, untappd_access_token }) => {
   };
 };
 
-const untappdFriends = async (obj, {}, { dataSources }) => {
+const untappdFriends = async (_, params, { dataSources }) => {
   const data = await dataSources.UntappdAPI.friends();
   return data;
 };
 
 const untappdIsFriend = async (
-  obj,
-  {},
+  _,
+  params,
   { dataSources, untappd_access_token }
 ) => {
   const friends = await dataSources.UntappdAPI.friends();
@@ -37,7 +41,7 @@ const untappdIsFriend = async (
 };
 
 const untappdSearch = async (
-  obj,
+  _,
   { query },
   { dataSources, untappd_access_token }
 ) => {
@@ -50,8 +54,8 @@ const untappdSearch = async (
 };
 
 const untappdUserBeers = async (
-  obj,
-  { query },
+  _,
+  params,
   { dataSources, untappd_access_token }
 ) => {
   const data = await dataSources.UntappdAPI.userBeers(untappd_access_token);
@@ -80,7 +84,7 @@ const systembolagetLatest = async (obj, { size }, { dataSources }) => {
 };
 
 const decoratedLatest = async (
-  obj,
+  _,
   { size, stockType = "Små partier" },
   { dataSources, untappd_access_token }
 ) => {
@@ -112,6 +116,32 @@ const decoratedLatest = async (
   };
 };
 
+const updateUntappdId = async (
+  _,
+  { systembolagetId, untappdId },
+  dataSources
+) => {
+  if (systembolagetId) {
+    const indexClient = new IndexClient();
+    const responseData = await indexClient.updateDocument({
+      index: "systembolaget",
+      type: "artikel",
+      id: systembolagetId,
+      documentBody: {
+        untappdId: Number(untappdId),
+        untappdData: null
+      }
+    });
+    if (responseData) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  return false;
+};
+
 export {
   untappdSearch,
   systembolagetLatest,
@@ -120,5 +150,6 @@ export {
   untappdUser,
   untappdUserBeers,
   untappdFriends,
-  untappdIsFriend
+  untappdIsFriend,
+  updateUntappdId
 };

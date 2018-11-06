@@ -18,4 +18,8 @@ export default gql`
     untappdIsFriend: Boolean
     decoratedLatest(size: Int, stockType: String): list
   }
+
+  type Mutation {
+    updateUntappdId(systembolagetId: Int, untappdId: Int): Boolean
+  }
 `;
