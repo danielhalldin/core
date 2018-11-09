@@ -53,7 +53,7 @@ class UntappdAPI extends RESTDataSource {
   async byId(id, untappd_access_token) {
     const response = await this.get(
       `/v4/beer/info/${id}`,
-      this.decorateOptionsWithTokens({}, untappd_access_token),
+      this.decorateOptionsWithTokens({ compact: true }, untappd_access_token),
       { cacheOptions: { ttl: 3600 * 24 * 5 } } // Cache beers for 5 days
     );
 
@@ -72,7 +72,7 @@ class UntappdAPI extends RESTDataSource {
 
   async friends() {
     const response = await this.get(
-      `/v4/user/friends/Nexus5`,
+      `/v4/user/friends/${config.superUser}`,
       this.decorateOptionsWithTokens({}),
       { cacheOptions: { ttl: 3600 * 24 } } // Cache beers for 1 days
     );
@@ -91,8 +91,8 @@ class UntappdAPI extends RESTDataSource {
 
   async user(untappd_access_token) {
     let response = await this.get(
-      `/v4/user/info#${untappd_access_token}`,
-      this.decorateOptionsWithTokens({}, untappd_access_token),
+      `/v4/user/info`,
+      this.decorateOptionsWithTokens({ compact: true }, untappd_access_token),
       { cacheOptions: { ttl: 600 } } // Cache user for 10 minutes
     );
 
