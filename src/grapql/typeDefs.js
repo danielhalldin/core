@@ -20,6 +20,6 @@ export default gql`
   }
 
   type Mutation {
-    updateUntappdId(systembolagetId: Int, untappdId: Int): Boolean
+    updateUntappdId(systembolagetArticleId: Int!, untappdId: Int!): Boolean
   }
 `;

@@ -32,6 +32,7 @@ export default `
     name: String 
     avatar: String
     totalBeers: Int
+    admin: Boolean
   }
 
   type list {

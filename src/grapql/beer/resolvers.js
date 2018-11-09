@@ -1,5 +1,6 @@
 import { untappdTransform, systembolagetTransform } from "./transformations";
 import IndexClient from "../../lib/worker/clients/indexClient";
+import config from "../../config";
 
 const untappdById = async (
   _,
@@ -20,7 +21,8 @@ const untappdUser = async (
   return {
     name: data.name,
     avatar: data.avatar,
-    totalBeers: data.totalBeers
+    totalBeers: data.totalBeers,
+    admin: data.name === config.superUser
   };
 };
 
@@ -118,15 +120,16 @@ const decoratedLatest = async (
 
 const updateUntappdId = async (
   _,
-  { systembolagetId, untappdId },
-  dataSources
+  { systembolagetArticleId, untappdId },
+  { dataSources, untappd_access_token }
 ) => {
-  if (systembolagetId) {
+  const data = await dataSources.UntappdAPI.user(untappd_access_token);
+  if (data.name === config.superUser && systembolagetArticleId) {
     const indexClient = new IndexClient();
     const responseData = await indexClient.updateDocument({
       index: "systembolaget",
       type: "artikel",
-      id: systembolagetId,
+      id: systembolagetArticleId,
       documentBody: {
         untappdId: Number(untappdId),
         untappdData: null

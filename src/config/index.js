@@ -5,6 +5,7 @@ module.exports = {
   indexInterval: process.env.INDEX_INTERVAL || 3600000,
   webConcurrenct: process.env.WEB_CONCURRENCY || 1,
   jwtSecret: process.env.JWT_SECRET,
+  superUser: process.env.SUPER_USER,
 
   graphql: {
     introspectionEnabled:
