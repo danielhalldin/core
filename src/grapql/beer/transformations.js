@@ -43,7 +43,7 @@ const untappdTransformBeer = data => {
     description,
     untappdId,
     untappdUrl: `https://untappd.com/b/${beer_slug}/${untappdId}`,
-    checkinDate: moment(checkinDate).format("YYYY-MM-DD")
+    checkinDate: checkinDate && moment(checkinDate).format("YYYY-MM-DD")
   };
 };
 
