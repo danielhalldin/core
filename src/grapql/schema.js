@@ -8,7 +8,8 @@ import {
   untappdIsFriend,
   untappdUserBeers,
   decoratedLatest,
-  updateUntappdId
+  updateUntappdId,
+  deleteBeer
 } from "./beer/resolvers";
 import { omdbById, omdbBySearch } from "./movie/resolvers";
 import typeDefs from "./typeDefs";
@@ -27,7 +28,8 @@ const resolvers = {
     decoratedLatest
   },
   Mutation: {
-    updateUntappdId
+    updateUntappdId,
+    deleteBeer
   }
 };
 

@@ -74,31 +74,13 @@ class IndexClient {
     });
   };
 
-  deleteFromIndex = (index, type, document) => {
-    this._client.delete(
-      {
-        index: index,
-        type: type,
-        id: document.id
-      },
-      function(error, response) {
-        if (error) {
-          logger.info("Failed to delete document from index: " + error);
-        } else {
-          logger.info(
-            "Deleted document from indexed." +
-              " Index: " +
-              response._index +
-              " Type: " +
-              response._type +
-              " Id: " +
-              response._id +
-              " Title: " +
-              document.title
-          );
-        }
-      }
-    );
+  deleteFromIndex = ({ index, type, id }) => {
+    console.log({ index, type, id });
+    return this._client.delete({
+      index: index,
+      type: type,
+      id: id
+    });
   };
 
   updateDocument = ({ index, type, id, documentBody }) => {

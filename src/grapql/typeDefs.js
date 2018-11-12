@@ -21,5 +21,6 @@ export default gql`
 
   type Mutation {
     updateUntappdId(systembolagetArticleId: Int!, untappdId: Int!): Boolean
+    deleteBeer(systembolagetArticleId: Int!): Boolean
   }
 `;
