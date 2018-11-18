@@ -5,6 +5,15 @@ import moment from "moment";
 import _get from "lodash/get";
 import { set, get, getTtl, setExpireat } from "../../redisClient";
 
+const CACHE_TIME = {
+  USER_BEERS: 3600,
+  BY_ID: 3600 * 24 * 5,
+  FALLBACK_USER: 3600,
+  SEARCH: 3600 * 2,
+  FRIENDS: 3600 * 24,
+  USER: 3600
+};
+
 class UntappdAPI extends RESTDataSource {
   constructor() {
     super();
@@ -44,7 +53,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/search/beer`,
       this.decorateOptionsWithTokens(options),
-      { cacheOptions: { ttl: 3600 * 2 } } // Cache beers for 2 hours
+      { cacheOptions: { ttl: CACHE_TIME.SEARCH } } // Cache beers for 2 hours
     );
 
     return response.response.beers.items;
@@ -54,7 +63,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/beer/info/${id}`,
       this.decorateOptionsWithTokens({ compact: true }, untappd_access_token),
-      { cacheOptions: { ttl: 3600 * 24 * 5 } } // Cache beers for 5 days
+      { cacheOptions: { ttl: CACHE_TIME.BY_ID } }
     );
 
     return response;
@@ -64,7 +73,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/user/beers?limit=50`,
       this.decorateOptionsWithTokens({}, untappd_access_token),
-      { cacheOptions: { ttl: 3600 } } // Cache beers 1 hour
+      { cacheOptions: { ttl: CACHE_TIME.USER_BEERS } }
     );
 
     return response.response.beers.items;
@@ -74,7 +83,7 @@ class UntappdAPI extends RESTDataSource {
     const response = await this.get(
       `/v4/user/friends/${config.superUser}`,
       this.decorateOptionsWithTokens({}),
-      { cacheOptions: { ttl: 3600 * 24 } } // Cache beers for 1 days
+      { cacheOptions: { ttl: CACHE_TIME.FRIENDS } } // Cache beers for 1 days
     );
 
     const friends =
@@ -92,8 +101,8 @@ class UntappdAPI extends RESTDataSource {
   async user(untappd_access_token) {
     let response = await this.get(
       `/v4/user/info`,
-      this.decorateOptionsWithTokens({ compact: true }, untappd_access_token),
-      { cacheOptions: { ttl: 600 } } // Cache user for 10 minutes
+      this.decorateOptionsWithTokens({ compact: false }, untappd_access_token),
+      { cacheOptions: { ttl: CACHE_TIME.USER } } // Cache user for 10 minutes
     );
 
     const fallbackUserCacheKey = `fallbackForUser_${untappd_access_token}`;
@@ -101,7 +110,12 @@ class UntappdAPI extends RESTDataSource {
 
     try {
       user = await response.response.user;
-      set(fallbackUserCacheKey, JSON.stringify(response), "EX", 3600); // Fallback cache user for 1 hour
+      set(
+        fallbackUserCacheKey,
+        JSON.stringify(response),
+        "EX",
+        CACHE_TIME.FALLBACK_USER
+      ); // Fallback cache user for 1 hour
     } catch (e) {
       response = JSON.parse(await get(fallbackUserCacheKey));
       user = response.response.user;
@@ -114,19 +128,26 @@ class UntappdAPI extends RESTDataSource {
       };
     });
 
+    // FLUSH CACHES IF RECENT CHECKINS
     checkins.map(async checkin => {
-      const key = `httpcache:https://api.untappd.com/v4/beer/info/${
-        checkin.bid
-      }?access_token=${untappd_access_token}`;
-      const ttl = await getTtl(key);
-      const timeWhenCached = moment()
-        .add(ttl, "second")
-        .subtract(3600 * 24 * 5, "second");
+      // Checkin
       const checkinTime = moment(checkin.timestamp);
-      if (timeWhenCached.isBefore(checkinTime) && ttl !== -2) {
-        await setExpireat(key, -2);
-      }
-      return key;
+      //Beer
+      const beerCacheKey = `httpcache:https://api.untappd.com/v4/beer/info/${
+        checkin.bid
+      }?compact=true&access_token=${untappd_access_token}`;
+      this.flushCache({
+        flushBeforeTimestamp: checkinTime,
+        cacheKey: beerCacheKey,
+        cacheKeyCacheTime: CACHE_TIME.BY_ID
+      });
+      // UserBeers
+      const userBeersCacheKey = `httpcache:https://api.untappd.com/v4/user/beers?limit=50&access_token=${untappd_access_token}`;
+      this.flushCache({
+        flushBeforeTimestamp: checkinTime,
+        cacheKey: userBeersCacheKey,
+        cacheKeyCacheTime: CACHE_TIME.USER_BEERS
+      });
     });
 
     return {
@@ -136,6 +157,24 @@ class UntappdAPI extends RESTDataSource {
       checkins: checkins
     };
   }
+
+  flushCache = async ({
+    flushBeforeTimestamp,
+    cacheKey,
+    cacheKeyCacheTime
+  }) => {
+    const flushBeforeTime = moment(flushBeforeTimestamp);
+    const cacheKeyTtl = await getTtl(cacheKey);
+    const cacheKeyTimeWhenCached = moment()
+      .add(cacheKeyTtl, "second")
+      .subtract(cacheKeyCacheTime, "second");
+    if (
+      cacheKeyTimeWhenCached.isBefore(flushBeforeTime) &&
+      cacheKeyTtl !== -2
+    ) {
+      await setExpireat(cacheKey, -2);
+    }
+  };
 }
 
 export default UntappdAPI;
