@@ -76,7 +76,8 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       id: beerToDecorate._id,
       documentBody: {
         untappdId: untappdId || 0,
-        untappdData: untappdData || null
+        untappdData: untappdData || null,
+        untappdTimestamp: Date.now()
       }
     });
   } catch (e) {
