@@ -29,7 +29,7 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       size: 50
     });
     beerToDecorate = beersToDecorate.find(beerToDecorate => {
-      const oneMonth = 1000 * 3600 * 24 * 30;
+      const oneWeek = 1000 * 3600 * 24 * 7;
       const untappdData = beerToDecorate._source.untappdData;
       const untappdId = beerToDecorate._source.untappdId;
       const untappdTimestamp = beerToDecorate._source.untappdTimestamp;
@@ -39,7 +39,7 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       );
       const shouldBeIgnored = untappdId === 0 || untappdId === "0";
       const souldBeRefreshed =
-        !untappdTimestamp || untappdTimestamp < Date.now() - oneMonth; // Older than one month
+        !untappdTimestamp || untappdTimestamp < Date.now() - oneWeek; // Older than one week
       return !shouldBeIgnored && (!hasUntappdData || souldBeRefreshed);
     });
     if (beerToDecorate) {
