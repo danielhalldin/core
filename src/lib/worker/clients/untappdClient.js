@@ -31,7 +31,7 @@ class UntappdClient {
   fetchBeerById = async id => {
     const url = `${this.baseUrl}/v4/beer/info/${id}?client_id=${
       this.untappedClientID
-    }&client_secret=${this.untappedClientSecret}`;
+    }&compact=true&client_secret=${this.untappedClientSecret}`;
 
     const response = await fetch(url);
     logger.info(

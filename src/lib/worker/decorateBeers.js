@@ -29,12 +29,18 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       size: 50
     });
     beerToDecorate = beersToDecorate.find(beerToDecorate => {
+      const oneMonth = 1000 * 3600 * 24 * 30;
       const untappdData = beerToDecorate._source.untappdData;
       const untappdId = beerToDecorate._source.untappdId;
-      return (
-        (untappdData === undefined || untappdData === null) &&
-        !(untappdId === 0 || untappdId === "0")
+      const untappdTimestamp = beerToDecorate._source.untappdTimestamp;
+
+      const hasUntappdData = !(
+        untappdData === undefined || untappdData === null
       );
+      const shouldBeIgnored = untappdId === 0 || untappdId === "0";
+      const souldBeRefreshed =
+        !untappdTimestamp || untappdTimestamp < Date.now() - oneMonth; // Older than one month
+      return !shouldBeIgnored && (!hasUntappdData || souldBeRefreshed);
     });
     if (beerToDecorate) {
       logger.info(`Stocktype: ${stockType}`);
@@ -52,7 +58,7 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
     let untappdData;
 
     if (untappdId) {
-      logger.info(`untappdId: ${untappdId}`);
+      logger.info(`untappdId: ${untappdId}, Namn: ${Namn} - ${Namn2}`);
       untappdData = await untappdClient.fetchBeerById(untappdId);
     } else {
       const queries = [];

@@ -14,7 +14,8 @@ const update = app => {
         id: id,
         documentBody: {
           untappdId: Number(uid),
-          untappdData: null
+          untappdData: null,
+          untappdTimestamp: 0
         }
       });
     }
