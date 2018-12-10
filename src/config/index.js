@@ -9,8 +9,8 @@ module.exports = {
 
   graphql: {
     introspectionEnabled:
-      (process.env.INTRSPECTION_ENABLED &&
-        process.env.INTRSPECTION_ENABLED === "true") ||
+      (process.env.INTROSPECTION_ENABLED &&
+        process.env.INTROSPECTION_ENABLED === "true") ||
       false,
     playgroundEnabled:
       (process.env.PLAYGROUND_ENABLED &&

@@ -1,6 +1,5 @@
 import fetch from "node-fetch";
 import xml2js from "xml2js";
-
 import logger from "../logger";
 import config from "../../config";
 
@@ -36,7 +35,10 @@ const indexBeers = async indexClient => {
   );
   const beers = json.artiklar.artikel
     .filter(function(article) {
-      return article.Varugrupp.toLocaleLowerCase().indexOf("öl") !== -1;
+      return (
+        article.Varugrupp &&
+        article.Varugrupp.toLocaleLowerCase().indexOf("öl") !== -1
+      );
     })
     .map(function(article) {
       article.id = article.Artikelid;
