@@ -66,6 +66,7 @@ const untappdUserBeers = async (
       return Object.assign({}, item, {
         beer: {
           ...item.beer,
+          bid: item.first_checkin_id,
           auth_rating: item.rating_score,
           checkinDate: item.recent_created_at
         }
