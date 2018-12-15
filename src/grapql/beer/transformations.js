@@ -42,7 +42,12 @@ const untappdTransformBeer = data => {
     style,
     description,
     untappdId,
-    untappdUrl: `https://untappd.com/b/${beer_slug}/${untappdId}`,
+    untappdUrl: checkinDate
+      ? `https://untappd.com/c/${untappdId}`
+      : `https://untappd.com/b/${beer_slug}/${untappdId}`,
+    untappdDeepLink: checkinDate
+      ? `untappd://checkin/${untappdId}`
+      : `untappd://beer/${untappdId}`,
     checkinDate: checkinDate && moment(checkinDate).format("YYYY-MM-DD")
   };
 };

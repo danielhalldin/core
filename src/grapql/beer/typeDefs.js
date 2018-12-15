@@ -17,6 +17,7 @@ export default `
     country: String
     untappdId: Int
     untappdUrl: String
+    untappdDeepLink: String
     userRating: Float
     rating: Float
     salesStartDate: String
