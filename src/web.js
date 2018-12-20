@@ -28,6 +28,7 @@ async function run() {
     tracing: true,
     cacheControl: true,
     cache: redisCache,
+    engine: false,
     persistedQueries: redisCache,
     introspection: config.graphql.introspectionEnabled,
     playground: config.graphql.playgroundEnabled,
