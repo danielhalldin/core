@@ -1,4 +1,7 @@
 export default `
+  """
+  A type that describes a beer.
+  """
   type beer {
     id: Int
     name: String
@@ -29,6 +32,9 @@ export default `
     checkinDate: String
   }
 
+  """
+  A type that describes a user.
+  """
   type user {
     name: String 
     avatar: String
@@ -36,6 +42,9 @@ export default `
     admin: Boolean
   }
 
+  """
+  A type that describes a named list of beers.
+  """
   type list {
     name: String
     beers: [beer]
