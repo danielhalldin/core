@@ -4,6 +4,7 @@ import compression from "compression";
 import express from "express";
 import schema from "./grapql/schema";
 import throng from "throng";
+import _get from "lodash/get";
 
 import untappdAPI from "./lib/web/dataSources/untappdAPI";
 import elasticsearchAPI from "./lib/web/dataSources/elasticsearchAPI";
@@ -48,7 +49,9 @@ async function run() {
       };
     },
     context: ({ req, res }) => {
-      const untappd_access_token = decrypt(req.headers.untappd_access_token);
+      const untappd_access_token = decrypt(
+        _get(req, "headers.untappd_access_token") || ""
+      );
       return {
         untappd_access_token
       };
