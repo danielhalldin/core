@@ -48,10 +48,14 @@ async function run() {
         path: error.path
       };
     },
-    context: ({ req, res }) => {
-      const untappd_access_token = decrypt(
-        _get(req, "headers.untappd_access_token") || ""
+    context: ({ req }) => {
+      const raw_untappd_access_token = _get(
+        req,
+        "headers.untappd_access_token"
       );
+      const untappd_access_token = raw_untappd_access_token
+        ? decrypt(raw_untappd_access_token)
+        : "";
       return {
         untappd_access_token
       };
