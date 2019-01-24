@@ -14,20 +14,25 @@ const tidyQuery = query => {
 };
 
 const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
-  const stockTypes = [
-    "Små partier",
-    "Lokalt och småskaligt",
-    "Övrigt sortiment",
-    "Ordinarie sortiment"
+  const batches = [
+    { stockType: "Små partier", size: 50 },
+    { stockType: "Lokalt och småskaligt", size: 50 },
+    { stockType: "Övrigt sortiment", size: 50 },
+    { stockType: "Ordinarie sortiment", size: 50 },
+    { stockType: "Små partier", size: 1000 },
+    { stockType: "Lokalt och småskaligt", size: 1000 },
+    { stockType: "Övrigt sortiment", size: 1000 },
+    { stockType: "Ordinarie sortiment", size: 1000 }
   ];
 
   let beerToDecorate;
 
-  for (const stockType of stockTypes) {
+  for (const batch of batches) {
     const beersToDecorate = await searchClient.latatestBeersToBeDecorated({
-      stockType: stockType,
-      size: 50
+      stockType: batch.stockType,
+      size: batch.size
     });
+
     beerToDecorate = beersToDecorate.find(beerToDecorate => {
       const oneWeek = 1000 * 3600 * 24 * 7;
       const untappdData = beerToDecorate._source.untappdData;
@@ -43,7 +48,7 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       return !shouldBeIgnored && (!hasUntappdData || souldBeRefreshed);
     });
     if (beerToDecorate) {
-      logger.info(`Stocktype: ${stockType}`);
+      logger.info(`Stocktype: ${batch.stockType} Size: ${batch.size}`);
       break;
     }
   }
