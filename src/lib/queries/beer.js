@@ -1,13 +1,15 @@
 import _ from "lodash";
 
-var sort = ["-Saljstart", "+Namn.keyword"].map(function(item) {
-  var order = _.startsWith(item, "-") ? "desc" : "asc";
-  var object = {};
-  object[_.trim(item, "+-")] = {
-    order: order
-  };
-  return object;
-});
+var sort = ["-Saljstart", "-untappdData.rating_score", "+Namn.keyword"].map(
+  function(item) {
+    var order = _.startsWith(item, "-") ? "desc" : "asc";
+    var object = {};
+    object[_.trim(item, "+-")] = {
+      order: order
+    };
+    return object;
+  }
+);
 
 const beers = ({ fromDate, toDate, stockType }) => {
   const q = {
