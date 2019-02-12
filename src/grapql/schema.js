@@ -8,6 +8,7 @@ import {
   untappdIsFriend,
   untappdUserBeers,
   decoratedLatest,
+  recommended,
   updateUntappdId,
   deleteBeer
 } from "./beer/resolvers";
@@ -25,7 +26,8 @@ const resolvers = {
     omdbById,
     omdbBySearch,
     systembolagetLatest,
-    decoratedLatest
+    decoratedLatest,
+    recommended
   },
   Mutation: {
     updateUntappdId,

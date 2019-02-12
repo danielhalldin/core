@@ -119,6 +119,39 @@ const decoratedLatest = async (
   };
 };
 
+const recommended = async (
+  _,
+  { size },
+  { dataSources, untappd_access_token }
+) => {
+  const data = await dataSources.ElasticsearchApi.recommendedBeer({
+    size
+  });
+  const beers = data.hits.hits.map(async beer => {
+    const systembolagetBeer = systembolagetTransform(beer);
+    const untappdId = beer._source.untappdId;
+    let untappdBeer;
+    if (untappdId) {
+      const personalBeerData = await dataSources.UntappdAPI.byId(
+        untappdId,
+        untappd_access_token
+      );
+
+      if (personalBeerData.response.beer) {
+        untappdBeer = untappdTransform(personalBeerData.response.beer);
+      } else {
+        untappdBeer = untappdTransform(beer._source.untappdData);
+      }
+    }
+    return Object.assign({}, systembolagetBeer, untappdBeer);
+  });
+
+  return {
+    name: "Rekommenderade",
+    beers: beers
+  };
+};
+
 const updateUntappdId = async (
   _,
   { systembolagetArticleId, untappdId },
@@ -174,6 +207,7 @@ export {
   systembolagetLatest,
   untappdById,
   decoratedLatest,
+  recommended,
   untappdUser,
   untappdUserBeers,
   untappdFriends,

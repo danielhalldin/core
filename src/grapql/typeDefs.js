@@ -17,6 +17,7 @@ export default gql`
     untappdFriends: [user]
     untappdIsFriend: Boolean
     decoratedLatest(size: Int, stockType: String): list
+    recommended(size: Int): list
   }
 
   type Mutation {
