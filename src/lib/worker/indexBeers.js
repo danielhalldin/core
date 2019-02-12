@@ -42,6 +42,7 @@ const indexBeers = async indexClient => {
     })
     .map(function(article) {
       article.id = article.Artikelid;
+      article.indexTimestamp = Date.now();
       return article;
     });
 
