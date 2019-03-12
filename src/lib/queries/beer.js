@@ -101,3 +101,14 @@ export { beers, recommendedBeers };
 //   },
 // "stored_fields" : ["Saljstart", "untappdData.rating_score", "Namn.keyword"]
 // }
+
+// CLEANUP QUERY
+// {
+//   "query": {
+//       "range" : {
+//           "indexTimestamp" : {
+//               "lte" : 1551800910000
+//           }
+//       }
+//   }
+// }

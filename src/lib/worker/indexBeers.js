@@ -33,6 +33,7 @@ const indexBeers = async indexClient => {
       else resolve(result);
     })
   );
+  const indexTimestamp = Date.now();
   const beers = json.artiklar.artikel
     .filter(function(article) {
       return (
@@ -42,7 +43,7 @@ const indexBeers = async indexClient => {
     })
     .map(function(article) {
       article.id = article.Artikelid;
-      article.indexTimestamp = Date.now();
+      article.indexTimestamp = indexTimestamp;
       return article;
     });
 
