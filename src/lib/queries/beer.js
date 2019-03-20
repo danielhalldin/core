@@ -112,3 +112,14 @@ export { beers, recommendedBeers };
 //       }
 //   }
 // }
+
+// CHECK EMPTY
+// {
+//   "query": {
+//     "bool": {
+//        "must_not": [
+//          {"exists": { "field": "indexTimestamp" }}
+//        ]
+//     }
+//   }
+// }
