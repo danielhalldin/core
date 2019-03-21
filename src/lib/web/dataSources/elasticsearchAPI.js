@@ -33,7 +33,7 @@ class elasticsearchAPI extends RESTDataSource {
   }
 
   async recommendedBeer({ size }) {
-    var fromDate = moment().subtract(3, "months");
+    var fromDate = moment().subtract(1, "months");
     var toDate = moment().add(1, "month");
 
     const response = await this.post(
