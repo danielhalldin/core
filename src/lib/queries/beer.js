@@ -5,7 +5,8 @@ const sort = sortFields => {
     var order = _.startsWith(item, "-") ? "desc" : "asc";
     var object = {};
     object[_.trim(item, "+-")] = {
-      order: order
+      order: order,
+      missing: "_last"
     };
     return object;
   });
