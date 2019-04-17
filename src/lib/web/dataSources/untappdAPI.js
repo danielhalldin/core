@@ -90,8 +90,8 @@ class UntappdAPI extends RESTDataSource {
       response.response.items &&
       response.response.items.map(item => {
         return {
-          name: item.user.user_name,
-          avatar: item.user.user_avatar
+          name: _get(item, "user.user_name") || null,
+          avatar: _get(item, "user.user_avatar") || null
         };
       });
 
@@ -151,9 +151,9 @@ class UntappdAPI extends RESTDataSource {
     });
 
     return {
-      name: user.user_name,
-      avatar: user.user_avatar,
-      totalBeers: user.stats.total_beers,
+      name: _get(user, "user_name") || null,
+      avatar: _get(user, "user_avatar") || null,
+      totalBeers: _get(user, "stats.total_beers") || null,
       checkins: checkins
     };
   }
