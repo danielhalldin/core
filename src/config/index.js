@@ -1,5 +1,5 @@
 module.exports = {
-  port: process.env.PORT || 4444,
+  port: process.env.PORT || 6667,
   logLevel: process.env.LOG_LEVEL || "info",
   decoratorInterval: process.env.DECORATOR_INTERVAL || 10000,
   indexInterval: process.env.INDEX_INTERVAL || 3600000,

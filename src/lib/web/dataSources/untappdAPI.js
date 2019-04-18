@@ -76,7 +76,9 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: CACHE_TIME.USER_BEERS } }
     );
 
-    return response.response.beers.items;
+    const items = _get(response, "response.beers.items") || null
+
+    return items;
   }
 
   async friends() {
@@ -86,9 +88,8 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: CACHE_TIME.FRIENDS } } // Cache beers for 1 days
     );
 
-    const friends =
-      response.response.items &&
-      response.response.items.map(item => {
+    const items = _get(response, "response.items") || []
+    const friends = items.map(item => {
         return {
           name: _get(item, "user.user_name") || null,
           avatar: _get(item, "user.user_avatar") || null
