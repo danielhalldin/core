@@ -51,11 +51,14 @@ async function run() {
     context: ({ req }) => {
       const raw_untappd_access_token = _get(
         req,
-        "headers.untappd_access_token"
+        "headers.x-untappd-access-token"
       );
+
       const untappd_access_token = raw_untappd_access_token
         ? decrypt(raw_untappd_access_token)
         : "";
+
+      console.log(_get(req, "headers"));
       return {
         untappd_access_token
       };
