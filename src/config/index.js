@@ -47,5 +47,11 @@ module.exports = {
   omdb: {
     baseUrl: process.env.UNTAPPED_BASE_URL || "http://www.omdbapi.com",
     apiKey: process.env.OMDB_API_KEY
+  },
+
+  webPush: {
+    vapidPublicKey: process.env.VAPID_PUBLIC_KEY,
+    vapidPrivateKey: process.env.VAPID_PRIVATE_KEY,
+    vapidEmail: process.env.VAPID_EMAIL
   }
 };

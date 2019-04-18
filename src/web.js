@@ -18,6 +18,14 @@ import { decrypt } from "./lib/jwtHandler";
 import logger from "./lib/logger";
 import morgan from "morgan";
 
+import webpush from "web-push";
+
+webpush.setVapidDetails(
+  config.webPush.vapidEmail,
+  config.webPush.vapidPublicKey,
+  config.webPush.vapidPrivateKey
+);
+
 async function run() {
   const redisCache = new RedisCache({
     url: config.rediscloudUrl,
@@ -65,11 +73,25 @@ async function run() {
   const app = express();
   app.use(compression());
   app.use(morgan("dev"));
+  app.use(express.json());
   app.use(express.static("public"));
 
   // Routes
   loginRoutes(app);
   updateRoutes(app);
+  app.post("/subscribe", (req, res) => {
+    const subscription = req.body;
+    res.status(201).json({});
+    const payload = JSON.stringify({
+      title: "Daniel testar lite",
+      body: "Information om en ny öl",
+      icon:
+        "https://untappd.akamaized.net/site/beer_logos/beer-3092221_5cf17_sm.jpeg"
+    });
+    webpush.sendNotification(subscription, payload).catch(error => {
+      console.error(error.stack);
+    });
+  });
 
   https: server.applyMiddleware({ app });
 
