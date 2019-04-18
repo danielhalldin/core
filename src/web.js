@@ -87,7 +87,7 @@ async function run() {
         `subscription-${_get(subscription, "keys.p256dh")}`,
         JSON.stringify(subscription),
         "EX",
-        3600
+        3600 * 24 * 365
       );
     }
     res.status(201).json({});
