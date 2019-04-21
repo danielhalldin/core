@@ -27,7 +27,7 @@ const push = app => {
   app.get("/push", async (req, res) => {
     const payload = JSON.stringify({
       title: "Daniel testar lite",
-      body: "Information om en ny öl",
+      body: "Information om en ny öl ☀️",
       icon:
         "https://untappd.akamaized.net/site/beer_logos/beer-3092221_5cf17_sm.jpeg"
     });
