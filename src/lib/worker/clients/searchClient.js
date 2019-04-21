@@ -9,7 +9,7 @@ class SearchClient {
     const uri = new URI(config.elasticsearch.url);
     this._client = new Elasticsearch.Client({
       host: uri.toString(),
-      apiVersion: "5.0"
+      apiVersion: "5.6"
     });
   }
 
