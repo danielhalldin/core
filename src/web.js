@@ -12,20 +12,12 @@ import elasticsearchAPI from "./lib/web/dataSources/elasticsearchAPI";
 import loginRoutes from "./lib/web/routes/login";
 import omdbAPI from "./lib/web/dataSources/omdbApi";
 import updateRoutes from "./lib/web/routes/update";
+import pushRoutes from "./lib/web/routes/push";
 
 import config from "./config";
 import { decrypt } from "./lib/jwtHandler";
 import logger from "./lib/logger";
 import morgan from "morgan";
-
-import webpush from "web-push";
-import { set, get, keys } from "./lib/redisClient";
-
-webpush.setVapidDetails(
-  config.webPush.vapidEmail,
-  config.webPush.vapidPublicKey,
-  config.webPush.vapidPrivateKey
-);
 
 async function run() {
   const redisCache = new RedisCache({
@@ -80,40 +72,7 @@ async function run() {
   // Routes
   loginRoutes(app);
   updateRoutes(app);
-  app.post("/subscribe", (req, res) => {
-    const subscription = req.body;
-    if (_get(subscription, "keys.p256dh")) {
-      set(
-        `subscription-${_get(subscription, "keys.p256dh")}`,
-        JSON.stringify(subscription),
-        "EX",
-        3600 * 24 * 365
-      );
-    }
-    res.status(201).json({});
-  });
-
-  app.get("/push", async (req, res) => {
-    const payload = JSON.stringify({
-      title: "Daniel testar lite",
-      body: "Information om en ny öl",
-      icon:
-        "https://untappd.akamaized.net/site/beer_logos/beer-3092221_5cf17_sm.jpeg"
-    });
-    let subscriptionsKeys = [];
-    try {
-      subscriptionsKeys = await keys("subscription-*");
-      await subscriptionsKeys.map(async subscriptionKey => {
-        const subscription = JSON.parse(await get(subscriptionKey));
-        await webpush.sendNotification(subscription, payload).catch(error => {
-          console.error("webpush", error.stack);
-        });
-      });
-    } catch (e) {
-      console.error(e);
-    }
-    res.json(subscriptionsKeys).send(201);
-  });
+  pushRoutes(app);
 
   https: server.applyMiddleware({ app });
 
