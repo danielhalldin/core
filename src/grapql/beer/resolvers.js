@@ -1,6 +1,7 @@
 import { untappdTransform, systembolagetTransform } from "./transformations";
 import IndexClient from "../../lib/worker/clients/indexClient";
 import config from "../../config";
+import { orderBy } from "lodash";
 
 const untappdById = async (
   _,
@@ -95,7 +96,7 @@ const decoratedLatest = async (
     size,
     stockType
   });
-  const beers = data.hits.hits.map(async beer => {
+  const _beers = data.hits.hits.map(async beer => {
     const systembolagetBeer = systembolagetTransform(beer);
     const untappdId = beer._source.untappdId;
     let untappdBeer;
@@ -112,10 +113,16 @@ const decoratedLatest = async (
     }
     return Object.assign({}, systembolagetBeer, untappdBeer);
   });
+  const beers = await Promise.all(_beers);
+  const sortedBeers = orderBy(
+    beers,
+    ["salesStartDate", "rating", "name"],
+    ["desc", "desc", "asc"]
+  );
 
   return {
     name: stockType,
-    beers: beers
+    beers: sortedBeers
   };
 };
 
