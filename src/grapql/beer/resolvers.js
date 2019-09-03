@@ -116,9 +116,14 @@ const decoratedLatest = async (
   const beers = await Promise.all(_beers);
   const sortedBeers = orderBy(
     beers,
-    ["salesStartDate", ({ rating }) => rating || -1, "name"][
-      ("desc", "desc", "asc")
-    ]
+    [
+      "salesStartDate",
+      beer => {
+        return beer.rating || -1;
+      },
+      "name"
+    ],
+    ["desc", "desc", "asc"]
   );
 
   return {
