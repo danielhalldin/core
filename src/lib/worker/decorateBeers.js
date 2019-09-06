@@ -9,8 +9,7 @@ const tidyQuery = query => {
     .replace("ale", "")
     .replace("&", "")
     .replace("[ ]+", " ");
-
-  return _.uniq(query.split(" ")).join(" ");
+  return encodeURIComponent(_.uniq(query.split(" ")).join(" "));
 };
 
 const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
@@ -72,15 +71,14 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
 
       for (const [i, q] of queries.entries()) {
         logger.info(`q${i}: ${q}`);
-        const untappdSearchResult = await untappdClient.searchBeer(
-          encodeURIComponent(q)
-        );
+        const untappdSearchResult = await untappdClient.searchBeer(q);
         if (untappdSearchResult.length > 0) {
           untappdData = untappdSearchResult[0];
           untappdId = untappdData.beer.bid;
           break;
         }
       }
+      console.log({ untappdData });
     }
 
     return indexClient.updateDocument({
