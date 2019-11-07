@@ -19,7 +19,7 @@ class SearchClient {
 
   latatestBeersToBeDecorated = async ({
     size = 50,
-    stockType = "Små partier"
+    stockType = "Tillfälligt sortiment"
   }) => {
     var fromDate = moment().subtract(10, "year");
     var toDate = moment().add(1, "month");

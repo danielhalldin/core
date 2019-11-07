@@ -80,7 +80,7 @@ export { beers, recommendedBeers };
 //     "bool": {
 //       "must": [
 //         { "match": { "Varugrupp": { "query": "öl", "operator": "and" } } },
-//         { "match": { "SortimentText": { "query": "Små partier", "operator": "and" } } }
+//         { "match": { "SortimentText": { "query": "Tillfälligt sortiment", "operator": "and" } } }
 //       ]
 //     }
 //   }
@@ -96,7 +96,7 @@ export { beers, recommendedBeers };
 //     "bool": {
 //       "must": [
 //         { "match": { "Varugrupp": { "query": "öl", "operator": "and" } } },
-//         { "match": { "SortimentText": { "query": "Små partier", "operator": "and" } } }
+//         { "match": { "SortimentText": { "query": "Tillfälligt sortiment", "operator": "and" } } }
 //       ]
 //     }
 //   },

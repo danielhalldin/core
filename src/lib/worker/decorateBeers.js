@@ -14,11 +14,11 @@ const tidyQuery = query => {
 
 const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
   const batches = [
-    { stockType: "Små partier", size: 50 },
+    { stockType: "Tillfälligt sortiment", size: 50 },
     { stockType: "Lokalt och småskaligt", size: 50 },
     { stockType: "Övrigt sortiment", size: 50 },
     { stockType: "Ordinarie sortiment", size: 50 },
-    { stockType: "Små partier", size: 1000 },
+    { stockType: "Tillfälligt sortiment", size: 1000 },
     { stockType: "Lokalt och småskaligt", size: 1000 },
     { stockType: "Övrigt sortiment", size: 1000 },
     { stockType: "Ordinarie sortiment", size: 1000 }

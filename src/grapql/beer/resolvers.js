@@ -89,7 +89,7 @@ const systembolagetLatest = async (obj, { size }, { dataSources }) => {
 
 const decoratedLatest = async (
   _,
-  { size, stockType = "Små partier" },
+  { size, stockType = "Tillfälligt sortiment" },
   { dataSources, untappd_access_token }
 ) => {
   const data = await dataSources.ElasticsearchApi.latestBeer({
