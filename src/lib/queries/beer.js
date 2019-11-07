@@ -12,9 +12,11 @@ const sort = sortFields => {
   });
 };
 
+//    sort: sort(["-Saljstart", "-untappdData.rating_score", "+Namn.keyword"]),
+
 const beers = ({ fromDate, toDate, stockType }) => {
   const q = {
-    sort: sort(["-Saljstart", "-untappdData.rating_score", "+Namn.keyword"]),
+    sort: sort(["-Saljstart", "+Namn.keyword"]),
     query: {
       bool: {
         must: [
