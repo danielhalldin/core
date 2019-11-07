@@ -1,6 +1,9 @@
 import moment from "moment";
 
 const untappdTransform = data => {
+  if (!data) {
+    return;
+  }
   if (data.beer && data.brewery) {
     return Object.assign(
       {},
