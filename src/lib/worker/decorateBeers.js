@@ -15,13 +15,17 @@ const tidyQuery = query => {
 const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
   const batches = [
     { stockType: "Tillfälligt sortiment", size: 50 },
-    { stockType: "Lokalt och småskaligt", size: 50 },
-    { stockType: "Övrigt sortiment", size: 50 },
-    { stockType: "Ordinarie sortiment", size: 50 },
+    { stockType: "Lokalt & småskaligt", size: 50 },
+    { stockType: "Säsong", size: 50 },
+    { stockType: "Fast sortiment", size: 50 },
+    { stockType: "Ordervaror", size: 50 },
+    //{ stockType: "Webblanseringar", size: 50 }, BARA FÖR VIN
     { stockType: "Tillfälligt sortiment", size: 1000 },
-    { stockType: "Lokalt och småskaligt", size: 1000 },
-    { stockType: "Övrigt sortiment", size: 1000 },
-    { stockType: "Ordinarie sortiment", size: 1000 }
+    { stockType: "Lokalt & småskaligt", size: 1000 },
+    { stockType: "Säsong", size: 1000 },
+    { stockType: "Fast sortiment", size: 1000 },
+    { stockType: "Ordervaror", size: 1000 }
+    //{ stockType: "Webblanseringar", size: 1000 }, BARA FÖR VIN
   ];
 
   let beerToDecorate;
