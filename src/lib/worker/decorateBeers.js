@@ -18,13 +18,13 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
     { stockType: "Lokalt & småskaligt", size: 50 },
     { stockType: "Säsong", size: 50 },
     { stockType: "Fast sortiment", size: 50 },
-    { stockType: "Ordervaror", size: 50 }
+    { stockType: "Ordervaror", size: 50 },
     //{ stockType: "Webblanseringar", size: 50 }, BARA FÖR VIN
-    // { stockType: "Tillfälligt sortiment", size: 1000 },
-    // { stockType: "Lokalt & småskaligt", size: 1000 },
-    // { stockType: "Säsong", size: 1000 },
-    // { stockType: "Fast sortiment", size: 1000 },
-    // { stockType: "Ordervaror", size: 1000 }
+    { stockType: "Tillfälligt sortiment", size: 1000 },
+    { stockType: "Lokalt & småskaligt", size: 1000 },
+    { stockType: "Säsong", size: 1000 },
+    { stockType: "Fast sortiment", size: 1000 },
+    { stockType: "Ordervaror", size: 1000 }
     //{ stockType: "Webblanseringar", size: 1000 }, BARA FÖR VIN
   ];
 
@@ -37,7 +37,7 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
     });
 
     beerToDecorate = beersToDecorate.find(beerToDecorate => {
-      const refreshInterval = 1000 * 3600 * 24 * 3; //three days
+      const refreshInterval = 1000 * 3600 * 24 * 2; //two days
       const untappdData = beerToDecorate._source.untappdData;
       const untappdId = beerToDecorate._source.untappdId;
       const untappdTimestamp = beerToDecorate._source.untappdTimestamp;
