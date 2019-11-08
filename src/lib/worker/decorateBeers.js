@@ -82,7 +82,6 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
           break;
         }
       }
-      console.log({ untappdData });
     }
 
     return indexClient.updateDocument({
