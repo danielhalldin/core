@@ -19,7 +19,11 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
     { stockType: "Säsong", size: 50 },
     { stockType: "Fast sortiment", size: 50 },
     { stockType: "Ordervaror", size: 50 },
-    //{ stockType: "Webblanseringar", size: 50 }, BARA FÖR VIN
+    { stockType: "Tillfälligt sortiment", size: 150 },
+    { stockType: "Lokalt & småskaligt", size: 150 },
+    { stockType: "Säsong", size: 150 },
+    { stockType: "Fast sortiment", size: 150 },
+    { stockType: "Ordervaror", size: 150 },
     { stockType: "Tillfälligt sortiment", size: 1000 },
     { stockType: "Lokalt & småskaligt", size: 1000 },
     { stockType: "Säsong", size: 1000 },
