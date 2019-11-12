@@ -12,7 +12,6 @@ import {
   updateUntappdId,
   deleteBeer
 } from "./beer/resolvers";
-import { omdbById, omdbBySearch } from "./movie/resolvers";
 import typeDefs from "./typeDefs";
 
 const resolvers = {
@@ -23,8 +22,6 @@ const resolvers = {
     untappdIsFriend,
     untappdUserBeers,
     untappdUser,
-    omdbById,
-    omdbBySearch,
     systembolagetLatest,
     decoratedLatest,
     recommended

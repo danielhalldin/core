@@ -10,7 +10,6 @@ import untappdAPI from "./lib/web/dataSources/untappdAPI";
 import elasticsearchAPI from "./lib/web/dataSources/elasticsearchAPI";
 
 import loginRoutes from "./lib/web/routes/login";
-import omdbAPI from "./lib/web/dataSources/omdbApi";
 import updateRoutes from "./lib/web/routes/update";
 import pushRoutes from "./lib/web/routes/push";
 
@@ -37,7 +36,6 @@ async function run() {
     introspection: config.graphql.introspectionEnabled,
     playground: config.graphql.playgroundEnabled,
     dataSources: () => ({
-      OmdbAPI: new omdbAPI(),
       UntappdAPI: new untappdAPI(),
       ElasticsearchApi: new elasticsearchAPI()
     }),

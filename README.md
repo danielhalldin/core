@@ -18,16 +18,15 @@
 
 ```
 REDISCLOUD_URL=
-OMDB_API_KEY=
 BONSAI_URL=
-GOOGLE_API_KEY=
-GOOGLE_CSE_ID=
 UNTAPPED_CLIENT_ID=
 UNTAPPED_CLIENT_SECRET=
 ```
 
 ---
+
 ## Create and install self-signed certificate
+
 ```
 sudo cp /System/Library/OpenSSL/openssl.cnf /etc/ssh/openssl.cnf
 ```
@@ -46,19 +45,22 @@ openssl req -x509 -days 1000 -nodes -newkey rsa:2048 \
 ```
 
 ### Open the new cert:
+
 ```
 open /Applications/Utilities/Keychain\ Access.app newbeers.key
-``` 
+```
 
 ### Add hosts to /etc/hosts:
-``` 
+
+```
 127.0.0.1   www.newbeers.se core.newbeers.se
 ```
 
 ### Copy the certificate files (newbeers.crt and newbeers.key) to /usr/local/etc/nginx/:
+
 ```
 $ cp dev.cmore.* /usr/local/etc/nginx/
-``` 
+```
 
 ### Add this section to the http section of /usr/local/etc/nginx/nginx.conf:
 
@@ -66,7 +68,7 @@ $ cp dev.cmore.* /usr/local/etc/nginx/
 $ code /usr/local/etc/nginx/nginx.conf
 ```
 
-``` 
+```
 ################################################################################
     # New beers
     ################################################################################
@@ -89,7 +91,7 @@ $ code /usr/local/etc/nginx/nginx.conf
             proxy_redirect          default;
         }
     }
-    
+
     ################################################################################
     # Core
     ################################################################################
@@ -113,5 +115,3 @@ $ code /usr/local/etc/nginx/nginx.conf
         }
     }
 ```
-
-
