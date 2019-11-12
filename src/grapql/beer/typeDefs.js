@@ -3,50 +3,50 @@ export default `
   A type that describes a beer.
   """
   type beer {
+    abv: Float
+    beerLabel: String
+    brewery: String
+    breweryLabel: String
+    category: String
+    checkinDate: String
+    country: String
+    description: String
+    ibu: Int
     id: Int
     name: String
-    brewery: String
-    beerLabel: String
-    breweryLabel: String
     price: Float
-    category: String
-    style: String
-    type: String
-    abv: Float
-    ibu: Int
-    supplier: String
-    volume: Float
-    description: String
-    country: String
-    untappdId: Int
-    untappdUrl: String
-    untappdDeepLink: String
-    userRating: Float
     rating: Float
     salesStartDate: String
-    stockTypeId: String
     stockType: String
-    systembolagetId: Int
+    stockTypeId: String
+    style: String
+    supplier: String
     systembolagetArticleId: Int
+    systembolagetId: Int
     systembolagetUrl: String 
-    checkinDate: String
+    type: String
+    untappdDeepLink: String
+    untappdId: Int
+    untappdUrl: String
+    userRating: Float
+    volume: Float
   }
 
   """
   A type that describes a user.
   """
   type user {
-    name: String 
-    avatar: String
-    totalBeers: Int
     admin: Boolean
+    avatar: String
+    name: String 
+    totalBeers: Int
   }
 
   """
   A type that describes a named list of beers.
   """
   type list {
-    name: String
     beers: [beer]
+    name: String
   }
 `;

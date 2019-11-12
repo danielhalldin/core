@@ -5,19 +5,26 @@ export default gql`
   ${beerTypeDefs}
 
   type Query {
+    """
+    The lates [size] beers of the [stockType] decoreted with untappd data
+    """
+    decoratedLatest(size: Int, stockType: String): list
+    """
+    The recommended [size] beers
+    """
+    recommended(size: Int): list
+
     systembolagetLatest(size: Int): [beer]
-    untappdSearch(query: String!): [beer]
-    untappdUserBeers: [beer]
     untappdById(id: ID!): beer
-    untappdUser: user
     untappdFriends: [user]
     untappdIsFriend: Boolean
-    decoratedLatest(size: Int, stockType: String): list
-    recommended(size: Int): list
+    untappdSearch(query: String!): [beer]
+    untappdUser: user
+    untappdUserBeers: [beer]
   }
 
   type Mutation {
-    updateUntappdId(systembolagetArticleId: Int!, untappdId: Int!): Boolean
     deleteBeer(systembolagetArticleId: Int!): Boolean
+    updateUntappdId(systembolagetArticleId: Int!, untappdId: Int!): Boolean
   }
 `;

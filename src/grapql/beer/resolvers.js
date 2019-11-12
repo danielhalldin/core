@@ -104,7 +104,7 @@ const recommended = async (
   };
 };
 const systembolagetLatest = async (_obj, { size }, { dataSources }) => {
-  const data = await dataSources.ElasticsearchApi.latestBeer(size);
+  const data = await dataSources.ElasticsearchApi.latestBeer({ size });
   const beers = data.hits.hits.map(beer => {
     return systembolagetTransform(beer);
   });

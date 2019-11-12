@@ -1,34 +1,34 @@
 import { makeExecutableSchema } from "apollo-server-express";
 import {
+  decoratedLatest,
+  deleteBeer,
+  recommended,
   systembolagetLatest,
-  untappdSearch,
   untappdById,
-  untappdUser,
   untappdFriends,
   untappdIsFriend,
+  untappdSearch,
+  untappdUser,
   untappdUserBeers,
-  decoratedLatest,
-  recommended,
-  updateUntappdId,
-  deleteBeer
+  updateUntappdId
 } from "./beer/resolvers";
 import typeDefs from "./typeDefs";
 
 const resolvers = {
   Query: {
-    untappdSearch,
+    decoratedLatest,
+    recommended,
+    systembolagetLatest,
     untappdById,
     untappdFriends,
     untappdIsFriend,
-    untappdUserBeers,
+    untappdSearch,
     untappdUser,
-    systembolagetLatest,
-    decoratedLatest,
-    recommended
+    untappdUserBeers
   },
   Mutation: {
-    updateUntappdId,
-    deleteBeer
+    deleteBeer,
+    updateUntappdId
   }
 };
 

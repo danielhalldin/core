@@ -19,7 +19,6 @@ const beers = ({ fromDate, toDate, stockType }) => {
       bool: {
         must: [
           { match: { Varugrupp: { query: "öl", operator: "and" } } },
-          { match: { SortimentText: { query: stockType, operator: "and" } } },
           {
             range: {
               Saljstart: {
@@ -32,6 +31,12 @@ const beers = ({ fromDate, toDate, stockType }) => {
       }
     }
   };
+
+  if (stockType) {
+    q.query.bool.must.push({
+      match: { SortimentText: { query: stockType, operator: "and" } }
+    });
+  }
   return q;
 };
 
