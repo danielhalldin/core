@@ -1,21 +1,21 @@
+import _get from "lodash/get";
 import { ApolloServer } from "apollo-server-express";
-import { RedisCache } from "apollo-server-cache-redis";
 import compression from "compression";
 import express from "express";
+import logger from "./lib/logger";
+import morgan from "morgan";
+import { RedisCache } from "apollo-server-cache-redis";
+
 import schema from "./lib/web/grapql/executableSchema";
-import _get from "lodash/get";
 
 import untappdAPI from "./lib/web/grapql/dataSources/untappdAPI";
 import elasticsearchAPI from "./lib/web/grapql/dataSources/elasticsearchAPI";
+import { decrypt } from "./lib/jwtHandler";
+import config from "./config";
 
 import loginRoutes from "./lib/web/routes/login";
 import updateRoutes from "./lib/web/routes/update";
 import pushRoutes from "./lib/web/routes/push";
-
-import config from "./config";
-import { decrypt } from "./lib/jwtHandler";
-import logger from "./lib/logger";
-import morgan from "morgan";
 
 const redisCache = new RedisCache({
   url: config.rediscloudUrl,
