@@ -1,4 +1,4 @@
-import { makeExecutableSchema } from "apollo-server-express";
+import { makeExecutableSchema } from 'apollo-server-express';
 import {
   decoratedLatest,
   recommended,
@@ -9,11 +9,11 @@ import {
   untappdSearch,
   untappdUser,
   untappdUserBeers
-} from "./resolvers";
+} from './resolvers';
 
-import { deleteBeer, updateUntappdId } from "./mutations";
+import { deleteBeer, updateUntappdId } from './mutations';
 
-import typeDefs from "./schema";
+import typeDefs from './schema';
 
 const resolvers = {
   Query: {

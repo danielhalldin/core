@@ -1,21 +1,21 @@
-import _get from "lodash/get";
-import { ApolloServer } from "apollo-server-express";
-import compression from "compression";
-import express from "express";
-import logger from "./lib/logger";
-import morgan from "morgan";
-import { RedisCache } from "apollo-server-cache-redis";
+import _get from 'lodash/get';
+import { ApolloServer } from 'apollo-server-express';
+import compression from 'compression';
+import express from 'express';
+import logger from './lib/logger';
+import morgan from 'morgan';
+import { RedisCache } from 'apollo-server-cache-redis';
 
-import schema from "./lib/web/grapql/executableSchema";
+import schema from './lib/web/grapql/executableSchema';
 
-import untappdAPI from "./lib/web/grapql/dataSources/untappdAPI";
-import elasticsearchAPI from "./lib/web/grapql/dataSources/elasticsearchAPI";
-import { decrypt } from "./lib/jwtHandler";
-import config from "./config";
+import untappdAPI from './lib/web/grapql/dataSources/untappdAPI';
+import elasticsearchAPI from './lib/web/grapql/dataSources/elasticsearchAPI';
+import { decrypt } from './lib/jwtHandler';
+import config from './config';
 
-import loginRoutes from "./lib/web/routes/login";
-import updateRoutes from "./lib/web/routes/update";
-import pushRoutes from "./lib/web/routes/push";
+import loginRoutes from './lib/web/routes/login';
+import updateRoutes from './lib/web/routes/update';
+import pushRoutes from './lib/web/routes/push';
 
 const redisCache = new RedisCache({
   url: config.rediscloudUrl,
@@ -46,13 +46,8 @@ const server = new ApolloServer({
     };
   },
   context: ({ req }) => {
-    const raw_untappd_access_token = _get(
-      req,
-      "headers.x-untappd-access-token"
-    );
-    const untappd_access_token = raw_untappd_access_token
-      ? decrypt(raw_untappd_access_token)
-      : "";
+    const raw_untappd_access_token = _get(req, 'headers.x-untappd-access-token');
+    const untappd_access_token = raw_untappd_access_token ? decrypt(raw_untappd_access_token) : '';
     return {
       untappd_access_token
     };
@@ -61,9 +56,9 @@ const server = new ApolloServer({
 
 const app = express();
 app.use(compression());
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static('public'));
 
 // Routes
 loginRoutes(app);
@@ -72,6 +67,4 @@ pushRoutes(app);
 
 server.applyMiddleware({ app });
 
-app.listen({ port: config.port }, () =>
-  logger.info(`Server is running on ${config.port}`)
-);
+app.listen({ port: config.port }, () => logger.info(`Server is running on ${config.port}`));

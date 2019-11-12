@@ -1,8 +1,8 @@
-import { RESTDataSource } from "apollo-datasource-rest";
-import moment from "moment";
-import config from "../../../../config";
+import { RESTDataSource } from 'apollo-datasource-rest';
+import moment from 'moment';
+import config from '../../../../config';
 
-import { beers, recommendedBeers } from "../../../queries/beer";
+import { beers, recommendedBeers } from '../../../queries/beer';
 
 class elasticsearchAPI extends RESTDataSource {
   constructor() {
@@ -20,27 +20,23 @@ class elasticsearchAPI extends RESTDataSource {
   }
 
   async latestBeer({ size, stockType }) {
-    const fromDate = moment().subtract(10, "year");
-    const toDate = moment().add(1, "month");
+    const fromDate = moment().subtract(10, 'year');
+    const toDate = moment().add(1, 'month');
 
-    const response = await this.post(
-      `/systembolaget/_search?size=${size}`,
-      beers({ fromDate, toDate, stockType }),
-      { cacheOptions: { ttl: 10 } }
-    );
+    const response = await this.post(`/systembolaget/_search?size=${size}`, beers({ fromDate, toDate, stockType }), {
+      cacheOptions: { ttl: 10 }
+    });
 
     return response;
   }
 
   async recommendedBeer({ size }) {
-    var fromDate = moment().subtract(1, "month");
-    var toDate = moment().add(1, "month");
+    var fromDate = moment().subtract(1, 'month');
+    var toDate = moment().add(1, 'month');
 
-    const response = await this.post(
-      `/systembolaget/_search?size=${size}`,
-      recommendedBeers({ fromDate, toDate }),
-      { cacheOptions: { ttl: 10 } }
-    );
+    const response = await this.post(`/systembolaget/_search?size=${size}`, recommendedBeers({ fromDate, toDate }), {
+      cacheOptions: { ttl: 10 }
+    });
 
     return response;
   }

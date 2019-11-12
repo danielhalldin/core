@@ -1,21 +1,13 @@
-import moment from "moment";
+import moment from 'moment';
 
 const untappdTransform = data => {
   if (!data) {
     return;
   }
   if (data.beer && data.brewery) {
-    return Object.assign(
-      {},
-      untappdTransformBeer(data.beer),
-      untappdTransformBrewery(data.brewery)
-    );
+    return Object.assign({}, untappdTransformBeer(data.beer), untappdTransformBrewery(data.brewery));
   } else {
-    return Object.assign(
-      {},
-      untappdTransformBeer(data),
-      untappdTransformBrewery(data.brewery)
-    );
+    return Object.assign({}, untappdTransformBeer(data), untappdTransformBrewery(data.brewery));
   }
 };
 
@@ -45,22 +37,14 @@ const untappdTransformBeer = data => {
     style,
     description,
     untappdId,
-    untappdUrl: checkinDate
-      ? `https://untappd.com/c/${untappdId}`
-      : `https://untappd.com/b/${beer_slug}/${untappdId}`,
-    untappdDeepLink: checkinDate
-      ? `untappd://checkin/${untappdId}`
-      : `untappd://beer/${untappdId}`,
-    checkinDate: checkinDate && moment(checkinDate).format("YYYY-MM-DD")
+    untappdUrl: checkinDate ? `https://untappd.com/c/${untappdId}` : `https://untappd.com/b/${beer_slug}/${untappdId}`,
+    untappdDeepLink: checkinDate ? `untappd://checkin/${untappdId}` : `untappd://beer/${untappdId}`,
+    checkinDate: checkinDate && moment(checkinDate).format('YYYY-MM-DD')
   };
 };
 
 const untappdTransformBrewery = data => {
-  const {
-    brewery_name: brewery,
-    brewery_label: breweryLabel,
-    country_name: country
-  } = data;
+  const { brewery_name: brewery, brewery_label: breweryLabel, country_name: country } = data;
 
   return {
     brewery,
@@ -91,17 +75,17 @@ const systembolagetTransform = data => {
   } = data._source;
   return {
     id: systembolagetId,
-    name: `${name}${name2 ? " " + name2 : ""}`,
+    name: `${name}${name2 ? ' ' + name2 : ''}`,
     brewery,
     price,
     category,
     style,
     type,
-    abv: abv.replace(/(\d+\.)(\d)\d*%/, "$1$2"),
+    abv: abv.replace(/(\d+\.)(\d)\d*%/, '$1$2'),
     supplier,
     volume,
     salesStartDate,
-    country: `${countryName}${countryRegion ? " - " + countryRegion : ""}`,
+    country: `${countryName}${countryRegion ? ' - ' + countryRegion : ''}`,
     stockTypeId,
     stockType,
     systembolagetId,

@@ -1,6 +1,6 @@
-import redis from "redis";
-import { promisify } from "util";
-import config from "../config";
+import redis from 'redis';
+import { promisify } from 'util';
+import config from '../config';
 
 const client = redis.createClient(config.rediscloudUrl);
 

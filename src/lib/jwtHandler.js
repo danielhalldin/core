@@ -1,5 +1,5 @@
-import jwt from "jwt-simple";
-import config from "../config";
+import jwt from 'jwt-simple';
+import config from '../config';
 
 const secret = config.jwtSecret;
 

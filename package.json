@@ -17,8 +17,12 @@
     "postinstall": "babel src --copy-files --source-maps --out-dir build"
   },
   "keywords": [],
-  "author": "",
+  "author": "Daniel Halldin",
   "license": "ISC",
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120
+  },
   "dependencies": {
     "apollo-datasource-rest": "^0.1.5",
     "apollo-server-cache-redis": "^0.1.3",

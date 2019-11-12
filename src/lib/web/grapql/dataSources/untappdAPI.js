@@ -1,9 +1,9 @@
-import { RESTDataSource } from "apollo-datasource-rest";
-import config from "../../../../config";
-import logger from "../../../logger";
-import moment from "moment";
-import _get from "lodash/get";
-import { set, get, getTtl, setExpireat } from "../../../redisClient";
+import { RESTDataSource } from 'apollo-datasource-rest';
+import config from '../../../../config';
+import logger from '../../../logger';
+import moment from 'moment';
+import _get from 'lodash/get';
+import { set, get, getTtl, setExpireat } from '../../../redisClient';
 
 const CACHE_TIME = {
   USER_BEERS: 3600,
@@ -27,10 +27,8 @@ class UntappdAPI extends RESTDataSource {
   }
 
   async didReceiveResponse(response) {
-    const currentRemainingRequest = response.headers.get(
-      "x-ratelimit-remaining"
-    );
-    const authType = response.headers.get("x-auth-type");
+    const currentRemainingRequest = response.headers.get('x-ratelimit-remaining');
+    const authType = response.headers.get('x-auth-type');
     logger.debug(`Remaining request, ${currentRemainingRequest}, ${authType}`);
     return response.json();
   }
@@ -47,7 +45,7 @@ class UntappdAPI extends RESTDataSource {
 
   async search(query) {
     let options = {
-      q: query.replace(/\s/g, "+")
+      q: query.replace(/\s/g, '+')
     };
 
     const response = await this.get(
@@ -76,7 +74,7 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: CACHE_TIME.USER_BEERS } }
     );
 
-    const items = _get(response, "response.beers.items") || null;
+    const items = _get(response, 'response.beers.items') || null;
 
     return items;
   }
@@ -88,11 +86,11 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: CACHE_TIME.FRIENDS } } // Cache beers for 1 days
     );
 
-    const items = _get(response, "response.items") || [];
+    const items = _get(response, 'response.items') || [];
     const friends = items.map(item => {
       return {
-        name: _get(item, "user.user_name") || null,
-        avatar: _get(item, "user.user_avatar") || null
+        name: _get(item, 'user.user_name') || null,
+        avatar: _get(item, 'user.user_avatar') || null
       };
     });
 
@@ -111,18 +109,13 @@ class UntappdAPI extends RESTDataSource {
 
     try {
       user = await response.response.user;
-      set(
-        fallbackUserCacheKey,
-        JSON.stringify(response),
-        "EX",
-        CACHE_TIME.FALLBACK_USER
-      ); // Fallback cache user for 1 hour
+      set(fallbackUserCacheKey, JSON.stringify(response), 'EX', CACHE_TIME.FALLBACK_USER); // Fallback cache user for 1 hour
     } catch (e) {
       response = JSON.parse(await get(fallbackUserCacheKey));
       user = response.response.user;
     }
 
-    const checkins = _get(user, ["checkins", "items"], []).map(checkin => {
+    const checkins = _get(user, ['checkins', 'items'], []).map(checkin => {
       return {
         timestamp: checkin.created_at,
         bid: checkin.beer.bid
@@ -150,27 +143,20 @@ class UntappdAPI extends RESTDataSource {
     });
 
     return {
-      name: _get(user, "user_name") || null,
-      avatar: _get(user, "user_avatar") || null,
-      totalBeers: _get(user, "stats.total_beers") || null,
+      name: _get(user, 'user_name') || null,
+      avatar: _get(user, 'user_avatar') || null,
+      totalBeers: _get(user, 'stats.total_beers') || null,
       checkins: checkins
     };
   }
 
-  flushCache = async ({
-    flushBeforeTimestamp,
-    cacheKey,
-    cacheKeyCacheTime
-  }) => {
+  flushCache = async ({ flushBeforeTimestamp, cacheKey, cacheKeyCacheTime }) => {
     const flushBeforeTime = moment(flushBeforeTimestamp);
     const cacheKeyTtl = await getTtl(cacheKey);
     const cacheKeyTimeWhenCached = moment()
-      .add(cacheKeyTtl, "second")
-      .subtract(cacheKeyCacheTime, "second");
-    if (
-      cacheKeyTimeWhenCached.isBefore(flushBeforeTime) &&
-      cacheKeyTtl !== -2
-    ) {
+      .add(cacheKeyTtl, 'second')
+      .subtract(cacheKeyCacheTime, 'second');
+    if (cacheKeyTimeWhenCached.isBefore(flushBeforeTime) && cacheKeyTtl !== -2) {
       await setExpireat(cacheKey, -2);
     }
   };

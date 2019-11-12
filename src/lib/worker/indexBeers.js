@@ -1,7 +1,7 @@
-import fetch from "node-fetch";
-import xml2js from "xml2js";
-import logger from "../logger";
-import config from "../../config";
+import fetch from 'node-fetch';
+import xml2js from 'xml2js';
+import logger from '../logger';
+import config from '../../config';
 
 var parser = new xml2js.Parser({ explicitArray: false });
 
@@ -21,11 +21,11 @@ const indexBeers = async indexClient => {
   // }
 
   // Fetching
-  logger.info("Fetching Systembolaget data");
+  logger.info('Fetching Systembolaget data');
   const res = await fetch(config.systembolaget.url);
 
   // Parsing
-  logger.info("Parsing Systembolaget data");
+  logger.info('Parsing Systembolaget data');
   const xml = await res.text();
   const json = await new Promise((resolve, reject) =>
     parser.parseString(xml, (err, result) => {
@@ -36,10 +36,7 @@ const indexBeers = async indexClient => {
   const indexTimestamp = Date.now();
   const beers = json.artiklar.artikel
     .filter(function(article) {
-      return (
-        article.Varugrupp &&
-        article.Varugrupp.toLocaleLowerCase().indexOf("öl") !== -1
-      );
+      return article.Varugrupp && article.Varugrupp.toLocaleLowerCase().indexOf('öl') !== -1;
     })
     .map(function(article) {
       article.id = article.Artikelid;
@@ -48,8 +45,8 @@ const indexBeers = async indexClient => {
     });
 
   // Indexing
-  logger.info("Indexing Systembolaget data");
-  await indexClient.bulkIndex("systembolaget", "artikel", beers);
+  logger.info('Indexing Systembolaget data');
+  await indexClient.bulkIndex('systembolaget', 'artikel', beers);
 };
 
 export default indexBeers;

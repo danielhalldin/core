@@ -1,7 +1,7 @@
-import IndexClient from "../../worker/clients/indexClient";
+import IndexClient from '../../worker/clients/indexClient';
 
 const update = app => {
-  app.get("/manual-update", async function(req, res) {
+  app.get('/manual-update', async function(req, res) {
     const id = req.query.id;
     const uid = req.query.uid;
     let responseData;
@@ -9,8 +9,8 @@ const update = app => {
     if (id) {
       const indexClient = new IndexClient();
       responseData = await indexClient.updateDocument({
-        index: "systembolaget",
-        type: "artikel",
+        index: 'systembolaget',
+        type: 'artikel',
         id: id,
         documentBody: {
           untappdId: Number(uid),
@@ -23,7 +23,7 @@ const update = app => {
     if (responseData) {
       res.send(responseData);
     } else {
-      res.send("no match found");
+      res.send('no match found');
     }
   });
 

@@ -1,14 +1,14 @@
-import Elasticsearch from "elasticsearch";
-import URI from "urijs";
-import logger from "../../logger";
-import config from "../../../config";
+import Elasticsearch from 'elasticsearch';
+import URI from 'urijs';
+import logger from '../../logger';
+import config from '../../../config';
 
 class IndexClient {
   constructor() {
     const uri = new URI(config.elasticsearch.url);
     this._client = new Elasticsearch.Client({
       host: uri.toString(),
-      apiVersion: "5.6"
+      apiVersion: '5.6'
     });
   }
 
@@ -29,9 +29,9 @@ class IndexClient {
       },
       function(error) {
         if (error) {
-          logger.error("Elasticsearch ping: DOWN");
+          logger.error('Elasticsearch ping: DOWN');
         } else {
-          logger.debug("Elasticsearch ping: OK");
+          logger.debug('Elasticsearch ping: OK');
         }
       }
     );
@@ -62,7 +62,7 @@ class IndexClient {
       body: body
     });
 
-    logger.info("All indexed");
+    logger.info('All indexed');
   };
 
   addToIndex = (index, type, document) => {

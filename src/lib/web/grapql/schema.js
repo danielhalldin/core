@@ -1,5 +1,5 @@
-import { gql } from "apollo-server-express";
-import beerTypeDefs from "./types";
+import { gql } from 'apollo-server-express';
+import beerTypeDefs from './types';
 
 export default gql`
   ${beerTypeDefs}

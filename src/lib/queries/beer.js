@@ -1,12 +1,12 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 const sort = sortFields => {
   return sortFields.map(function(item) {
-    var order = _.startsWith(item, "-") ? "desc" : "asc";
+    var order = _.startsWith(item, '-') ? 'desc' : 'asc';
     var object = {};
-    object[_.trim(item, "+-")] = {
+    object[_.trim(item, '+-')] = {
       order: order,
-      missing: "_last"
+      missing: '_last'
     };
     return object;
   });
@@ -14,11 +14,11 @@ const sort = sortFields => {
 
 const beers = ({ fromDate, toDate, stockType }) => {
   const q = {
-    sort: sort(["-Saljstart", "-untappdData.rating_score", "+Namn.keyword"]),
+    sort: sort(['-Saljstart', '-untappdData.rating_score', '+Namn.keyword']),
     query: {
       bool: {
         must: [
-          { match: { Varugrupp: { query: "öl", operator: "and" } } },
+          { match: { Varugrupp: { query: 'öl', operator: 'and' } } },
           {
             range: {
               Saljstart: {
@@ -34,7 +34,7 @@ const beers = ({ fromDate, toDate, stockType }) => {
 
   if (stockType) {
     q.query.bool.must.push({
-      match: { SortimentText: { query: stockType, operator: "and" } }
+      match: { SortimentText: { query: stockType, operator: 'and' } }
     });
   }
   return q;
@@ -42,11 +42,11 @@ const beers = ({ fromDate, toDate, stockType }) => {
 
 const recommendedBeers = ({ fromDate, toDate }) => {
   const q = {
-    sort: sort(["-untappdData.rating_score", "-Saljstart", "+Namn.keyword"]),
+    sort: sort(['-untappdData.rating_score', '-Saljstart', '+Namn.keyword']),
     query: {
       bool: {
         must: [
-          { match: { Varugrupp: { query: "öl", operator: "and" } } },
+          { match: { Varugrupp: { query: 'öl', operator: 'and' } } },
           {
             range: {
               Saljstart: {
@@ -55,7 +55,7 @@ const recommendedBeers = ({ fromDate, toDate }) => {
               }
             }
           },
-          { exists: { field: "untappdData.rating_score" } }
+          { exists: { field: 'untappdData.rating_score' } }
         ]
       }
     }

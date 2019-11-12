@@ -1,13 +1,10 @@
-import {
-  untappdTransform,
-  systembolagetTransform
-} from "./helpers/transformations";
-import config from "../../../config";
-import { orderBy } from "lodash";
+import { untappdTransform, systembolagetTransform } from './helpers/transformations';
+import config from '../../../config';
+import { orderBy } from 'lodash';
 
 const decoratedLatest = async (
   _,
-  { size, stockType = "Tillfälligt sortiment" },
+  { size, stockType = 'Tillfälligt sortiment' },
   { dataSources, untappd_access_token }
 ) => {
   const data = await dataSources.ElasticsearchApi.latestBeer({
@@ -19,10 +16,7 @@ const decoratedLatest = async (
     const untappdId = beer._source.untappdId;
     let untappdBeer;
     if (untappdId) {
-      const personalBeerData = await dataSources.UntappdAPI.byId(
-        untappdId,
-        untappd_access_token
-      );
+      const personalBeerData = await dataSources.UntappdAPI.byId(untappdId, untappd_access_token);
       if (personalBeerData.response.beer) {
         untappdBeer = untappdTransform(personalBeerData.response.beer);
       } else {
@@ -35,13 +29,13 @@ const decoratedLatest = async (
   const sortedBeers = orderBy(
     beers,
     [
-      "salesStartDate",
+      'salesStartDate',
       beer => {
         return beer.rating || -1;
       },
-      "name"
+      'name'
     ],
-    ["desc", "desc", "asc"]
+    ['desc', 'desc', 'asc']
   );
 
   return {
@@ -50,11 +44,7 @@ const decoratedLatest = async (
   };
 };
 
-const recommended = async (
-  _,
-  { size },
-  { dataSources, untappd_access_token }
-) => {
+const recommended = async (_, { size }, { dataSources, untappd_access_token }) => {
   const data = await dataSources.ElasticsearchApi.recommendedBeer({
     size
   });
@@ -63,10 +53,7 @@ const recommended = async (
     const untappdId = beer._source.untappdId;
     let untappdBeer;
     if (untappdId) {
-      const personalBeerData = await dataSources.UntappdAPI.byId(
-        untappdId,
-        untappd_access_token
-      );
+      const personalBeerData = await dataSources.UntappdAPI.byId(untappdId, untappd_access_token);
 
       if (personalBeerData.response.beer) {
         untappdBeer = untappdTransform(personalBeerData.response.beer);
@@ -78,7 +65,7 @@ const recommended = async (
   });
 
   return {
-    name: "Rekommenderade",
+    name: 'Rekommenderade',
     beers: beers
   };
 };
@@ -91,11 +78,7 @@ const systembolagetLatest = async (_obj, { size }, { dataSources }) => {
   return beers;
 };
 
-const untappdById = async (
-  _,
-  { id },
-  { dataSources, untappd_access_token }
-) => {
+const untappdById = async (_, { id }, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.byId(id, untappd_access_token);
   return untappdTransform(data.response.beer);
 };
@@ -105,11 +88,7 @@ const untappdFriends = async (_, _params, { dataSources }) => {
   return data;
 };
 
-const untappdUser = async (
-  _,
-  _params,
-  { dataSources, untappd_access_token }
-) => {
+const untappdUser = async (_, _params, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.user(untappd_access_token);
 
   return {
@@ -120,22 +99,14 @@ const untappdUser = async (
   };
 };
 
-const untappdIsFriend = async (
-  _,
-  _params,
-  { dataSources, untappd_access_token }
-) => {
+const untappdIsFriend = async (_, _params, { dataSources, untappd_access_token }) => {
   const friends = await dataSources.UntappdAPI.friends();
   const user = await dataSources.UntappdAPI.user(untappd_access_token);
 
   return !!friends.find(friend => friend.name === user.name);
 };
 
-const untappdSearch = async (
-  _,
-  { query },
-  { dataSources, untappd_access_token }
-) => {
+const untappdSearch = async (_, { query }, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.search(query, untappd_access_token);
   const beers = data.map(item => {
     return untappdTransform(item);
@@ -144,11 +115,7 @@ const untappdSearch = async (
   return beers;
 };
 
-const untappdUserBeers = async (
-  _,
-  _params,
-  { dataSources, untappd_access_token }
-) => {
+const untappdUserBeers = async (_, _params, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.userBeers(untappd_access_token);
   const beers = data
     .map(item => {

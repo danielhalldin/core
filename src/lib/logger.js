@@ -1,5 +1,5 @@
-import config from "../config";
-import { createLogger, format, transports } from "winston";
+import config from '../config';
+import { createLogger, format, transports } from 'winston';
 const { combine, printf } = format;
 
 const myFormat = printf(info => {
@@ -9,7 +9,7 @@ const myFormat = printf(info => {
 const logger = createLogger({
   format: combine(
     format.colorize(),
-    format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.prettyPrint(),
     myFormat
   ),
