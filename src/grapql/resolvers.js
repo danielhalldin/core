@@ -1,6 +1,8 @@
-import { untappdTransform, systembolagetTransform } from "./transformations";
-import IndexClient from "../../lib/worker/clients/indexClient";
-import config from "../../config";
+import {
+  untappdTransform,
+  systembolagetTransform
+} from "./helpers/transformations";
+import config from "../config";
 import { orderBy } from "lodash";
 
 const decoratedLatest = async (
@@ -46,29 +48,6 @@ const decoratedLatest = async (
     name: stockType,
     beers: sortedBeers
   };
-};
-
-const deleteBeer = async (
-  _,
-  { systembolagetArticleId },
-  { dataSources, untappd_access_token }
-) => {
-  const data = await dataSources.UntappdAPI.user(untappd_access_token);
-  if (data.name === config.superUser && systembolagetArticleId) {
-    const indexClient = new IndexClient();
-    const responseData = await indexClient.deleteFromIndex({
-      index: "systembolaget",
-      type: "artikel",
-      id: systembolagetArticleId
-    });
-    if (responseData) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  return false;
 };
 
 const recommended = async (
@@ -187,33 +166,6 @@ const untappdUserBeers = async (
   return beers;
 };
 
-const updateUntappdId = async (
-  _,
-  { systembolagetArticleId, untappdId },
-  { dataSources, untappd_access_token }
-) => {
-  const data = await dataSources.UntappdAPI.user(untappd_access_token);
-  if (data.name === config.superUser && systembolagetArticleId) {
-    const indexClient = new IndexClient();
-    const responseData = await indexClient.updateDocument({
-      index: "systembolaget",
-      type: "artikel",
-      id: systembolagetArticleId,
-      documentBody: {
-        untappdId: Number(untappdId),
-        untappdData: null
-      }
-    });
-    if (responseData) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  return false;
-};
-
 export {
   untappdSearch,
   systembolagetLatest,
@@ -223,7 +175,5 @@ export {
   untappdUser,
   untappdUserBeers,
   untappdFriends,
-  untappdIsFriend,
-  updateUntappdId,
-  deleteBeer
+  untappdIsFriend
 };
