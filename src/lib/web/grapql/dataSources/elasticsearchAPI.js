@@ -1,8 +1,8 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import moment from "moment";
-import config from "../../../config";
+import config from "../../../../config";
 
-import { beers, recommendedBeers } from "../../queries/beer";
+import { beers, recommendedBeers } from "../../../queries/beer";
 
 class elasticsearchAPI extends RESTDataSource {
   constructor() {

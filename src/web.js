@@ -2,11 +2,11 @@ import { ApolloServer } from "apollo-server-express";
 import { RedisCache } from "apollo-server-cache-redis";
 import compression from "compression";
 import express from "express";
-import schema from "./grapql/executableSchema";
+import schema from "./lib/web/grapql/executableSchema";
 import _get from "lodash/get";
 
-import untappdAPI from "./lib/web/dataSources/untappdAPI";
-import elasticsearchAPI from "./lib/web/dataSources/elasticsearchAPI";
+import untappdAPI from "./lib/web/grapql/dataSources/untappdAPI";
+import elasticsearchAPI from "./lib/web/grapql/dataSources/elasticsearchAPI";
 
 import loginRoutes from "./lib/web/routes/login";
 import updateRoutes from "./lib/web/routes/update";

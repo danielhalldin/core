@@ -2,7 +2,7 @@ import {
   untappdTransform,
   systembolagetTransform
 } from "./helpers/transformations";
-import config from "../config";
+import config from "../../../config";
 import { orderBy } from "lodash";
 
 const decoratedLatest = async (

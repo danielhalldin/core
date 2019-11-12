@@ -1,5 +1,5 @@
-import IndexClient from "../lib/worker/clients/indexClient";
-import config from "../config";
+import IndexClient from "../../worker/clients/indexClient";
+import config from "../../../config";
 
 const deleteBeer = async (
   _,

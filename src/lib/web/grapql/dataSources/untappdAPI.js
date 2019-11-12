@@ -1,9 +1,9 @@
 import { RESTDataSource } from "apollo-datasource-rest";
-import config from "../../../config";
-import logger from "../../logger";
+import config from "../../../../config";
+import logger from "../../../logger";
 import moment from "moment";
 import _get from "lodash/get";
-import { set, get, getTtl, setExpireat } from "../../redisClient";
+import { set, get, getTtl, setExpireat } from "../../../redisClient";
 
 const CACHE_TIME = {
   USER_BEERS: 3600,
@@ -76,7 +76,7 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: CACHE_TIME.USER_BEERS } }
     );
 
-    const items = _get(response, "response.beers.items") || null
+    const items = _get(response, "response.beers.items") || null;
 
     return items;
   }
@@ -88,13 +88,13 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: CACHE_TIME.FRIENDS } } // Cache beers for 1 days
     );
 
-    const items = _get(response, "response.items") || []
+    const items = _get(response, "response.items") || [];
     const friends = items.map(item => {
-        return {
-          name: _get(item, "user.user_name") || null,
-          avatar: _get(item, "user.user_avatar") || null
-        };
-      });
+      return {
+        name: _get(item, "user.user_name") || null,
+        avatar: _get(item, "user.user_avatar") || null
+      };
+    });
 
     return friends;
   }
@@ -134,9 +134,7 @@ class UntappdAPI extends RESTDataSource {
       // Checkin
       const checkinTime = moment(checkin.timestamp);
       //Beer
-      const beerCacheKey = `httpcache:https://api.untappd.com/v4/beer/info/${
-        checkin.bid
-      }?compact=true&access_token=${untappd_access_token}`;
+      const beerCacheKey = `httpcache:https://api.untappd.com/v4/beer/info/${checkin.bid}?compact=true&access_token=${untappd_access_token}`;
       this.flushCache({
         flushBeforeTimestamp: checkinTime,
         cacheKey: beerCacheKey,
