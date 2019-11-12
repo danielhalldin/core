@@ -3,90 +3,6 @@ import IndexClient from "../../lib/worker/clients/indexClient";
 import config from "../../config";
 import { orderBy } from "lodash";
 
-const untappdById = async (
-  _,
-  { id },
-  { dataSources, untappd_access_token }
-) => {
-  const data = await dataSources.UntappdAPI.byId(id, untappd_access_token);
-  return untappdTransform(data.response.beer);
-};
-
-const untappdUser = async (
-  _,
-  params,
-  { dataSources, untappd_access_token }
-) => {
-  const data = await dataSources.UntappdAPI.user(untappd_access_token);
-
-  return {
-    name: data.name,
-    avatar: data.avatar,
-    totalBeers: data.totalBeers,
-    admin: data.name === config.superUser
-  };
-};
-
-const untappdFriends = async (_, params, { dataSources }) => {
-  const data = await dataSources.UntappdAPI.friends();
-  return data;
-};
-
-const untappdIsFriend = async (
-  _,
-  params,
-  { dataSources, untappd_access_token }
-) => {
-  const friends = await dataSources.UntappdAPI.friends();
-  const user = await dataSources.UntappdAPI.user(untappd_access_token);
-
-  return !!friends.find(friend => friend.name === user.name);
-};
-
-const untappdSearch = async (
-  _,
-  { query },
-  { dataSources, untappd_access_token }
-) => {
-  const data = await dataSources.UntappdAPI.search(query, untappd_access_token);
-  const beers = data.map(item => {
-    return untappdTransform(item);
-  });
-
-  return beers;
-};
-
-const untappdUserBeers = async (
-  _,
-  params,
-  { dataSources, untappd_access_token }
-) => {
-  const data = await dataSources.UntappdAPI.userBeers(untappd_access_token);
-  const beers = data
-    .map(item => {
-      return Object.assign({}, item, {
-        beer: {
-          ...item.beer,
-          bid: item.first_checkin_id,
-          auth_rating: item.rating_score,
-          checkinDate: item.recent_created_at
-        }
-      });
-    })
-    .map(item => untappdTransform(item));
-
-  return beers;
-};
-
-const systembolagetLatest = async (obj, { size }, { dataSources }) => {
-  const data = await dataSources.ElasticsearchApi.latestBeer(size);
-  const beers = data.hits.hits.map(beer => {
-    return systembolagetTransform(beer);
-  });
-
-  return beers;
-};
-
 const decoratedLatest = async (
   _,
   { size, stockType = "Tillfälligt sortiment" },
@@ -132,6 +48,29 @@ const decoratedLatest = async (
   };
 };
 
+const deleteBeer = async (
+  _,
+  { systembolagetArticleId },
+  { dataSources, untappd_access_token }
+) => {
+  const data = await dataSources.UntappdAPI.user(untappd_access_token);
+  if (data.name === config.superUser && systembolagetArticleId) {
+    const indexClient = new IndexClient();
+    const responseData = await indexClient.deleteFromIndex({
+      index: "systembolaget",
+      type: "artikel",
+      id: systembolagetArticleId
+    });
+    if (responseData) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  return false;
+};
+
 const recommended = async (
   _,
   { size },
@@ -164,6 +103,89 @@ const recommended = async (
     beers: beers
   };
 };
+const systembolagetLatest = async (_obj, { size }, { dataSources }) => {
+  const data = await dataSources.ElasticsearchApi.latestBeer(size);
+  const beers = data.hits.hits.map(beer => {
+    return systembolagetTransform(beer);
+  });
+
+  return beers;
+};
+
+const untappdById = async (
+  _,
+  { id },
+  { dataSources, untappd_access_token }
+) => {
+  const data = await dataSources.UntappdAPI.byId(id, untappd_access_token);
+  return untappdTransform(data.response.beer);
+};
+
+const untappdFriends = async (_, _params, { dataSources }) => {
+  const data = await dataSources.UntappdAPI.friends();
+  return data;
+};
+
+const untappdUser = async (
+  _,
+  _params,
+  { dataSources, untappd_access_token }
+) => {
+  const data = await dataSources.UntappdAPI.user(untappd_access_token);
+
+  return {
+    name: data.name,
+    avatar: data.avatar,
+    totalBeers: data.totalBeers,
+    admin: data.name === config.superUser
+  };
+};
+
+const untappdIsFriend = async (
+  _,
+  _params,
+  { dataSources, untappd_access_token }
+) => {
+  const friends = await dataSources.UntappdAPI.friends();
+  const user = await dataSources.UntappdAPI.user(untappd_access_token);
+
+  return !!friends.find(friend => friend.name === user.name);
+};
+
+const untappdSearch = async (
+  _,
+  { query },
+  { dataSources, untappd_access_token }
+) => {
+  const data = await dataSources.UntappdAPI.search(query, untappd_access_token);
+  const beers = data.map(item => {
+    return untappdTransform(item);
+  });
+
+  return beers;
+};
+
+const untappdUserBeers = async (
+  _,
+  _params,
+  { dataSources, untappd_access_token }
+) => {
+  const data = await dataSources.UntappdAPI.userBeers(untappd_access_token);
+  const beers = data
+    .map(item => {
+      return Object.assign({}, item, {
+        beer: {
+          ...item.beer,
+          bid: item.first_checkin_id,
+          auth_rating: item.rating_score,
+          checkinDate: item.recent_created_at
+        }
+      });
+    })
+    .map(item => untappdTransform(item));
+
+  return beers;
+};
 
 const updateUntappdId = async (
   _,
@@ -181,29 +203,6 @@ const updateUntappdId = async (
         untappdId: Number(untappdId),
         untappdData: null
       }
-    });
-    if (responseData) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  return false;
-};
-
-const deleteBeer = async (
-  _,
-  { systembolagetArticleId },
-  { dataSources, untappd_access_token }
-) => {
-  const data = await dataSources.UntappdAPI.user(untappd_access_token);
-  if (data.name === config.superUser && systembolagetArticleId) {
-    const indexClient = new IndexClient();
-    const responseData = await indexClient.deleteFromIndex({
-      index: "systembolaget",
-      type: "artikel",
-      id: systembolagetArticleId
     });
     if (responseData) {
       return true;
