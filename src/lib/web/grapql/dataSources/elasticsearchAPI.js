@@ -23,9 +23,13 @@ class elasticsearchAPI extends RESTDataSource {
     const fromDate = moment().subtract(10, 'year');
     const toDate = moment().add(1, 'month');
 
-    const response = await this.post(`/systembolaget/_search?size=${size}`, beers({ fromDate, toDate, stockType }), {
-      cacheOptions: { ttl: 10 }
-    });
+    const response = await this.post(
+      `/systembolaget/_search?size=${size}#stockType=${stockType}`,
+      beers({ fromDate, toDate, stockType }),
+      {
+        cacheOptions: { ttl: 10 }
+      }
+    );
 
     return response;
   }
