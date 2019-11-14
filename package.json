@@ -2,23 +2,24 @@
   "name": "core",
   "version": "1.0.0",
   "description": "",
+  "keywords": [],
+  "author": "Daniel Halldin",
+  "license": "ISC",
   "main": "/build/web.js",
   "scripts": {
     "dev": "nodemon --exec babel-node src/web.js -e js,graphql,json --node-path './src/web.js'",
     "dev-worker": "nodemon --watch src/worker.js --exec babel-node src/worker.js -e js,graphql,json --node-path './src/worker.js'",
-    "prepush": "yarn lint",
     "build": "babel src --copy-files --source-maps --out-dir build",
     "start": "node build src/web.js && node build src/worker.js",
     "test": "jest src",
-    "prestart": "yarn build",
-    "lint": "eslint src",
-    "security": "nsp check",
-    "killProcess": "yarn run build && kill $(lsof -t -i:4444) || true",
-    "postinstall": "babel src --copy-files --source-maps --out-dir build"
+    "lint": "eslint src"
   },
-  "keywords": [],
-  "author": "Daniel Halldin",
-  "license": "ISC",
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "prettier": {
     "singleQuote": true,
     "printWidth": 120
@@ -36,6 +37,12 @@
     "rules": {
       "no-console": 0,
       "no-unused-vars": 1
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run lint"
     }
   },
   "dependencies": {
@@ -73,6 +80,7 @@
     "@babel/preset-env": "^7.0.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "eslint": "^4.19.1",
+    "husky": "^3.0.9",
     "jest": "^25.0.0",
     "nodemon": "^1.19.4"
   }
