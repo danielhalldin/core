@@ -44,13 +44,16 @@ const untappdTransformBeer = data => {
 };
 
 const untappdTransformBrewery = data => {
-  const { brewery_name: brewery, brewery_label: breweryLabel, country_name: country } = data;
-
-  return {
-    brewery,
-    breweryLabel,
-    country
-  };
+  try {
+    const { brewery_name: brewery, brewery_label: breweryLabel, country_name: country } = data;
+    return {
+      brewery,
+      breweryLabel,
+      country
+    };
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const systembolagetTransform = data => {
