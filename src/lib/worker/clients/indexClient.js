@@ -12,7 +12,7 @@ class IndexClient {
     });
   }
 
-  healthCheck = healthCheckInterval => {
+  healthCheck(healthCheckInterval) {
     this.ping();
     setInterval(
       function() {
@@ -20,9 +20,9 @@ class IndexClient {
       }.bind(this),
       healthCheckInterval
     );
-  };
+  }
 
-  ping = () => {
+  ping() {
     this._client.ping(
       {
         requestTimeout: 60000
@@ -35,23 +35,21 @@ class IndexClient {
         }
       }
     );
-  };
+  }
 
-  createIndex = (index, settingsAndMapping) => {
+  createIndex(index) {
     return this._client.indices.create({
       index: index
-      // ,
-      // body: settingsAndMapping
     });
-  };
+  }
 
-  deleteIndex = index => {
+  deleteIndex(index) {
     return this._client.indices.delete({
       index: index
     });
-  };
+  }
 
-  bulkIndex = (index, type, documents) => {
+  bulkIndex(index, type, documents) {
     const body = [];
     documents.slice(0, 5000).forEach(beer => {
       body.push({ update: { _index: index, _type: type, _id: beer.id } });
@@ -63,27 +61,27 @@ class IndexClient {
     });
 
     logger.info('All indexed');
-  };
+  }
 
-  addToIndex = (index, type, document) => {
+  addToIndex(index, type, document) {
     return this._client.index({
       index: index,
       type: type,
       id: document.id,
       body: document
     });
-  };
+  }
 
-  deleteFromIndex = ({ index, type, id }) => {
+  deleteFromIndex({ index, type, id }) {
     console.log({ index, type, id });
     return this._client.delete({
       index: index,
       type: type,
       id: id
     });
-  };
+  }
 
-  updateDocument = ({ index, type, id, documentBody }) => {
+  updateDocument({ index, type, id, documentBody }) {
     return this._client.update({
       index: index,
       type: type,
@@ -93,7 +91,7 @@ class IndexClient {
       },
       refresh: true
     });
-  };
+  }
 }
 
 export default IndexClient;

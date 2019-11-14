@@ -13,11 +13,11 @@ class SearchClient {
     });
   }
 
-  search = query => {
+  search(query) {
     return this._client.search(query);
-  };
+  }
 
-  latatestBeersToBeDecorated = async ({ size = 50, stockType = 'Tillfälligt sortiment' }) => {
+  async latatestBeersToBeDecorated({ size = 50, stockType = 'Tillfälligt sortiment' }) {
     var fromDate = moment().subtract(10, 'year');
     var toDate = moment().add(1, 'month');
     const queryBody = beers({ fromDate, toDate, stockType });
@@ -29,7 +29,7 @@ class SearchClient {
 
     const response = await this.search(query);
     return response.hits.hits;
-  };
+  }
 }
 
 export default SearchClient;

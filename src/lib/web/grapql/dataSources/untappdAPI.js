@@ -43,6 +43,17 @@ class UntappdAPI extends RESTDataSource {
     return options;
   }
 
+  async flushCache({ flushBeforeTimestamp, cacheKey, cacheKeyCacheTime }) {
+    const flushBeforeTime = moment(flushBeforeTimestamp);
+    const cacheKeyTtl = await getTtl(cacheKey);
+    const cacheKeyTimeWhenCached = moment()
+      .add(cacheKeyTtl, 'second')
+      .subtract(cacheKeyCacheTime, 'second');
+    if (cacheKeyTimeWhenCached.isBefore(flushBeforeTime) && cacheKeyTtl !== -2) {
+      await setExpireat(cacheKey, -2);
+    }
+  }
+
   async search(query) {
     let options = {
       q: query.replace(/\s/g, '+')
@@ -149,17 +160,6 @@ class UntappdAPI extends RESTDataSource {
       checkins: checkins
     };
   }
-
-  flushCache = async ({ flushBeforeTimestamp, cacheKey, cacheKeyCacheTime }) => {
-    const flushBeforeTime = moment(flushBeforeTimestamp);
-    const cacheKeyTtl = await getTtl(cacheKey);
-    const cacheKeyTimeWhenCached = moment()
-      .add(cacheKeyTtl, 'second')
-      .subtract(cacheKeyCacheTime, 'second');
-    if (cacheKeyTimeWhenCached.isBefore(flushBeforeTime) && cacheKeyTtl !== -2) {
-      await setExpireat(cacheKey, -2);
-    }
-  };
 }
 
 export default UntappdAPI;
