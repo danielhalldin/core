@@ -7,12 +7,11 @@
   "license": "ISC",
   "main": "/build/web.js",
   "scripts": {
+    "build": "babel src --copy-files --out-dir build",
     "dev": "nodemon --exec babel-node src/web.js -e js,graphql,json --node-path './src/web.js'",
-    "dev-worker": "nodemon --watch src/worker.js --exec babel-node src/worker.js -e js,graphql,json --node-path './src/worker.js'",
-    "build": "babel src --copy-files --source-maps --out-dir build",
-    "start": "node build src/web.js && node build src/worker.js",
-    "test": "jest src",
-    "lint": "eslint src"
+    "dev-worker": "nodemon --exec babel-node src/worker.js -e js,graphql,json --node-path './src/worker.js'",
+    "lint": "eslint src",
+    "test": "jest src"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
