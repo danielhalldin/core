@@ -19,15 +19,17 @@ const batches = [
   { stockType: 'Ordervaror', size: 1000 }
 ];
 
-const tidyQuery = query => {
+export const tidyQuery = query => {
+  const regex = /ab|aktiebryggeri|ale|&/gm;
   query = query
     .toLowerCase()
-    .replace('ab', '')
-    .replace('aktiebryggeri', '')
-    .replace('ale', '')
-    .replace('&', '')
-    .replace('[ ]+', ' ');
-  return encodeURIComponent(_.uniq(query.split(' ')).join(' '));
+    .replace(regex, '')
+    .replace(/\s\s+/gm, ' ');
+  return encodeURIComponent(
+    _.uniq(query.split(' '))
+      .join(' ')
+      .trim()
+  );
 };
 
 export const shouldBeDecorated = b => {
