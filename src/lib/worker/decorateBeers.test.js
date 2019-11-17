@@ -1,4 +1,4 @@
-import { shouldBeDecorated, tidyQuery } from './decorateBeers';
+import { shouldBeDecorated, tidyQuery, lookupBeer } from './decorateBeers';
 
 describe('shouldBeDecorated', () => {
   test('Decorates beers that misses untappdData', () => {
@@ -44,5 +44,29 @@ describe('tidyQuery', () => {
   test('Should remove multiple spaces', () => {
     const query = 'test   test2   test3';
     expect(tidyQuery(query)).toEqual('test%20test2%20test3');
+  });
+});
+
+describe('lookupBeer', () => {
+  const myMock = jest.fn();
+  myMock.mockReturnValueOnce([]).mockReturnValueOnce([
+    {
+      beer: {
+        bid: 1010
+      }
+    }
+  ]);
+
+  const untappdClient = {
+    searchBeer: myMock
+  };
+
+  test('Should query Untappd correctly', async () => {
+    const beerData = { Namn: 'namn', Namn2: 'namn2', Producent: 'Producent' };
+    const resp = await lookupBeer({ untappdClient, beerData });
+    expect(myMock.mock.calls.length).toBe(2);
+    expect(myMock.mock.calls[0][0]).toBe('producent%20namn%20namn2');
+    expect(myMock.mock.calls[1][0]).toBe('namn%20namn2');
+    expect(resp).toEqual({ untappdData: { beer: { bid: 1010 } }, untappdId: 1010 });
   });
 });

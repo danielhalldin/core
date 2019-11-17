@@ -49,21 +49,21 @@ const refreshBeer = async ({ untappdClient, beerData: { untappdId } }) => {
   return await untappdClient.fetchBeerById(untappdId);
 };
 
-const lookuoBeer = async ({ untappdClient, beerData: { Namn, Namn2, Producent } }) => {
-  let result;
+export const lookupBeer = async ({ untappdClient, beerData: { Namn, Namn2, Producent } }) => {
   const queries = [tidyQuery(`${Producent} ${Namn} ${Namn2}`), tidyQuery(`${Namn} ${Namn2}`.replace(Producent, ''))];
 
   for (const [i, q] of queries.entries()) {
     logger.info(`q${i}: ${q}`);
     const untappdSearchResult = await untappdClient.searchBeer(q);
     if (untappdSearchResult.length > 0) {
-      result.untappdData = _.get(untappdSearchResult, '[0]');
-      result.untappdId = _.get(untappdSearchResult, '[0].untappdData.beer.bid');
-      break;
+      return {
+        untappdData: _.get(untappdSearchResult, '[0]'),
+        untappdId: _.get(untappdSearchResult, '[0].beer.bid')
+      };
     }
   }
 
-  return result;
+  return;
 };
 
 const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
@@ -92,7 +92,7 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       logger.info(`untappdId: ${untappdId}, Namn: ${Namn} - ${Namn2}`);
       untappdData = await refreshBeer({ untappdClient, beerData: beerToDecorate._source });
     } else {
-      const result = await lookuoBeer({ untappdClient, beerData: beerToDecorate._source });
+      const result = await lookupBeer({ untappdClient, beerData: beerToDecorate._source });
       untappdId = result.untappdId;
       untappdData = result.untappdData;
     }
