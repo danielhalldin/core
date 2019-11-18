@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import logger from '../logger';
+import { send } from '../../lib/push';
 
 const batches = [
   { stockType: 'Tillfälligt sortiment', size: 50 },
@@ -45,7 +46,7 @@ export const shouldBeDecorated = b => {
   return !shouldBeIgnored && (!hasUntappdData || souldBeRefreshed);
 };
 
-const refreshBeer = async ({ untappdClient, beerData: { untappdId } }) => {
+export const refreshBeer = async ({ untappdClient, beerData: { untappdId } }) => {
   return await untappdClient.fetchBeerById(untappdId);
 };
 
@@ -66,7 +67,7 @@ export const lookupBeer = async ({ untappdClient, beerData: { Namn, Namn2, Produ
   return {};
 };
 
-const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
+export const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
   let beerToDecorate;
 
   for (const batch of batches) {
@@ -95,6 +96,9 @@ const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
       const result = await lookupBeer({ untappdClient, beerData: beerToDecorate._source });
       untappdId = result.untappdId;
       untappdData = result.untappdData;
+      if (untappdData) {
+        send({ systembolagetData: beerToDecorate, untappdData });
+      }
     }
 
     return indexClient.updateDocument({
