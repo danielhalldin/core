@@ -63,7 +63,7 @@ export const lookupBeer = async ({ untappdClient, beerData: { Namn, Namn2, Produ
     }
   }
 
-  return;
+  return {};
 };
 
 const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
