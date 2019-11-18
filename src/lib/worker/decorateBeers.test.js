@@ -49,20 +49,31 @@ describe('tidyQuery', () => {
 
 describe('lookupBeer', () => {
   const myMock = jest.fn();
-  myMock.mockReturnValueOnce([]).mockReturnValueOnce([
-    {
-      beer: {
-        bid: 1010
-      }
-    }
-  ]);
+  const beerData = { Namn: 'namn', Namn2: 'namn2', Producent: 'Producent' };
 
-  const untappdClient = {
-    searchBeer: myMock
-  };
+  beforeEach(() => {
+    myMock.mockClear();
+  });
 
-  test('Should query Untappd correctly', async () => {
-    const beerData = { Namn: 'namn', Namn2: 'namn2', Producent: 'Producent' };
+  test('Should return valid object if hit', async () => {
+    myMock.mockReturnValueOnce([{ beer: { bid: 1010 } }]);
+    const untappdClient = { searchBeer: myMock };
+    const resp = await lookupBeer({ untappdClient, beerData });
+    expect(myMock.mock.calls.length).toBe(1);
+    expect(myMock.mock.calls[0][0]).toBe('producent%20namn%20namn2');
+    expect(resp).toEqual({ untappdData: { beer: { bid: 1010 } }, untappdId: 1010 });
+  });
+
+  test('Should return empty object if no hit', async () => {
+    myMock.mockReturnValueOnce([]).mockReturnValueOnce([]);
+    const untappdClient = { searchBeer: myMock };
+    const resp = await lookupBeer({ untappdClient, beerData });
+    expect(resp).toEqual({});
+  });
+
+  test('Should retry with second query', async () => {
+    myMock.mockReturnValueOnce([]).mockReturnValueOnce([{ beer: { bid: 1010 } }]);
+    const untappdClient = { searchBeer: myMock };
     const resp = await lookupBeer({ untappdClient, beerData });
     expect(myMock.mock.calls.length).toBe(2);
     expect(myMock.mock.calls[0][0]).toBe('producent%20namn%20namn2');
