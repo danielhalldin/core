@@ -11,7 +11,7 @@
     "dev": "nodemon --exec babel-node src/web.js -e js,graphql,json --node-path './src/web.js'",
     "dev-worker": "nodemon --exec babel-node src/worker.js -e js,graphql,json --node-path './src/worker.js'",
     "lint": "eslint src",
-    "test": "jest test"
+    "test": "jest --detectOpenHandles test"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [

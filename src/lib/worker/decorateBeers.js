@@ -67,7 +67,7 @@ export const lookupBeer = async ({ untappdClient, beerData: { Namn, Namn2, Produ
   return {};
 };
 
-export const decorateBeers = async ({ indexClient, searchClient, untappdClient }) => {
+export const decorateBeers = async ({ indexClient, searchClient, untappdClient, redisClient }) => {
   let beerToDecorate;
 
   for (const batch of batches) {
@@ -97,7 +97,7 @@ export const decorateBeers = async ({ indexClient, searchClient, untappdClient }
       untappdId = result.untappdId;
       untappdData = result.untappdData;
       if (untappdData) {
-        send({ systembolagetData: beerToDecorate, untappdData });
+        send({ redisClient, systembolagetData: beerToDecorate, untappdData });
       }
     }
 
