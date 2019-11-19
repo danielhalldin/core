@@ -2,7 +2,9 @@ import webpush from 'web-push';
 import config from '../config';
 
 export const send = async ({ redisClient, systembolagetData, untappdData }) => {
-  webpush.setVapidDetails(config.webPush.vapidEmail, config.webPush.vapidPublicKey, config.webPush.vapidPrivateKey);
+  if (!redisClient) {
+    return;
+  }
 
   const payload = JSON.stringify({
     title: `${untappdData.beer.beer_name} - ${untappdData.brewery.brewery_name}`,
@@ -13,8 +15,9 @@ export const send = async ({ redisClient, systembolagetData, untappdData }) => {
   try {
     subscriptionsKeys = await redisClient.keys('subscription-*');
     await subscriptionsKeys.map(async subscriptionKey => {
+      webpush.setVapidDetails(config.webPush.vapidEmail, config.webPush.vapidPublicKey, config.webPush.vapidPrivateKey);
       const subscription = JSON.parse(await redisClient.get(subscriptionKey));
-      await webpush.sendNotification(subscription, payload).catch(error => {
+      await webpush.sendNotification(subscription, payload).catch(_error => {
         //console.error('webpush', error.stack);
       });
     });
