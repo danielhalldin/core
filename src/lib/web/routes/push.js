@@ -19,7 +19,7 @@ const push = app => {
     const payload = JSON.stringify({
       title: 'Daniel testar lite',
       body: 'Information om en ny öl ☀️',
-      path: '/checkins',
+      data: { path: '/checkins' },
       icon: 'https://untappd.akamaized.net/site/beer_logos/beer-3092221_5cf17_sm.jpeg'
     });
     let subscriptionsKeys = [];
