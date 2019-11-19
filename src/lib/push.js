@@ -9,7 +9,8 @@ export const send = async ({ redisClient, systembolagetData, untappdData }) => {
   const payload = JSON.stringify({
     title: `${untappdData.beer.beer_name} - ${untappdData.brewery.brewery_name}`,
     body: `[${systembolagetData._source.SortimentText}]`,
-    icon: untappdData.beer.beer_label
+    icon: untappdData.beer.beer_label,
+    path: '/checkins'
   });
   let subscriptionsKeys = [];
   try {
