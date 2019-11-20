@@ -34,7 +34,7 @@ export const tidyQuery = query => {
 };
 
 export const shouldBeDecorated = b => {
-  const refreshInterval = 1000 * 3600 * 24 * 2; //two days
+  const refreshInterval = 1000 * 3600 * 24 * 4; //four days
   const untappdData = _.get(b, '_source.untappdData');
   const untappdId = _.get(b, '_source.untappdId');
   const untappdTimestamp = _.get(b, '_source.untappdTimestamp');
