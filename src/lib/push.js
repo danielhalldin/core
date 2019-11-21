@@ -18,18 +18,23 @@ const mapSortimentToPath = sortiment => {
   }
 };
 
-export const send = async ({ redisClient, systembolagetData, untappdData }) => {
-  if (!redisClient) {
-    return;
-  }
-
-  const payload = JSON.stringify({
+export const generateAndPush = async ({ redisClient, systembolagetData, untappdData }) => {
+  push({
+    redisClient,
     title: `${untappdData.beer.beer_name} - ${untappdData.brewery.brewery_name}`,
     body: `[${systembolagetData._source.SortimentText}]`,
     icon: untappdData.beer.beer_label,
     data: { path: mapSortimentToPath(systembolagetData._source.SortimentText) },
     tag: `new-beers${mapSortimentToPath(systembolagetData._source.SortimentText)}`
   });
+};
+
+export const push = async ({ redisClient, title, body, icon, data, tag }) => {
+  if (!redisClient) {
+    return;
+  }
+
+  const payload = JSON.stringify({ title, body, icon, data, tag });
   let subscriptionsKeys = [];
   try {
     subscriptionsKeys = await redisClient.keys('subscription-*');

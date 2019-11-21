@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import logger from '../logger';
-import { send } from '../../lib/push';
+import { generateAndPush } from '../../lib/push';
 
 const batches = [
   { stockType: 'Tillfälligt sortiment', size: 50 },
@@ -97,7 +97,7 @@ export const decorateBeers = async ({ indexClient, searchClient, untappdClient, 
       untappdId = result.untappdId;
       untappdData = result.untappdData;
       if (untappdData) {
-        send({ redisClient, systembolagetData: beerToDecorate, untappdData });
+        generateAndPush({ redisClient, systembolagetData: beerToDecorate, untappdData });
       }
     }
 

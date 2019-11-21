@@ -1,5 +1,5 @@
 import _get from 'lodash/get';
-import { send } from '../../push';
+import { generateAndPush } from '../../push';
 import RedisClient from '../../worker/clients/redisClient';
 
 const redisClient = new RedisClient();
@@ -33,7 +33,7 @@ const pushRoute = app => {
         brewery_name: 'Information om en ny öl ☀️'
       }
     };
-    send({ redisClient, systembolagetData, untappdData });
+    generateAndPush({ redisClient, systembolagetData, untappdData });
     res.json('Message sent').send(201);
   });
 };
