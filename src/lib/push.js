@@ -17,6 +17,7 @@ const mapSortimentToPath = sortiment => {
       return '/rekommenderade';
   }
 };
+
 export const send = async ({ redisClient, systembolagetData, untappdData }) => {
   if (!redisClient) {
     return;
@@ -26,7 +27,8 @@ export const send = async ({ redisClient, systembolagetData, untappdData }) => {
     title: `${untappdData.beer.beer_name} - ${untappdData.brewery.brewery_name}`,
     body: `[${systembolagetData._source.SortimentText}]`,
     icon: untappdData.beer.beer_label,
-    data: { path: mapSortimentToPath(systembolagetData._source.SortimentText) }
+    data: { path: mapSortimentToPath(systembolagetData._source.SortimentText) },
+    tag: 'new-beers'
   });
   let subscriptionsKeys = [];
   try {
