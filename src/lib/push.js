@@ -28,7 +28,7 @@ export const send = async ({ redisClient, systembolagetData, untappdData }) => {
     body: `[${systembolagetData._source.SortimentText}]`,
     icon: untappdData.beer.beer_label,
     data: { path: mapSortimentToPath(systembolagetData._source.SortimentText) },
-    tag: 'new-beers'
+    tag: `new-beers${mapSortimentToPath(systembolagetData._source.SortimentText)}`
   });
   let subscriptionsKeys = [];
   try {
