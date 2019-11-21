@@ -34,7 +34,7 @@ const pushRoute = app => {
       }
     };
     generateAndPush({ redisClient, systembolagetData, untappdData });
-    res.json('Message sent').send(201);
+    res.status(200).send('Message sent');
   });
 };
 
