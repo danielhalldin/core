@@ -3,7 +3,7 @@ import config from '../../../../config';
 import logger from '../../../logger';
 import moment from 'moment';
 import _get from 'lodash/get';
-import { set, get, getTtl, setExpireat } from '../../../redisClient';
+import RedisClient from '../../../worker/clients/redisClient';
 
 const CACHE_TIME = {
   USER_BEERS: 3600,
@@ -20,6 +20,7 @@ class UntappdAPI extends RESTDataSource {
     this.baseURL = config.untappd.baseUrl;
     this.clientSecret = config.untappd.clientSecret;
     this.clientId = config.untappd.clientID;
+    this.redisClient = new RedisClient();
   }
 
   willSendRequest(request) {
@@ -45,12 +46,12 @@ class UntappdAPI extends RESTDataSource {
 
   async flushCache({ flushBeforeTimestamp, cacheKey, cacheKeyCacheTime }) {
     const flushBeforeTime = moment(flushBeforeTimestamp);
-    const cacheKeyTtl = await getTtl(cacheKey);
+    const cacheKeyTtl = await this.redisClient.getTtl(cacheKey);
     const cacheKeyTimeWhenCached = moment()
       .add(cacheKeyTtl, 'second')
       .subtract(cacheKeyCacheTime, 'second');
     if (cacheKeyTimeWhenCached.isBefore(flushBeforeTime) && cacheKeyTtl !== -2) {
-      await setExpireat(cacheKey, -2);
+      await this.redisClient.setExpireat(cacheKey, -2);
     }
   }
 
@@ -120,9 +121,9 @@ class UntappdAPI extends RESTDataSource {
 
     try {
       user = await response.response.user;
-      set(fallbackUserCacheKey, JSON.stringify(response), 'EX', CACHE_TIME.FALLBACK_USER); // Fallback cache user for 1 hour
+      this.redisClient.set(fallbackUserCacheKey, JSON.stringify(response), 'EX', CACHE_TIME.FALLBACK_USER); // Fallback cache user for 1 hour
     } catch (e) {
-      response = JSON.parse(await get(fallbackUserCacheKey));
+      response = JSON.parse(await this.redisClient.get(fallbackUserCacheKey));
       user = response.response.user;
     }
 
