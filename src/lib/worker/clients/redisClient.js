@@ -24,8 +24,8 @@ class RedisClient {
   ttl(key) {
     return this._client.ttl(key);
   }
-  setExpireat(key) {
-    return this._client.expireat(key);
+  setExpireat(key, ttl) {
+    return this._client.expireat(key, ttl);
   }
 }
 
