@@ -46,7 +46,7 @@ class UntappdAPI extends RESTDataSource {
 
   async flushCache({ flushBeforeTimestamp, cacheKey, cacheKeyCacheTime }) {
     const flushBeforeTime = moment(flushBeforeTimestamp);
-    const cacheKeyTtl = await this.redisClient.getTtl(cacheKey);
+    const cacheKeyTtl = await this.redisClient.ttl(cacheKey);
     const cacheKeyTimeWhenCached = moment()
       .add(cacheKeyTtl, 'second')
       .subtract(cacheKeyCacheTime, 'second');

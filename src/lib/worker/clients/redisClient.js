@@ -12,20 +12,20 @@ class RedisClient {
     this._client.expireat = promisify(this._client.expireat).bind(this._client);
   }
 
-  set(data) {
-    return this._client.set(data);
+  set(key, value, timeUnit, time) {
+    return this._client.set(key, value, timeUnit, time);
   }
-  get(data) {
-    return this._client.get(data);
+  get(key) {
+    return this._client.get(key);
   }
-  keys(data) {
-    return this._client.keys(data);
+  keys(keys) {
+    return this._client.keys(keys);
   }
-  ttl(data) {
-    return this._client.ttl(data);
+  ttl(key) {
+    return this._client.ttl(key);
   }
-  expireat(data) {
-    return this._client.expireat(data);
+  expireat(key) {
+    return this._client.expireat(key);
   }
 }
 
