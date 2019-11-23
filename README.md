@@ -2,15 +2,19 @@
 
 ## Installing
 
-`$ yarn`
+`$ npm i`
+
+## Run test
+
+`$ npm run test`
 
 ## Run web
 
-`$ dotenv yarn dev`
+`$ dotenv npm run dev`
 
 ## Run worker
 
-`$ dotenv yarn dev-worker`
+`$ dotenv npm run dev-worker`
 
 ---
 
