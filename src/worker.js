@@ -1,4 +1,4 @@
-import IndexClient from './lib/worker/clients/indexClient';
+import indexClient from './lib/worker/clients/indexClient';
 import SearchClient from './lib/worker/clients/searchClient';
 import UntappdClient from './lib/worker/clients/untappdClient';
 import redisClient from './lib/worker/clients/redisClient';
@@ -8,7 +8,6 @@ import decorateBeers from './lib/worker/decorateBeers';
 
 import config from './config';
 
-const indexClient = new IndexClient();
 const searchClient = new SearchClient();
 const untappdClient = new UntappdClient();
 

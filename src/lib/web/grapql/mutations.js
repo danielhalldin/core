@@ -1,10 +1,9 @@
-import IndexClient from '../../worker/clients/indexClient';
+import indexClient from '../../worker/clients/indexClient';
 import config from '../../../config';
 
 const deleteBeer = async (_, { systembolagetArticleId }, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.user(untappd_access_token);
   if (data.name === config.superUser && systembolagetArticleId) {
-    const indexClient = new IndexClient();
     const responseData = await indexClient.deleteFromIndex({
       index: 'systembolaget',
       type: 'artikel',
@@ -23,7 +22,6 @@ const deleteBeer = async (_, { systembolagetArticleId }, { dataSources, untappd_
 const updateUntappdId = async (_, { systembolagetArticleId, untappdId }, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.user(untappd_access_token);
   if (data.name === config.superUser && systembolagetArticleId) {
-    const indexClient = new IndexClient();
     const responseData = await indexClient.updateDocument({
       index: 'systembolaget',
       type: 'artikel',

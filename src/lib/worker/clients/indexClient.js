@@ -94,4 +94,7 @@ class IndexClient {
   }
 }
 
-export default IndexClient;
+const instance = new IndexClient();
+Object.freeze(instance);
+
+export default instance;

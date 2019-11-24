@@ -1,4 +1,4 @@
-import IndexClient from '../../worker/clients/indexClient';
+import indexClient from '../../worker/clients/indexClient';
 
 const update = app => {
   app.get('/manual-update', async function(req, res) {
@@ -7,7 +7,6 @@ const update = app => {
     let responseData;
 
     if (id) {
-      const indexClient = new IndexClient();
       responseData = await indexClient.updateDocument({
         index: 'systembolaget',
         type: 'artikel',
