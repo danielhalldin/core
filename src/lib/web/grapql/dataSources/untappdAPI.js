@@ -3,7 +3,7 @@ import config from '../../../../config';
 import logger from '../../../logger';
 import moment from 'moment';
 import _get from 'lodash/get';
-import RedisClient from '../../../worker/clients/redisClient';
+import redisClient from '../../../worker/clients/redisClient';
 
 const CACHE_TIME = {
   USER_BEERS: 3600,
@@ -20,7 +20,7 @@ class UntappdAPI extends RESTDataSource {
     this.baseURL = config.untappd.baseUrl;
     this.clientSecret = config.untappd.clientSecret;
     this.clientId = config.untappd.clientID;
-    this.redisClient = new RedisClient();
+    this.redisClient = redisClient;
   }
 
   willSendRequest(request) {

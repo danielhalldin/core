@@ -1,7 +1,7 @@
 import IndexClient from './lib/worker/clients/indexClient';
 import SearchClient from './lib/worker/clients/searchClient';
 import UntappdClient from './lib/worker/clients/untappdClient';
-import RedisClient from './lib/worker/clients/redisClient';
+import redisClient from './lib/worker/clients/redisClient';
 
 import indexBeers from './lib/worker/indexBeers';
 import decorateBeers from './lib/worker/decorateBeers';
@@ -11,7 +11,6 @@ import config from './config';
 const indexClient = new IndexClient();
 const searchClient = new SearchClient();
 const untappdClient = new UntappdClient();
-const redisClient = new RedisClient();
 
 indexClient.healthCheck(60000);
 

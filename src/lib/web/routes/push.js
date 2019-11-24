@@ -1,8 +1,6 @@
 import _get from 'lodash/get';
 import { generateAndPush } from '../../push';
-import RedisClient from '../../worker/clients/redisClient';
-
-const redisClient = new RedisClient();
+import redisClient from '../../worker/clients/redisClient';
 
 const pushRoute = app => {
   app.post('/subscribe', (req, res) => {

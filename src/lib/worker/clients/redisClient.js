@@ -29,4 +29,7 @@ class RedisClient {
   }
 }
 
-export default RedisClient;
+const instance = new RedisClient();
+Object.freeze(instance);
+
+export default instance;
