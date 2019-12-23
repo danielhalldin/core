@@ -7,36 +7,41 @@ const decoratedLatest = async (
   { size, stockType = 'Tillfälligt sortiment' },
   { dataSources, untappd_access_token }
 ) => {
-  const data = await dataSources.ElasticsearchApi.latestBeer({
-    size,
-    stockType
-  });
-  const _beers = data.hits.hits.map(async beer => {
-    const systembolagetBeer = systembolagetTransform(beer);
-    const untappdId = beer._source.untappdId;
-    let untappdBeer;
-    if (untappdId) {
-      const personalBeerData = await dataSources.UntappdAPI.byId(untappdId, untappd_access_token);
-      if (personalBeerData.response.beer) {
-        untappdBeer = untappdTransform(personalBeerData.response.beer);
-      } else {
-        untappdBeer = untappdTransform(beer._source.untappdData);
+  let sortedBeers = [];
+  try {
+    const data = await dataSources.ElasticsearchApi.latestBeer({
+      size,
+      stockType
+    });
+    const _beers = data.hits.hits.map(async beer => {
+      const systembolagetBeer = systembolagetTransform(beer);
+      const untappdId = beer._source.untappdId;
+      let untappdBeer;
+      if (untappdId) {
+        const personalBeerData = await dataSources.UntappdAPI.byId(untappdId, untappd_access_token);
+        if (personalBeerData.response.beer) {
+          untappdBeer = untappdTransform(personalBeerData.response.beer);
+        } else {
+          untappdBeer = untappdTransform(beer._source.untappdData);
+        }
       }
-    }
-    return Object.assign({}, systembolagetBeer, untappdBeer);
-  });
-  const beers = await Promise.all(_beers);
-  const sortedBeers = orderBy(
-    beers,
-    [
-      'salesStartDate',
-      beer => {
-        return beer.rating || -1;
-      },
-      'name'
-    ],
-    ['desc', 'desc', 'asc']
-  );
+      return Object.assign({}, systembolagetBeer, untappdBeer);
+    });
+    const beers = await Promise.all(_beers);
+    sortedBeers = orderBy(
+      beers,
+      [
+        'salesStartDate',
+        beer => {
+          return beer.rating || -1;
+        },
+        'name'
+      ],
+      ['desc', 'desc', 'asc']
+    );
+  } catch (e) {
+    console.log(e);
+  }
 
   return {
     name: stockType,
