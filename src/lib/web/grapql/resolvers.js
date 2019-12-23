@@ -1,6 +1,6 @@
 import { untappdTransform, systembolagetTransform } from './helpers/transformations';
 import config from '../../../config';
-import { orderBy } from 'lodash';
+import { get as _get, orderBy } from 'lodash';
 
 const decoratedLatest = async (
   _,
@@ -13,7 +13,7 @@ const decoratedLatest = async (
       size,
       stockType
     });
-    const _beers = data.hits.hits.map(async beer => {
+    const _beers = _get(data, 'hits.hits', []).map(async beer => {
       const systembolagetBeer = systembolagetTransform(beer);
       const untappdId = beer._source.untappdId;
       let untappdBeer;

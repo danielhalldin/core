@@ -41,8 +41,9 @@ export const push = async ({ redisClient, title, body, icon, data, tag }) => {
     await subscriptionsKeys.map(async subscriptionKey => {
       webpush.setVapidDetails(config.webPush.vapidEmail, config.webPush.vapidPublicKey, config.webPush.vapidPrivateKey);
       const subscription = JSON.parse(await redisClient.get(subscriptionKey));
+      // eslint-disable-next-line no-unused-vars
       await webpush.sendNotification(subscription, payload).catch(_error => {
-        //console.error('webpush', error.stack);
+        //console.error('webpush', _error.stack);
       });
     });
   } catch (e) {
