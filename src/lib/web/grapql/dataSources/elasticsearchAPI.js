@@ -27,7 +27,7 @@ class elasticsearchAPI extends RESTDataSource {
       `/systembolaget/_search?size=${size}#stockType=${stockType}`,
       beers({ fromDate, toDate, stockType }),
       {
-        cacheOptions: { ttl: 10 }
+        cacheOptions: { ttl: 1000 }
       }
     );
 
