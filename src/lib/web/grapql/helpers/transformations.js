@@ -79,7 +79,7 @@ const systembolagetTransform = data => {
   return {
     id: systembolagetId,
     name: `${name}${name2 ? ' ' + name2 : ''}`,
-    brewery,
+    brewery: brewery || 'N/A',
     price,
     category,
     style,
