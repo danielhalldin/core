@@ -18,4 +18,5 @@ indexBeers(indexClient);
 setInterval(() => indexBeers(indexClient), config.indexInterval);
 
 // Decorating
+decorateBeers({ indexClient, searchClient, untappdClient, redisClient });
 setInterval(() => decorateBeers({ indexClient, searchClient, untappdClient, redisClient }), config.decoratorInterval);
