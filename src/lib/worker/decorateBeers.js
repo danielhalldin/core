@@ -80,7 +80,6 @@ export const decorateBeers = async ({ indexClient, searchClient, untappdClient, 
   }
 
   if (!beerToDecorate) {
-    console.log('NOTHING TO DECORATE');
     return;
   }
 
