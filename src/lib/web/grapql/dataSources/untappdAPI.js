@@ -86,8 +86,7 @@ class UntappdAPI extends RESTDataSource {
       { cacheOptions: { ttl: CACHE_TIME.USER_BEERS } }
     );
 
-    const items = _get(response, 'response.beers.items') || null;
-
+    const items = _get(response, 'response.beers.items') || [];
     return items;
   }
 
@@ -115,12 +114,12 @@ class UntappdAPI extends RESTDataSource {
       this.decorateOptionsWithTokens({ compact: false }, untappd_access_token),
       { cacheOptions: { ttl: CACHE_TIME.USER } } // Cache user for 10 minutes
     );
-
     const fallbackUserCacheKey = `fallbackForUser_${untappd_access_token}`;
     let user;
 
     try {
       user = await response.response.user;
+
       this.redisClient.set(fallbackUserCacheKey, JSON.stringify(response), 'EX', CACHE_TIME.FALLBACK_USER); // Fallback cache user for 1 hour
     } catch (e) {
       response = JSON.parse(await this.redisClient.get(fallbackUserCacheKey));
