@@ -16,7 +16,7 @@ const untappdTransformBeer = data => {
     auth_rating: userRating,
     rating_score: rating,
     beer_name: name,
-    beer_label: beerLabel,
+    beer_label_hd: beerLabel,
     beer_ibu: ibu,
     beer_abv: abv,
     beer_style: style,
