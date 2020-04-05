@@ -23,7 +23,7 @@ export const generateAndPush = async ({ redisClient, systembolagetData, untappdD
     redisClient,
     title: `${untappdData.beer.beer_name} - ${untappdData.brewery.brewery_name}`,
     body: `[${systembolagetData._source.SortimentText}]`,
-    icon: untappdData.beer.beer_label_hd,
+    icon: untappdData.beer.beer_label_hd || untappdData.beer.beer_label,
     data: { path: mapSortimentToPath(systembolagetData._source.SortimentText) },
     tag: `new-beers${mapSortimentToPath(systembolagetData._source.SortimentText)}`
   });
