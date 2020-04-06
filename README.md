@@ -51,7 +51,7 @@ openssl req -x509 -days 1000 -nodes -newkey rsa:2048 \
 ### Open the new cert:
 
 ```
-open /Applications/Utilities/Keychain\ Access.app newbeers.key
+open /Applications/Utilities/Keychain\ Access.app newbeers.crt
 ```
 
 ### Add hosts to /etc/hosts:
@@ -63,7 +63,7 @@ open /Applications/Utilities/Keychain\ Access.app newbeers.key
 ### Copy the certificate files (newbeers.crt and newbeers.key) to /usr/local/etc/nginx/:
 
 ```
-$ cp dev.cmore.* /usr/local/etc/nginx/
+$ cp newbeers.* /usr/local/etc/nginx/
 ```
 
 ### Add this section to the http section of /usr/local/etc/nginx/nginx.conf:
@@ -119,3 +119,7 @@ $ code /usr/local/etc/nginx/nginx.conf
         }
     }
 ```
+
+### Reload nginx:
+
+sudo nginx -s reload
