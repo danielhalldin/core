@@ -19,39 +19,39 @@ import pushRoutes from './lib/web/routes/push';
 
 const redisCache = new RedisCache({
   url: config.rediscloudUrl,
-  options: { no_ready_check: true }
+  options: { no_ready_check: true },
 });
 
 const server = new ApolloServer({
   schema,
-  tracing: true,
+  tracing: config.graphql.tracingEnabled,
   cacheControl: true,
   cache: redisCache,
   engine: {
-    apiKey: process.env.ENGINE_API_KEY
+    apiKey: config.graphql.engineApiKey,
   },
   persistedQueries: redisCache,
   introspection: config.graphql.introspectionEnabled,
   playground: config.graphql.playgroundEnabled,
   dataSources: () => ({
     UntappdAPI: new untappdAPI(),
-    ElasticsearchApi: new elasticsearchAPI()
+    ElasticsearchApi: new elasticsearchAPI(),
   }),
-  formatError: error => {
+  formatError: (error) => {
     return {
       message: error.message,
       locations: error.locations,
       stack: error.stack,
-      path: error.path
+      path: error.path,
     };
   },
   context: ({ req }) => {
     const raw_untappd_access_token = _get(req, 'headers.x-untappd-access-token');
     const untappd_access_token = raw_untappd_access_token ? decrypt(raw_untappd_access_token) : '';
     return {
-      untappd_access_token
+      untappd_access_token,
     };
-  }
+  },
 });
 
 const app = express();

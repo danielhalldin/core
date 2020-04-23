@@ -1,42 +1,47 @@
+import _get from 'lodash/get';
+
+const envs = _get(process, 'env');
+
 module.exports = {
-  port: process.env.PORT || 6667,
-  logLevel: process.env.LOG_LEVEL || 'info',
-  decoratorInterval: process.env.DECORATOR_INTERVAL || 10000,
-  indexInterval: process.env.INDEX_INTERVAL || 3600000,
-  webConcurrenct: process.env.WEB_CONCURRENCY || 1,
-  jwtSecret: process.env.JWT_SECRET,
-  superUser: process.env.SUPER_USER,
+  port: _get(envs, 'PORT', 6667),
+  logLevel: _get(envs, 'LOG_LEVEL', 'info'),
+  decoratorInterval: _get(envs, 'DECORATOR_INTERVAL', 10000),
+  indexInterval: _get(envs, 'INDEX_INTERVAL', 3600000),
+  jwtSecret: _get(envs, 'JWT_SECRET'),
+  superUser: _get(envs, 'SUPER_USER'),
 
   graphql: {
-    introspectionEnabled: (process.env.INTROSPECTION_ENABLED && process.env.INTROSPECTION_ENABLED === 'true') || false,
-    playgroundEnabled: (process.env.PLAYGROUND_ENABLED && process.env.PLAYGROUND_ENABLED === 'true') || false
+    introspectionEnabled: _get(envs, 'INTROSPECTION_ENABLED') === 'true' || false,
+    playgroundEnabled: _get(envs, 'PLAYGROUND_ENABLED') === 'true' || false,
+    tracingEnabled: _get(envs, 'TRACING_ENABLED') === 'true' || false,
+    engineApiKey: _get(envs, 'ENGINE_API_KEY'),
   },
 
-  rediscloudUrl: process.env.REDISCLOUD_URL,
+  rediscloudUrl: _get(envs, 'REDISCLOUD_URL'),
 
   newBeers: {
-    url: process.env.NEW_BEERS_URL || 'http://new-beers.ddns.net',
-    authUrl: process.env.NEW_BEERS_AUTH_URL || 'http://data-source.ddns.net/auth'
+    url: _get(envs, 'NEW_BEERS_URL', 'http://new-beers.ddns.net'),
+    authUrl: _get(envs, 'NEW_BEERS_AUTH_URL', 'http://data-source.ddns.net/auth'),
   },
 
   elasticsearch: {
-    url: process.env.BONSAI_URL || 'http://localhost:9200'
+    url: _get(envs, 'BONSAI_URL', 'http://localhost:9200'),
   },
 
   untappd: {
-    baseUrl: process.env.UNTAPPED_BASE_URL || 'https://api.untappd.com',
-    authBaseUrl: process.env.UNTAPPED_AUTH_BASE_URL || 'https://untappd.com/oauth',
-    clientID: process.env.UNTAPPED_CLIENT_ID,
-    clientSecret: process.env.UNTAPPED_CLIENT_SECRET
+    baseUrl: _get(envs, 'UNTAPPED_BASE_URL', 'https://api.untappd.com'),
+    authBaseUrl: _get(envs, 'UNTAPPED_AUTH_BASE_URL', 'https://untappd.com/oauth'),
+    clientID: _get(envs, 'UNTAPPED_CLIENT_ID'),
+    clientSecret: _get(envs, 'UNTAPPED_CLIENT_SECRET'),
   },
 
   systembolaget: {
-    url: process.env.SYSTEMBOLAGET_URL || 'http://www.systembolaget.se/api/assortment/products/xml'
+    url: _get(envs, 'SYSTEMBOLAGET_URL', 'http://www.systembolaget.se/api/assortment/products/xml'),
   },
 
   webPush: {
-    vapidPublicKey: process.env.VAPID_PUBLIC_KEY,
-    vapidPrivateKey: process.env.VAPID_PRIVATE_KEY,
-    vapidEmail: process.env.VAPID_EMAIL
-  }
+    vapidPublicKey: _get(envs, 'VAPID_PUBLIC_KEY'),
+    vapidPrivateKey: _get(envs, 'VAPID_PRIVATE_KEY'),
+    vapidEmail: _get(envs, 'VAPID_EMAIL'),
+  },
 };
