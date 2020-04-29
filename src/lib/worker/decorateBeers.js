@@ -3,6 +3,11 @@ import logger from '../logger';
 import { generateAndPush } from '../../lib/push';
 
 const batches = [
+  { stockType: 'Tillfälligt sortiment', size: 10 },
+  { stockType: 'Lokalt & småskaligt', size: 10 },
+  { stockType: 'Säsong', size: 10 },
+  { stockType: 'Fast sortiment', size: 10 },
+  { stockType: 'Ordervaror', size: 10 },
   { stockType: 'Tillfälligt sortiment', size: 50 },
   { stockType: 'Lokalt & småskaligt', size: 50 },
   { stockType: 'Säsong', size: 50 },
