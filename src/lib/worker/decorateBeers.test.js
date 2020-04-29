@@ -4,15 +4,15 @@ const searchBeerMock = jest.fn();
 const fetchBeerByIdMock = jest.fn();
 const untappdClientMock = {
   fetchBeerById: fetchBeerByIdMock,
-  searchBeer: searchBeerMock
+  searchBeer: searchBeerMock,
 };
 const latatestBeersToBeDecoratedtMock = jest.fn();
 const searchClientMock = {
-  latatestBeersToBeDecorated: latatestBeersToBeDecoratedtMock
+  latatestBeersToBeDecorated: latatestBeersToBeDecoratedtMock,
 };
 const updateDocumentMock = jest.fn();
 const indexClientMock = {
-  updateDocument: updateDocumentMock
+  updateDocument: updateDocumentMock,
 };
 
 beforeEach(() => {
@@ -27,8 +27,8 @@ describe('shouldBeDecorated', () => {
     const beerThatShouldBeDecorated = {
       _source: {
         untappdData: undefined,
-        untappdTimestamp: Date.now()
-      }
+        untappdTimestamp: Date.now(),
+      },
     };
     expect(shouldBeDecorated(beerThatShouldBeDecorated)).toBe(true);
   });
@@ -36,8 +36,8 @@ describe('shouldBeDecorated', () => {
   test('Refreshes beers that misses untappdTimestamp', () => {
     const beerThatShouldBeRefreshed = {
       _source: {
-        untappdData: undefined
-      }
+        untappdData: undefined,
+      },
     };
     expect(shouldBeDecorated(beerThatShouldBeRefreshed)).toBe(true);
   });
@@ -45,8 +45,8 @@ describe('shouldBeDecorated', () => {
   test('Ignores beers with untappdId = 0', () => {
     const beerThatShouldBeIgnored = {
       _source: {
-        untappdId: 0
-      }
+        untappdId: 0,
+      },
     };
     expect(shouldBeDecorated(beerThatShouldBeIgnored)).toBe(false);
   });
@@ -100,7 +100,7 @@ describe('refreshBeer', () => {
   test('Should return valid object', async () => {
     const beerData = { untappdId: 1010 };
     fetchBeerByIdMock.mockReturnValueOnce({
-      bid: 1010
+      bid: 1010,
     });
     const resp = await refreshBeer({ untappdClient: untappdClientMock, beerData });
     expect(fetchBeerByIdMock.mock.calls.length).toBe(1);
@@ -118,37 +118,37 @@ describe('decorateBeer', () => {
           Namn2: 'namn2',
           Producent: 'Producent',
           untappdData: undefined,
-          untappdTimestamp: Date.now()
-        }
-      }
+          untappdTimestamp: Date.now(),
+        },
+      },
     ]);
 
     searchBeerMock.mockReturnValueOnce([
       {
         untappdId: 1010,
-        untappdData: { dataToBeIndexed: true }
-      }
+        untappdData: { dataToBeIndexed: true },
+      },
     ]);
 
     await decorateBeers({
       indexClient: indexClientMock,
       searchClient: searchClientMock,
       untappdClient: untappdClientMock,
-      redisClient: undefined
+      redisClient: undefined,
     });
     expect(latatestBeersToBeDecoratedtMock.mock.calls.length).toBe(1);
-    expect(latatestBeersToBeDecoratedtMock.mock.calls[0][0]).toEqual({ size: 50, stockType: 'Tillfälligt sortiment' });
+    expect(latatestBeersToBeDecoratedtMock.mock.calls[0][0]).toEqual({ size: 10, stockType: 'Tillfälligt sortiment' });
     expect(searchBeerMock.mock.calls.length).toBe(1);
     expect(searchBeerMock.mock.calls[0][0]).toEqual('producent%20namn%20namn2');
     expect(updateDocumentMock.mock.calls.length).toBe(1);
     expect(updateDocumentMock.mock.calls[0][0]).toMatchObject({
       documentBody: {
         untappdData: { untappdData: { dataToBeIndexed: true }, untappdId: 1010 },
-        untappdId: 0
+        untappdId: 0,
       },
       id: undefined,
       index: 'systembolaget',
-      type: 'artikel'
+      type: 'artikel',
     });
   });
 });
