@@ -17,24 +17,17 @@ const batches = [
   { stockType: 'Lokalt & småskaligt', size: 1000 },
   { stockType: 'Säsong', size: 1000 },
   { stockType: 'Fast sortiment', size: 1000 },
-  { stockType: 'Ordervaror', size: 1000 }
+  { stockType: 'Ordervaror', size: 1000 },
 ];
 
-export const tidyQuery = query => {
+export const tidyQuery = (query) => {
   const regex = /ab|aktiebryggeri|ale|&/gm;
-  query = query
-    .toLowerCase()
-    .replace(regex, '')
-    .replace(/\s\s+/gm, ' ');
-  return encodeURIComponent(
-    _.uniq(query.split(' '))
-      .join(' ')
-      .trim()
-  );
+  query = query.toLowerCase().replace(regex, '').replace(/\s\s+/gm, ' ');
+  return encodeURIComponent(_.uniq(query.split(' ')).join(' ').trim());
 };
 
-export const shouldBeDecorated = b => {
-  const refreshInterval = 1000 * 3600 * 24 * 4; //four days
+export const shouldBeDecorated = (b) => {
+  const refreshInterval = 1000 * 3600 * 24 * 1; //every day
   const untappdData = _.get(b, '_source.untappdData');
   const untappdId = _.get(b, '_source.untappdId');
   const untappdTimestamp = _.get(b, '_source.untappdTimestamp');
@@ -59,7 +52,7 @@ export const lookupBeer = async ({ untappdClient, beerData: { Namn, Namn2, Produ
     if (untappdSearchResult.length > 0) {
       return {
         untappdData: _.get(untappdSearchResult, '[0]'),
-        untappdId: _.get(untappdSearchResult, '[0].beer.bid')
+        untappdId: _.get(untappdSearchResult, '[0].beer.bid'),
       };
     }
   }
@@ -108,8 +101,8 @@ export const decorateBeers = async ({ indexClient, searchClient, untappdClient, 
       documentBody: {
         untappdId: untappdId || 0,
         untappdData: untappdData || null,
-        untappdTimestamp: Date.now()
-      }
+        untappdTimestamp: Date.now(),
+      },
     });
   } catch (e) {
     logger.error('Failed to decorate beer: ' + e.message);
