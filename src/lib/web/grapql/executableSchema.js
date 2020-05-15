@@ -3,12 +3,13 @@ import {
   decoratedLatest,
   recommended,
   systembolagetLatest,
+  systembolagetSearch,
   untappdById,
   untappdFriends,
   untappdIsFriend,
   untappdSearch,
   untappdUser,
-  untappdUserBeers
+  untappdUserBeers,
 } from './resolvers';
 
 import { deleteBeer, updateUntappdId } from './mutations';
@@ -20,17 +21,18 @@ const resolvers = {
     decoratedLatest,
     recommended,
     systembolagetLatest,
+    systembolagetSearch,
     untappdById,
     untappdFriends,
     untappdIsFriend,
     untappdSearch,
     untappdUser,
-    untappdUserBeers
+    untappdUserBeers,
   },
   Mutation: {
     deleteBeer,
-    updateUntappdId
-  }
+    updateUntappdId,
+  },
 };
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });

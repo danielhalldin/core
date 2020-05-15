@@ -1,12 +1,12 @@
 import _ from 'lodash';
 
-const sort = sortFields => {
-  return sortFields.map(function(item) {
+const sort = (sortFields) => {
+  return sortFields.map(function (item) {
     var order = _.startsWith(item, '-') ? 'desc' : 'asc';
     var object = {};
     object[_.trim(item, '+-')] = {
       order: order,
-      missing: '_last'
+      missing: '_last',
     };
     return object;
   });
@@ -23,18 +23,18 @@ const beers = ({ fromDate, toDate, stockType }) => {
             range: {
               Saljstart: {
                 gte: fromDate,
-                lte: toDate
-              }
-            }
-          }
-        ]
-      }
-    }
+                lte: toDate,
+              },
+            },
+          },
+        ],
+      },
+    },
   };
 
   if (stockType) {
     q.query.bool.must.push({
-      match: { SortimentText: { query: stockType, operator: 'and' } }
+      match: { SortimentText: { query: stockType, operator: 'and' } },
     });
   }
   return q;
@@ -51,19 +51,37 @@ const recommendedBeers = ({ fromDate, toDate }) => {
             range: {
               Saljstart: {
                 gte: fromDate,
-                lte: toDate
-              }
-            }
+                lte: toDate,
+              },
+            },
           },
-          { exists: { field: 'untappdData.rating_score' } }
-        ]
-      }
-    }
+          { exists: { field: 'untappdData.rating_score' } },
+        ],
+      },
+    },
   };
   return q;
 };
 
-export { beers, recommendedBeers };
+const searchBeers = ({ searchString }) => {
+  const q = {
+    sort: sort([
+      '+Namn.keyword',
+      '+untappdData.beer.beer_name.keyword',
+      '+Namn2.keyword',
+      '+untappdData.brewery.brewery_name.keyword',
+    ]),
+    query: {
+      multi_match: {
+        query: searchString,
+        fields: ['Namn', 'untappdData.beer.beer_name', 'Namn2', 'untappdData.beer.brewery_name'],
+      },
+    },
+  };
+  return q;
+};
+
+export { beers, searchBeers, recommendedBeers };
 
 // EXISTS
 // const beersToDecorate = (fromDate, toDate, stockType) => {
