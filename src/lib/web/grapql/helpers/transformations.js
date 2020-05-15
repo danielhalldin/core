@@ -58,7 +58,6 @@ const untappdTransformBrewery = (data) => {
 };
 
 const systembolagetTransform = (data) => {
-  console.log({ TTT: data._source });
   const {
     Namn: name,
     Namn2: name2,

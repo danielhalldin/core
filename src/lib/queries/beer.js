@@ -75,6 +75,7 @@ const searchBeers = ({ searchString }) => {
       multi_match: {
         query: searchString,
         fields: ['Namn', 'untappdData.beer.beer_name', 'Namn2', 'untappdData.beer.brewery_name'],
+        operator: 'and',
       },
     },
   };
