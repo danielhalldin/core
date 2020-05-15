@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const untappdTransform = data => {
+const untappdTransform = (data) => {
   if (!data) {
     return;
   }
@@ -11,7 +11,7 @@ const untappdTransform = data => {
   }
 };
 
-const untappdTransformBeer = data => {
+const untappdTransformBeer = (data) => {
   const {
     auth_rating: userRating,
     rating_score: rating,
@@ -24,7 +24,7 @@ const untappdTransformBeer = data => {
     beer_description: description,
     bid: untappdId,
     beer_slug,
-    checkinDate
+    checkinDate,
   } = data;
 
   return {
@@ -40,24 +40,25 @@ const untappdTransformBeer = data => {
     untappdId,
     untappdUrl: checkinDate ? `https://untappd.com/c/${untappdId}` : `https://untappd.com/b/${beer_slug}/${untappdId}`,
     untappdDeepLink: checkinDate ? `untappd://checkin/${untappdId}` : `untappd://beer/${untappdId}`,
-    checkinDate: checkinDate && moment(checkinDate).format('YYYY-MM-DD')
+    checkinDate: checkinDate && moment(checkinDate).format('YYYY-MM-DD'),
   };
 };
 
-const untappdTransformBrewery = data => {
+const untappdTransformBrewery = (data) => {
   try {
     const { brewery_name: brewery, brewery_label: breweryLabel, country_name: country } = data;
     return {
       brewery,
       breweryLabel,
-      country
+      country,
     };
   } catch (e) {
     console.log(e);
   }
 };
 
-const systembolagetTransform = data => {
+const systembolagetTransform = (data) => {
+  console.log({ TTT: data._source });
   const {
     Namn: name,
     Namn2: name2,
@@ -75,17 +76,34 @@ const systembolagetTransform = data => {
     Sortiment: stockTypeId,
     SortimentText: stockType,
     nr: systembolagetId,
-    Artikelid: systembolagetArticleId
+    Artikelid: systembolagetArticleId,
+    untappdData,
   } = data._source;
+  const {
+    beer_label_hd: beerLabelHD = undefined,
+    beer_label: beerLabel = undefined,
+    beer_name: untappdBeerNamne = undefined,
+    beer_abv: untappdAbv = undefined,
+    beer_style: untappdStyle,
+    rating_score: rating = undefined,
+    bid: untappdId = undefined,
+    beer_slug = undefined,
+    beer_ibu: ibu = undefined,
+    beer_description: description = undefined,
+  } = untappdData || {};
+
   return {
     id: systembolagetId,
-    name: `${name}${name2 ? ' ' + name2 : ''}`,
+    name: untappdBeerNamne || `${name}${name2 ? ' ' + name2 : ''}`,
     brewery: brewery || 'N/A',
+    description,
+    rating,
+    ibu,
     price,
     category,
-    style,
+    style: untappdStyle || style,
     type,
-    abv: abv.replace(/(\d+\.)(\d)\d*%/, '$1$2'),
+    abv: untappdAbv || abv.replace(/(\d+\.)(\d)\d*%/, '$1$2'),
     supplier,
     volume,
     salesStartDate,
@@ -94,7 +112,11 @@ const systembolagetTransform = data => {
     stockType,
     systembolagetId,
     systembolagetArticleId,
-    systembolagetUrl: `https://www.systembolaget.se/${systembolagetId}`
+    systembolagetUrl: `https://www.systembolaget.se/${systembolagetId}`,
+    untappdId,
+    beerLabel: beerLabelHD || beerLabel,
+    untappdDeepLink: untappdId && `untappd://beer/${untappdId}`,
+    untappdUrl: untappdId && beer_slug && `https://untappd.com/b/${beer_slug}/${untappdId}`,
   };
 };
 
