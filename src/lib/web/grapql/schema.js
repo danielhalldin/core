@@ -23,7 +23,7 @@ export default gql`
     """
     The [size] latest beers from systembolaget
     """
-    systembolagetSearch(searchFields: [String], sortFields: [String], searchString: String, size: Int): [beer]
+    systembolagetSearch(searchType: String, sortType: String, searchString: String, size: Int): [beer]
 
     """
     Search untappd using the [id]

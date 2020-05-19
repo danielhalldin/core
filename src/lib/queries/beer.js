@@ -63,16 +63,34 @@ const recommendedBeers = ({ fromDate, toDate }) => {
   return q;
 };
 
-const searchBeers = ({
-  searchString,
-  searchFields = ['Namn', 'Namn2', 'untappdData.beer.beer_name', 'untappdData.brewery.brewery_name'],
-  sortFields = [
-    '+Namn.keyword',
-    '+untappdData.beer.beer_name.keyword',
-    '+Namn2.keyword',
-    '+untappdData.brewery.brewery_name.keyword',
-  ],
-}) => {
+const searchBeers = ({ searchString, searchType = 'beer', sortType = 'rating' }) => {
+  let sortFields;
+  switch (sortType) {
+    case 'rating':
+      sortFields = [
+        '-untappdData.rating_score',
+        '+untappdData.beer.beer_name.keyword',
+        '+untappdData.brewery.brewery_name.keyword',
+      ];
+      break;
+    case 'name':
+      sortFields = [
+        '+untappdData.beer.beer_name.keyword',
+        '+untappdData.brewery.brewery_name.keyword',
+        '-untappdData.rating_score',
+      ];
+      if (searchType === 'brewery') {
+        sortFields = [
+          '+untappdData.brewery.brewery_name.keyword',
+          '+untappdData.beer.beer_name.keyword',
+          '-untappdData.rating_score',
+        ];
+      }
+      break;
+    default:
+      sortFields = ['-untappdData.rating_score'];
+      break;
+  }
   let q = {
     sort: sort(sortFields),
     query: {
@@ -82,8 +100,13 @@ const searchBeers = ({
       },
     },
   };
-  if (searchFields) {
-    q.query.multi_match['fields'] = searchFields;
+  switch (searchType) {
+    case 'beer':
+      q.query.multi_match['fields'] = ['untappdData.beer.beer_name'];
+      break;
+    case 'brewery':
+      q.query.multi_match['fields'] = ['untappdData.brewery.brewery_name'];
+      break;
   }
 
   return q;
