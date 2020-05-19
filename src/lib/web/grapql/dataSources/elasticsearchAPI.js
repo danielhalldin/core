@@ -45,10 +45,14 @@ class elasticsearchAPI extends RESTDataSource {
     return response;
   }
 
-  async searchBeer({ size, searchString }) {
-    const response = await this.post(`/systembolaget/_search?size=${size}`, searchBeers({ searchString }), {
-      cacheOptions: { ttl: 10 },
-    });
+  async searchBeer({ size, searchString, searchFields, sortFields }) {
+    const response = await this.post(
+      `/systembolaget/_search?size=${size}`,
+      searchBeers({ searchString, searchFields, sortFields }),
+      {
+        cacheOptions: { ttl: 10 },
+      }
+    );
 
     return response;
   }

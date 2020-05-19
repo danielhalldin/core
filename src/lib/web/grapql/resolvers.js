@@ -84,8 +84,8 @@ const systembolagetLatest = async (_obj, { size }, { dataSources }) => {
   return beers;
 };
 
-const systembolagetSearch = async (_obj, { searchString, size }, { dataSources }) => {
-  const data = await dataSources.ElasticsearchApi.searchBeer({ searchString, size });
+const systembolagetSearch = async (_obj, { size, searchString, searchFields, sortFields }, { dataSources }) => {
+  const data = await dataSources.ElasticsearchApi.searchBeer({ size, searchString, searchFields, sortFields });
   const beers = data.hits.hits.map((beer) => {
     return systembolagetTransform(beer);
   });

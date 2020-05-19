@@ -63,14 +63,18 @@ const recommendedBeers = ({ fromDate, toDate }) => {
   return q;
 };
 
-const searchBeers = ({ searchString }) => {
-  const q = {
-    sort: sort([
-      '+Namn.keyword',
-      '+untappdData.beer.beer_name.keyword',
-      '+Namn2.keyword',
-      '+untappdData.brewery.brewery_name.keyword',
-    ]),
+const searchBeers = ({
+  searchString,
+  searchFields = ['Namn', 'Namn2', 'untappdData.beer.beer_name', 'untappdData.brewery.brewery_name'],
+  sortFields = [
+    '+Namn.keyword',
+    '+untappdData.beer.beer_name.keyword',
+    '+Namn2.keyword',
+    '+untappdData.brewery.brewery_name.keyword',
+  ],
+}) => {
+  let q = {
+    sort: sort(sortFields),
     query: {
       multi_match: {
         query: searchString,
@@ -78,6 +82,10 @@ const searchBeers = ({ searchString }) => {
       },
     },
   };
+  if (searchFields) {
+    q.query.multi_match['fields'] = searchFields;
+  }
+
   return q;
 };
 
