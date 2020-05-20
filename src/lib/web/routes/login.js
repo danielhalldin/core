@@ -6,7 +6,9 @@ import { encrypt } from '../../jwtHandler';
 
 const login = (app) => {
   app.get('/login', function (req, res) {
-    if (req.query.returnUrl) {
+    // Handle returnUrl
+    const returnUrl = req.query.returnUrl;
+    if (returnUrl.includes(config.newBeers.url) || returnUrl.includes('https://web.newbeers.se')) {
       res.setHeader(
         'Set-Cookie',
         cookie.serialize('returnUrl', String(req.query.returnUrl), {
@@ -15,12 +17,12 @@ const login = (app) => {
         })
       );
     }
+
     const params = {
       client_id: config.untappd.clientID,
       response_type: 'code',
       redirect_url: encodeURI(config.newBeers.authUrl),
     };
-
     const url = config.untappd.authBaseUrl + '/authenticate/?' + querystring.stringify(params);
 
     res.redirect(url);
@@ -41,8 +43,17 @@ const login = (app) => {
     const token = (await authorizeResponse.json()).response.access_token;
     const jwt = encrypt(token);
 
+    // Handle returnUrl
     const cookies = cookie.parse(req.headers.cookie || '');
     const returnUrl = cookies.returnUrl || config.newBeers.url;
+    res.setHeader(
+      'Set-Cookie',
+      cookie.serialize('returnUrl', String(''), {
+        httpOnly: true,
+        maxAge: 1,
+      })
+    );
+
     res.redirect(`${returnUrl}/?token=${jwt}`);
   });
 };
