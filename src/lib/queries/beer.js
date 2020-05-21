@@ -66,6 +66,14 @@ const recommendedBeers = ({ fromDate, toDate }) => {
 const searchBeers = ({ searchString, searchType = 'beer', sortType = 'rating' }) => {
   let sortFields;
   switch (sortType) {
+    case 'date':
+      sortFields = [
+        '-Saljstart',
+        '-untappdData.rating_score',
+        '+untappdData.beer.beer_name.keyword',
+        '+untappdData.brewery.brewery_name.keyword',
+      ];
+      break;
     case 'rating':
       sortFields = [
         '-untappdData.rating_score',
