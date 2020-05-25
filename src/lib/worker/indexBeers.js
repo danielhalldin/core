@@ -5,7 +5,7 @@ import config from '../../config';
 
 var parser = new xml2js.Parser({ explicitArray: false });
 
-const indexBeers = async indexClient => {
+const indexBeers = async (indexClient) => {
   // // REMOVE AND CREATE INDEX
   // try {
   //   await indexClient.deleteIndex("systembolaget");
@@ -35,10 +35,10 @@ const indexBeers = async indexClient => {
   );
   const indexTimestamp = Date.now();
   const beers = json.artiklar.artikel
-    .filter(function(article) {
+    .filter(function (article) {
       return article.Varugrupp && article.Varugrupp.toLocaleLowerCase().indexOf('öl') !== -1;
     })
-    .map(function(article) {
+    .map(function (article) {
       article.id = article.Artikelid;
       article.indexTimestamp = indexTimestamp;
       return article;
@@ -47,6 +47,7 @@ const indexBeers = async indexClient => {
   // Indexing
   logger.info('Indexing Systembolaget data');
   await indexClient.bulkIndex('systembolaget', 'artikel', beers);
+  return indexTimestamp;
 };
 
 export default indexBeers;

@@ -7,6 +7,7 @@ import indexBeers from './lib/worker/indexBeers';
 import decorateBeers from './lib/worker/decorateBeers';
 
 import config from './config';
+import logger from './lib/logger';
 
 const searchClient = new SearchClient();
 const untappdClient = new UntappdClient();
@@ -14,7 +15,8 @@ const untappdClient = new UntappdClient();
 indexClient.healthCheck(60000);
 
 // Indexing
-indexBeers(indexClient);
+const indexTimestamp = indexBeers(indexClient);
+logger.info(`Index timestamp: ${indexTimestamp}`);
 setInterval(() => indexBeers(indexClient), config.indexInterval);
 
 // Decorating
