@@ -15,8 +15,10 @@ const untappdClient = new UntappdClient();
 indexClient.healthCheck(60000);
 
 // Indexing
-const indexTimestamp = indexBeers(indexClient);
-logger.info(`Index timestamp: ${indexTimestamp}`);
+indexBeers(indexClient).then((indexTimestamp) => {
+  logger.info(`Index timestamp: ${indexTimestamp}`);
+});
+
 setInterval(() => indexBeers(indexClient), config.indexInterval);
 
 // Decorating
