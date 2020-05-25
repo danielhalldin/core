@@ -120,7 +120,21 @@ const searchBeers = ({ searchString, searchType = 'beer', sortType = 'rating' })
   return q;
 };
 
-export { beers, searchBeers, recommendedBeers };
+// run '/systembolaget/_delete_by_query'
+const cleanupBeers = ({ indexTimestamp }) => {
+  const q = {
+    query: {
+      range: {
+        indexTimestamp: {
+          lt: indexTimestamp,
+        },
+      },
+    },
+  };
+  return q;
+};
+
+export { beers, searchBeers, recommendedBeers, cleanupBeers };
 
 // EXISTS
 // const beersToDecorate = (fromDate, toDate, stockType) => {
@@ -163,17 +177,6 @@ export { beers, searchBeers, recommendedBeers };
 //     }
 //   },
 // "stored_fields" : ["Saljstart", "untappdData.rating_score", "Namn.keyword"]
-// }
-
-// CLEANUP QUERY
-// {
-//   "query": {
-//       "range" : {
-//           "indexTimestamp" : {
-//               "lte" : 1551800910000
-//           }
-//       }
-//   }
 // }
 
 // CHECK EMPTY

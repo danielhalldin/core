@@ -17,6 +17,8 @@ indexClient.healthCheck(60000);
 // Indexing
 indexBeers(indexClient).then((indexTimestamp) => {
   logger.info(`Index timestamp: ${indexTimestamp}`);
+  const cleanupResponse = searchClient.cleanupOutdatedBeers({ indexTimestamp });
+  logger.info(`cleanupResponse: ${JSON.stringify(cleanupResponse)}`);
 });
 
 setInterval(() => indexBeers(indexClient), config.indexInterval);
