@@ -15,10 +15,11 @@ const untappdClient = new UntappdClient();
 indexClient.healthCheck(60000);
 
 // Indexing
-indexBeers(indexClient).then((indexTimestamp) => {
-  logger.info(`Index timestamp: ${indexTimestamp}`);
-  const cleanupResponse = searchClient.cleanupOutdatedBeers({ indexTimestamp });
-  logger.info(`cleanupResponse: ${JSON.stringify(cleanupResponse)}`);
+indexBeers(indexClient).then(indexTimestamp => {
+  const week = 604800000;
+  searchClient.cleanupOutdatedBeers({ indexTimestamp: indexTimestamp - week }).then(noDeletedBeers => {
+    logger.info(`Cleaning up Systembolaget data, number of beer that was deleted: ${noDeletedBeers}`);
+  });
 });
 
 setInterval(() => indexBeers(indexClient), config.indexInterval);

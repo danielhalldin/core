@@ -9,7 +9,7 @@ class SearchClient {
     const uri = new URI(config.elasticsearch.url);
     this._client = new Elasticsearch.Client({
       host: uri.toString(),
-      apiVersion: '5.6',
+      apiVersion: '5.6'
     });
   }
 
@@ -17,9 +17,9 @@ class SearchClient {
     return this._client.search(query);
   }
 
-  // delete(query) {
-  //   return this._client.deleteByQuery(query)
-  // }
+  delete(query) {
+    return this._client.deleteByQuery(query);
+  }
 
   async latatestBeersToBeDecorated({ size = 50, stockType = 'Tillfälligt sortiment' }) {
     var fromDate = moment().subtract(10, 'year');
@@ -28,7 +28,7 @@ class SearchClient {
     const query = {
       index: ['systembolaget'],
       size: size,
-      body: queryBody,
+      body: queryBody
     };
 
     const response = await this.search(query);
@@ -39,11 +39,11 @@ class SearchClient {
     const queryBody = cleanupBeers({ indexTimestamp });
     const query = {
       index: ['systembolaget'],
-      body: queryBody,
+      body: queryBody
     };
 
-    const response = await this.search(query);
-    return response;
+    const response = await this.delete(query);
+    return response.deleted;
   }
 }
 
