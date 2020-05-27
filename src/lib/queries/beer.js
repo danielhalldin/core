@@ -1,12 +1,12 @@
 import _ from 'lodash';
 
-const sort = (sortFields) => {
-  return sortFields.map(function (item) {
+const sort = sortFields => {
+  return sortFields.map(function(item) {
     var order = _.startsWith(item, '-') ? 'desc' : 'asc';
     var object = {};
     object[_.trim(item, '+-')] = {
       order: order,
-      missing: '_last',
+      missing: '_last'
     };
     return object;
   });
@@ -23,18 +23,18 @@ const beers = ({ fromDate, toDate, stockType }) => {
             range: {
               Saljstart: {
                 gte: fromDate,
-                lte: toDate,
-              },
-            },
-          },
-        ],
-      },
-    },
+                lte: toDate
+              }
+            }
+          }
+        ]
+      }
+    }
   };
 
   if (stockType) {
     q.query.bool.must.push({
-      match: { SortimentText: { query: stockType, operator: 'and' } },
+      match: { SortimentText: { query: stockType, operator: 'and' } }
     });
   }
   return q;
@@ -51,14 +51,14 @@ const recommendedBeers = ({ fromDate, toDate }) => {
             range: {
               Saljstart: {
                 gte: fromDate,
-                lte: toDate,
-              },
-            },
+                lte: toDate
+              }
+            }
           },
-          { exists: { field: 'untappdData.rating_score' } },
-        ],
-      },
-    },
+          { exists: { field: 'untappdData.rating_score' } }
+        ]
+      }
+    }
   };
   return q;
 };
@@ -71,27 +71,27 @@ const searchBeers = ({ searchString, searchType = 'beer', sortType = 'rating' })
         '-Saljstart',
         '-untappdData.rating_score',
         '+untappdData.beer.beer_name.keyword',
-        '+untappdData.brewery.brewery_name.keyword',
+        '+untappdData.brewery.brewery_name.keyword'
       ];
       break;
     case 'rating':
       sortFields = [
         '-untappdData.rating_score',
         '+untappdData.beer.beer_name.keyword',
-        '+untappdData.brewery.brewery_name.keyword',
+        '+untappdData.brewery.brewery_name.keyword'
       ];
       break;
     case 'name':
       sortFields = [
         '+untappdData.beer.beer_name.keyword',
         '+untappdData.brewery.brewery_name.keyword',
-        '-untappdData.rating_score',
+        '-untappdData.rating_score'
       ];
       if (searchType === 'brewery') {
         sortFields = [
           '+untappdData.brewery.brewery_name.keyword',
           '+untappdData.beer.beer_name.keyword',
-          '-untappdData.rating_score',
+          '-untappdData.rating_score'
         ];
       }
       break;
@@ -104,9 +104,9 @@ const searchBeers = ({ searchString, searchType = 'beer', sortType = 'rating' })
     query: {
       multi_match: {
         query: searchString,
-        operator: 'and',
-      },
-    },
+        operator: 'and'
+      }
+    }
   };
   switch (searchType) {
     case 'beer':
@@ -121,15 +121,15 @@ const searchBeers = ({ searchString, searchType = 'beer', sortType = 'rating' })
 };
 
 // run '/systembolaget/_delete_by_query'
-const cleanupBeers = ({ indexTimestamp }) => {
+const cleanupBeers = ({ deleteOlderThanTimestamp }) => {
   const q = {
     query: {
       range: {
         indexTimestamp: {
-          lt: indexTimestamp,
-        },
-      },
-    },
+          lt: deleteOlderThanTimestamp
+        }
+      }
+    }
   };
   return q;
 };

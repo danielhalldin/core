@@ -35,8 +35,8 @@ class SearchClient {
     return response.hits.hits;
   }
 
-  async cleanupOutdatedBeers({ indexTimestamp }) {
-    const queryBody = cleanupBeers({ indexTimestamp });
+  async cleanupOutdatedBeers({ deleteOlderThanTimestamp }) {
+    const queryBody = cleanupBeers({ deleteOlderThanTimestamp });
     const query = {
       index: ['systembolaget'],
       body: queryBody

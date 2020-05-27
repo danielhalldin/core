@@ -1,3 +1,4 @@
+import moment from 'moment';
 import indexClient from './lib/worker/clients/indexClient';
 import SearchClient from './lib/worker/clients/searchClient';
 import UntappdClient from './lib/worker/clients/untappdClient';
@@ -17,8 +18,13 @@ indexClient.healthCheck(60000);
 // Indexing
 indexBeers(indexClient).then(indexTimestamp => {
   const week = 604800000;
-  searchClient.cleanupOutdatedBeers({ indexTimestamp: indexTimestamp - week }).then(noDeletedBeers => {
-    logger.info(`Cleaning up Systembolaget data, number of beer that was deleted: ${noDeletedBeers}`);
+  const deleteOlderThanTimestamp = indexTimestamp - week;
+  searchClient.cleanupOutdatedBeers({ deleteOlderThanTimestamp }).then(noDeletedBeers => {
+    logger.info(
+      `Cleaning up Systembolaget data older than ${moment(deleteOlderThanTimestamp).format(
+        'YYYY-MM-DD HH:mm:ss'
+      )} (${deleteOlderThanTimestamp}), number of beer that was deleted: ${noDeletedBeers}`
+    );
   });
 });
 
