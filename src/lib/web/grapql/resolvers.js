@@ -11,9 +11,9 @@ const decoratedLatest = async (
   try {
     const data = await dataSources.ElasticsearchApi.latestBeer({
       size,
-      stockType,
+      stockType
     });
-    const _beers = _get(data, 'hits.hits', []).map(async (beer) => {
+    const _beers = _get(data, 'hits.hits', []).map(async beer => {
       const systembolagetBeer = systembolagetTransform(beer);
       const untappdId = beer._source.untappdId;
       let untappdBeer;
@@ -32,10 +32,10 @@ const decoratedLatest = async (
       beers,
       [
         'salesStartDate',
-        (beer) => {
+        beer => {
           return beer.rating || -1;
         },
-        'name',
+        'name'
       ],
       ['desc', 'desc', 'asc']
     );
@@ -45,15 +45,15 @@ const decoratedLatest = async (
 
   return {
     name: stockType,
-    beers: sortedBeers,
+    beers: sortedBeers
   };
 };
 
 const recommended = async (_, { size }, { dataSources, untappd_access_token }) => {
   const data = await dataSources.ElasticsearchApi.recommendedBeer({
-    size,
+    size
   });
-  const beers = data.hits.hits.map(async (beer) => {
+  const beers = data.hits.hits.map(async beer => {
     const systembolagetBeer = systembolagetTransform(beer);
     const untappdId = beer._source.untappdId;
     let untappdBeer;
@@ -71,13 +71,13 @@ const recommended = async (_, { size }, { dataSources, untappd_access_token }) =
 
   return {
     name: 'Rekommenderade',
-    beers: beers,
+    beers: beers
   };
 };
 
 const systembolagetLatest = async (_obj, { size }, { dataSources }) => {
   const data = await dataSources.ElasticsearchApi.latestBeer({ size });
-  const beers = data.hits.hits.map((beer) => {
+  const beers = data.hits.hits.map(beer => {
     return systembolagetTransform(beer);
   });
 
@@ -86,7 +86,7 @@ const systembolagetLatest = async (_obj, { size }, { dataSources }) => {
 
 const systembolagetSearch = async (_obj, { size, searchString, searchType, sortType }, { dataSources }) => {
   const data = await dataSources.ElasticsearchApi.searchBeer({ size, searchString, searchType, sortType });
-  const beers = data.hits.hits.map((beer) => {
+  const beers = data.hits.hits.map(beer => {
     return systembolagetTransform(beer);
   });
 
@@ -110,20 +110,23 @@ const untappdUser = async (_, _params, { dataSources, untappd_access_token }) =>
     name: data.name,
     avatar: data.avatar,
     totalBeers: data.totalBeers,
-    admin: data.name === config.superUser,
+    admin: data.name === config.superUser
   };
 };
 
 const untappdIsFriend = async (_, _params, { dataSources, untappd_access_token }) => {
-  const friends = await dataSources.UntappdAPI.friends();
+  const superUserfriends = await dataSources.UntappdAPI.friends();
   const user = await dataSources.UntappdAPI.user(untappd_access_token);
-
-  return !!friends.find((friend) => friend.name === user.name);
+  if (config.superUser === user.name) {
+    // Self
+    return true;
+  }
+  return !!superUserfriends.find(friend => friend.name === user.name);
 };
 
 const untappdSearch = async (_, { query }, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.search(query, untappd_access_token);
-  const beers = data.map((item) => {
+  const beers = data.map(item => {
     return untappdTransform(item);
   });
 
@@ -133,17 +136,17 @@ const untappdSearch = async (_, { query }, { dataSources, untappd_access_token }
 const untappdUserBeers = async (_, _params, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.userBeers(untappd_access_token);
   const beers = data
-    .map((item) => {
+    .map(item => {
       return Object.assign({}, item, {
         beer: {
           ...item.beer,
           bid: item.first_checkin_id,
           auth_rating: item.rating_score,
-          checkinDate: item.recent_created_at,
-        },
+          checkinDate: item.recent_created_at
+        }
       });
     })
-    .map((item) => untappdTransform(item));
+    .map(item => untappdTransform(item));
 
   return beers;
 };
@@ -158,5 +161,5 @@ export {
   untappdUser,
   untappdUserBeers,
   untappdFriends,
-  untappdIsFriend,
+  untappdIsFriend
 };
