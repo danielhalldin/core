@@ -134,7 +134,21 @@ const cleanupBeers = ({ deleteOlderThanTimestamp }) => {
   return q;
 };
 
-export { beers, searchBeers, recommendedBeers, cleanupBeers };
+const stock = () => {
+  const q = {
+    aggs: {
+      stock: {
+        terms: { field: 'SortimentText.keyword' },
+        aggs: {
+          maxSalesStartDate: { max: { field: 'Saljstart' } }
+        }
+      }
+    }
+  };
+  return q;
+};
+
+export { beers, searchBeers, recommendedBeers, cleanupBeers, stock };
 
 // EXISTS
 // const beersToDecorate = (fromDate, toDate, stockType) => {

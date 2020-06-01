@@ -26,6 +26,11 @@ export default gql`
     systembolagetSearch(searchType: String, sortType: String, searchString: String, size: Int): [beer]
 
     """
+    The avaliable stock-types in systembolaget
+    """
+    systembolagetStock: [stock]
+
+    """
     Search untappd using the [id]
     """
     untappdById(id: ID!): beer

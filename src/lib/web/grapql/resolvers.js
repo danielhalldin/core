@@ -1,6 +1,7 @@
 import { untappdTransform, systembolagetTransform } from './helpers/transformations';
 import config from '../../../config';
 import { get as _get, orderBy } from 'lodash';
+import moment from 'moment';
 
 const decoratedLatest = async (
   _,
@@ -93,6 +94,23 @@ const systembolagetSearch = async (_obj, { size, searchString, searchType, sortT
   return beers;
 };
 
+const systembolagetStock = async (_obj, _args, { dataSources }) => {
+  const data = await dataSources.ElasticsearchApi.stock();
+  const stockCategories = data.aggregations.stock.buckets
+    .sort(function(a, b) {
+      return b.maxSalesStartDate.value - a.maxSalesStartDate.value;
+    })
+    .map(category => {
+      return {
+        name: category.key,
+        nrOfBeers: category.doc_count,
+        nextRelease: moment(category.maxSalesStartDate.value).format('YYYY-MM-DD')
+      };
+    });
+
+  return stockCategories;
+};
+
 const untappdById = async (_, { id }, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.byId(id, untappd_access_token);
   return untappdTransform(data.response.beer);
@@ -155,6 +173,7 @@ export {
   untappdSearch,
   systembolagetLatest,
   systembolagetSearch,
+  systembolagetStock,
   untappdById,
   decoratedLatest,
   recommended,
