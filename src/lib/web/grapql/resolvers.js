@@ -104,7 +104,7 @@ const systembolagetStock = async (_obj, _args, { dataSources }) => {
       return {
         name: category.key,
         nrOfBeers: category.doc_count,
-        nextRelease: moment(category.maxSalesStartDate.value).format('YYYY-MM-DD')
+        nextRelease: category.maxSalesStartDate.value
       };
     });
 
