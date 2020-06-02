@@ -17,8 +17,8 @@ indexClient.healthCheck(60000);
 
 // Indexing
 indexBeers(indexClient).then(indexTimestamp => {
-  const week = 604800000;
-  const deleteOlderThanTimestamp = indexTimestamp - week;
+  const twoDays = 172800000;
+  const deleteOlderThanTimestamp = indexTimestamp - twoDays;
   searchClient.cleanupOutdatedBeers({ deleteOlderThanTimestamp }).then(noDeletedBeers => {
     logger.info(
       `Cleaning up Systembolaget data older than ${moment(deleteOlderThanTimestamp).format(
