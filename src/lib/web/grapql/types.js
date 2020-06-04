@@ -36,11 +36,11 @@ export default `
   A type that describes a user.
   """
   type user {
-    admin: Boolean
-    avatar: String
-    name: String 
-    id: Int
-    totalBeers: Int
+    admin: Boolean!
+    avatar: String!
+    name: String!
+    id: Int!
+    totalBeers: Int!
   }
 
   """
