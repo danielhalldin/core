@@ -125,6 +125,7 @@ const untappdUser = async (_, _params, { dataSources, untappd_access_token }) =>
   const data = await dataSources.UntappdAPI.user(untappd_access_token);
 
   return {
+    id: data.id,
     name: data.name,
     avatar: data.avatar,
     totalBeers: data.totalBeers,

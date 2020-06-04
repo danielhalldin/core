@@ -154,6 +154,7 @@ class UntappdAPI extends RESTDataSource {
     });
 
     return {
+      id: _get(user, 'id') || null,
       name: _get(user, 'user_name') || null,
       avatar: _get(user, 'user_avatar') || null,
       totalBeers: _get(user, 'stats.total_beers') || null,

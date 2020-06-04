@@ -39,6 +39,7 @@ export default `
     admin: Boolean
     avatar: String
     name: String 
+    id: Int
     totalBeers: Int
   }
 
