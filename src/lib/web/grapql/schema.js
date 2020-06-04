@@ -53,7 +53,7 @@ export default gql`
     """
     The untappd user
     """
-    untappdUser: user
+    untappdUser: user!
 
     """
     The users latest checkins
