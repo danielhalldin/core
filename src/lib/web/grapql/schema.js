@@ -28,7 +28,7 @@ export default gql`
     """
     The avaliable stock-types in systembolaget
     """
-    systembolagetStock: [stock]
+    systembolagetStock: [stock]!
 
     """
     Search untappd using the [id]
@@ -65,11 +65,11 @@ export default gql`
     """
     Delete the beer with [systembolagetArticleId]
     """
-    deleteBeer(systembolagetArticleId: Int!): Boolean
+    deleteBeer(systembolagetArticleId: Int!): Boolean!
 
     """
     Set [untappdId] on beer with [systembolagetArticleId]
     """
-    updateUntappdId(systembolagetArticleId: Int!, untappdId: Int!): Boolean
+    updateUntappdId(systembolagetArticleId: Int!, untappdId: Int!): Boolean!
   }
 `;

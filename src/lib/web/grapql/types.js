@@ -55,9 +55,9 @@ export default `
   A type that describes a stock.
   """
   type stock {
-    name: String
-    nrOfBeers: Int
-    nextRelease: String
-    nextReleaseTimestamp: Int
+    name: String!
+    nrOfBeers: Int!
+    nextRelease: String!
+    nextReleaseTimestamp: Int!
   }
 `;
