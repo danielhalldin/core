@@ -2,7 +2,7 @@ import { RESTDataSource } from 'apollo-datasource-rest';
 import moment from 'moment';
 import config from '../../../../config';
 
-import { beers, recommendedBeers, searchBeers, stock } from '../../../queries/beer';
+import { beers, recommendedBeers, searchBeers, stock, beerFromBID } from '../../../queries/beer';
 
 class elasticsearchAPI extends RESTDataSource {
   constructor() {
@@ -39,6 +39,14 @@ class elasticsearchAPI extends RESTDataSource {
     var toDate = moment().add(1, 'month');
 
     const response = await this.post(`/systembolaget/_search?size=${size}`, recommendedBeers({ fromDate, toDate }), {
+      cacheOptions: { ttl: 10 }
+    });
+
+    return response;
+  }
+
+  async beerFromBID({ BIDs }) {
+    const response = await this.post(`/systembolaget/_search?size=200`, beerFromBID({ BIDs }), {
       cacheOptions: { ttl: 10 }
     });
 

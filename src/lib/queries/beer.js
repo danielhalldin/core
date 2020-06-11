@@ -148,7 +148,19 @@ const stock = () => {
   return q;
 };
 
-export { beers, searchBeers, recommendedBeers, cleanupBeers, stock };
+const beerFromBID = ({ BIDs }) => {
+  const q = {
+    query: {
+      terms: {
+        untappdId: BIDs
+      }
+    }
+  };
+
+  return q;
+};
+
+export { beers, searchBeers, recommendedBeers, cleanupBeers, stock, beerFromBID };
 
 // EXISTS
 // const beersToDecorate = (fromDate, toDate, stockType) => {

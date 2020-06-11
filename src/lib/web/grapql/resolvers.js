@@ -154,18 +154,23 @@ const untappdSearch = async (_, { query }, { dataSources, untappd_access_token }
 
 const untappdUserBeers = async (_, _params, { dataSources, untappd_access_token }) => {
   const data = await dataSources.UntappdAPI.userBeers(untappd_access_token);
-  const beers = data
-    .map(item => {
-      return Object.assign({}, item, {
-        beer: {
-          ...item.beer,
-          bid: item.first_checkin_id,
-          auth_rating: item.rating_score,
-          checkinDate: item.recent_created_at
-        }
-      });
-    })
-    .map(item => untappdTransform(item));
+  const BIDs = data.map(item => item.beer.bid);
+  const systembolagetData = await dataSources.ElasticsearchApi.beerFromBID({ BIDs });
+  const beers = data.map(item => {
+    const systembolagetBeer = systembolagetData.hits.hits.find(hit => hit._source.untappdId === item.beer.bid);
+    const decoratedSystembolagetBeer = systembolagetBeer ? systembolagetTransform(systembolagetBeer) : {};
+
+    Object.assign({}, item, {
+      beer: {
+        ...item.beer,
+        bid: item.first_checkin_id,
+        auth_rating: item.rating_score,
+        checkinDate: item.recent_created_at
+      }
+    });
+    const decoratedUntappdBeer = untappdTransform(item);
+    return Object.assign({}, decoratedSystembolagetBeer, decoratedUntappdBeer);
+  });
 
   return beers;
 };
