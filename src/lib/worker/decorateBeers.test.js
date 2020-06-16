@@ -65,7 +65,7 @@ describe('tidyQuery', () => {
 
   test('Should remove multiple spaces', () => {
     const query = 'test   test2   test3';
-    expect(tidyQuery(query)).toEqual('test%20test2%20test3');
+    expect(tidyQuery(query)).toEqual('test%20test2%20test3xxx');
   });
 });
 
