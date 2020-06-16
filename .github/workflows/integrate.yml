@@ -1,4 +1,4 @@
-node: Node Continous Integration
+name: Node Continous Integration
 
 on:
   pull_request:
