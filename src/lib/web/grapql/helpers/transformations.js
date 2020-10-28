@@ -102,7 +102,7 @@ const systembolagetTransform = data => {
     category,
     style: untappdStyle || style,
     type,
-    abv: untappdAbv || (abv ? abv.replace(/(\d+\.)(\d)\d*%/, '$1$2') : null),
+    abv: untappdAbv || typeof abv === 'string' ? abv.replace(/(\d+\.)(\d)\d*%/, '$1$2') : abv,
     supplier,
     volume,
     salesStartDate,
