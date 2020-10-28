@@ -16,19 +16,17 @@ const untappdClient = new UntappdClient();
 indexClient.healthCheck(60000);
 
 // Indexing
-indexBeers(indexClient);
-
-// .then(indexTimestamp => {
-//   const oneDay = 86400000;
-//   const deleteOlderThanTimestamp = indexTimestamp - oneDay;
-//   searchClient.cleanupOutdatedBeers({ deleteOlderThanTimestamp }).then(noDeletedBeers => {
-//     logger.info(
-//       `Cleaning up Systembolaget data older than ${moment(deleteOlderThanTimestamp).format(
-//         'YYYY-MM-DD HH:mm:ss'
-//       )} (${deleteOlderThanTimestamp}), number of beer that was deleted: ${noDeletedBeers}`
-//     );
-//   });
-// });
+indexBeers(indexClient).then(indexTimestamp => {
+  const oneDay = 86400000;
+  const deleteOlderThanTimestamp = indexTimestamp - oneDay;
+  searchClient.cleanupOutdatedBeers({ deleteOlderThanTimestamp }).then(noDeletedBeers => {
+    logger.info(
+      `Cleaning up Systembolaget data older than ${moment(deleteOlderThanTimestamp).format(
+        'YYYY-MM-DD HH:mm:ss'
+      )} (${deleteOlderThanTimestamp}), number of beer that was deleted: ${noDeletedBeers}`
+    );
+  });
+});
 
 setInterval(() => indexBeers(indexClient), config.indexInterval);
 
