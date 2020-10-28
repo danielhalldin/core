@@ -25,6 +25,7 @@ const indexBeers = async indexClient => {
   });
   const json = await res.json();
 
+  console.log(json[0]);
   // Parsing
   logger.info('Parsing Systembolaget data');
   const indexTimestamp = Date.now();
@@ -50,7 +51,7 @@ const indexBeers = async indexClient => {
         Ursprunglandnamn: item.Country,
         Producent: item.ProducerName,
         Leverantor: item.SupplierName,
-        Alkoholhalt: item.AlcoholPercentaget,
+        Alkoholhalt: item.AlcoholPercentage,
         Sortiment: item.Assortment,
         SortimentText: item.AssortmentText,
         indexTimestamp: indexTimestamp
