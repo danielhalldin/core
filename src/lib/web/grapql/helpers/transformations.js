@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const untappdTransform = (data) => {
+const untappdTransform = data => {
   if (!data) {
     return;
   }
@@ -11,7 +11,7 @@ const untappdTransform = (data) => {
   }
 };
 
-const untappdTransformBeer = (data) => {
+const untappdTransformBeer = data => {
   const {
     auth_rating: userRating,
     rating_score: rating,
@@ -24,7 +24,7 @@ const untappdTransformBeer = (data) => {
     beer_description: description,
     bid: untappdId,
     beer_slug,
-    checkinDate,
+    checkinDate
   } = data;
 
   return {
@@ -40,24 +40,24 @@ const untappdTransformBeer = (data) => {
     untappdId,
     untappdUrl: checkinDate ? `https://untappd.com/c/${untappdId}` : `https://untappd.com/b/${beer_slug}/${untappdId}`,
     untappdDeepLink: checkinDate ? `untappd://checkin/${untappdId}` : `untappd://beer/${untappdId}`,
-    checkinDate: checkinDate && moment(checkinDate).format('YYYY-MM-DD'),
+    checkinDate: checkinDate && moment(checkinDate).format('YYYY-MM-DD')
   };
 };
 
-const untappdTransformBrewery = (data) => {
+const untappdTransformBrewery = data => {
   try {
     const { brewery_name: brewery, brewery_label: breweryLabel, country_name: country } = data;
     return {
       brewery,
       breweryLabel,
-      country,
+      country
     };
   } catch (e) {
     console.log(e);
   }
 };
 
-const systembolagetTransform = (data) => {
+const systembolagetTransform = data => {
   const {
     Namn: name,
     Namn2: name2,
@@ -76,7 +76,7 @@ const systembolagetTransform = (data) => {
     SortimentText: stockType,
     nr: systembolagetId,
     Artikelid: systembolagetArticleId,
-    untappdData,
+    untappdData
   } = data._source;
   const {
     beer_label_hd: beerLabelHD = undefined,
@@ -88,7 +88,7 @@ const systembolagetTransform = (data) => {
     bid: untappdId = undefined,
     beer_slug = undefined,
     beer_ibu: ibu = undefined,
-    beer_description: description = undefined,
+    beer_description: description = undefined
   } = untappdData || {};
 
   return {
@@ -102,7 +102,7 @@ const systembolagetTransform = (data) => {
     category,
     style: untappdStyle || style,
     type,
-    abv: untappdAbv || abv.replace(/(\d+\.)(\d)\d*%/, '$1$2'),
+    abv: untappdAbv || (abv ? abv.replace(/(\d+\.)(\d)\d*%/, '$1$2') : null),
     supplier,
     volume,
     salesStartDate,
@@ -115,7 +115,7 @@ const systembolagetTransform = (data) => {
     untappdId,
     beerLabel: beerLabelHD || beerLabel,
     untappdDeepLink: untappdId && `untappd://beer/${untappdId}`,
-    untappdUrl: untappdId && beer_slug && `https://untappd.com/b/${beer_slug}/${untappdId}`,
+    untappdUrl: untappdId && beer_slug && `https://untappd.com/b/${beer_slug}/${untappdId}`
   };
 };
 
