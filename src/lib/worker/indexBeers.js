@@ -23,9 +23,10 @@ const indexBeers = async indexClient => {
   const res = await fetch(config.systembolaget.url, {
     headers: { 'Ocp-Apim-Subscription-Key': config.systembolaget.subscriptionKey, 'Content-Type': 'application/json' }
   });
+
   const json = await res.json();
 
-  console.log(json[0]);
+  console.log({ json });
   // Parsing
   logger.info('Parsing Systembolaget data');
   const indexTimestamp = Date.now();
