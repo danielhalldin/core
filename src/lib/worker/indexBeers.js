@@ -79,7 +79,7 @@ const indexBeers = async (indexClient) => {
     return true;
   };
 
-  const status = await indexPage(0);
+  const status = await indexPage(1);
   if (status) {
     logger.info('Done indexing Systembolaget data');
     // TODO Cleanup
