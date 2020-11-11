@@ -84,7 +84,7 @@ const syncPages = async (indexClient, indexTimestamp, page = 1) => {
 const synkRepo = async (indexClient, searchClient) => {
   logger.info('Start indexing Systembolaget data');
   const indexTimestamp = Date.now();
-  const status = await syncPages(indexClient, indexTimestamp, 270);
+  const status = await syncPages(indexClient, indexTimestamp, 1);
   if (status) {
     logger.info('Done indexing Systembolaget data');
     clenupRepo(searchClient, indexTimestamp);
