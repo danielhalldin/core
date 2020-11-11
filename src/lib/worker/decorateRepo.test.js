@@ -1,4 +1,4 @@
-import { shouldBeDecorated, tidyQuery, lookupBeer, refreshBeer, decorateBeers } from './decorateBeers';
+import { shouldBeDecorated, tidyQuery, lookupBeer, refreshBeer, decorateRepo } from './decorateRepo';
 
 const searchBeerMock = jest.fn();
 const fetchBeerByIdMock = jest.fn();
@@ -130,7 +130,7 @@ describe('decorateBeer', () => {
       },
     ]);
 
-    await decorateBeers({
+    await decorateRepo({
       indexClient: indexClientMock,
       searchClient: searchClientMock,
       untappdClient: untappdClientMock,

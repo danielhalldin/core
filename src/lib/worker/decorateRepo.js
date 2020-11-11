@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import logger from '../logger';
-import { generateAndPush } from '../../lib/push';
+import { generateAndPush } from '../push';
 
 const batches = [
   { stockType: 'Tillfälligt sortiment', size: 10 },
@@ -65,7 +65,7 @@ export const lookupBeer = async ({ untappdClient, beerData: { Namn, Namn2, Produ
   return {};
 };
 
-export const decorateBeers = async ({ indexClient, searchClient, untappdClient, redisClient }) => {
+export const decorateRepo = async ({ indexClient, searchClient, untappdClient, redisClient }) => {
   let beerToDecorate;
 
   for (const batch of batches) {
@@ -114,4 +114,4 @@ export const decorateBeers = async ({ indexClient, searchClient, untappdClient, 
   }
 };
 
-export default decorateBeers;
+export default decorateRepo;
