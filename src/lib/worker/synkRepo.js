@@ -74,7 +74,7 @@ const syncPages = async (indexClient, indexTimestamp, page = 1) => {
   const beers = translateProducts(data.products, indexTimestamp);
 
   await indexClient.bulkIndex('systembolaget', 'artikel', beers);
-
+  logger.info(`Indexed ${beers.length} items`);
   if (nextPage != -1) {
     return syncPages(indexClient, indexTimestamp, nextPage);
   }
