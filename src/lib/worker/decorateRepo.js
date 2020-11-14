@@ -26,7 +26,7 @@ const batches = [
 ];
 
 export const tidyQuery = (query) => {
-  const regex = /ab|aktiebryggeri|ale|null&/gm;
+  const regex = /ab|aktiebryggeri|ale|null|&/gm;
   query = query.toLowerCase().replace(regex, '').replace(/\s\s+/gm, ' ');
   return encodeURIComponent(_.uniq(query.split(' ')).join(' ').trim());
 };
