@@ -27,7 +27,7 @@ const translateProducts = (products, indexTimestamp) => {
       Artikelid: item.productId,
       Varnummer: item.productNumberShort,
       Namn: item.productNameBold,
-      Namn2: item.productNameThin,
+      Namn2: item.productNameThin || '',
       Prisinklmoms: item.price,
       Volymiml: item.volume,
       Saljstart: format(salesStartDate, 'yyyy-MM-dd'),
