@@ -26,7 +26,7 @@ const batches = [
 ];
 
 export const tidyQuery = (query) => {
-  const regex = /ab|aktiebryggeri|ale|&/gm;
+  const regex = /ab|aktiebryggeri|ale|null&/gm;
   query = query.toLowerCase().replace(regex, '').replace(/\s\s+/gm, ' ');
   return encodeURIComponent(_.uniq(query.split(' ')).join(' ').trim());
 };
@@ -50,7 +50,7 @@ export const refreshBeer = async ({ untappdClient, beerData: { untappdId } }) =>
 
 export const lookupBeer = async ({ untappdClient, beerData: { Namn, Namn2, Producent } }) => {
   const queries = [tidyQuery(`${Producent} ${Namn} ${Namn2}`), tidyQuery(`${Namn} ${Namn2}`.replace(Producent, ''))];
-
+  console.log({ queries });
   for (const [i, q] of queries.entries()) {
     logger.info(`q${i}: ${q}`);
     const untappdSearchResult = await untappdClient.searchBeer(q);
